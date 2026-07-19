@@ -20,13 +20,13 @@ function getLeadingNumber(name) {
   return m ? Number.parseInt(m[1], 10) : null;
 }
 
-function sortImageNamesByNumericDesc(a, b) {
+function sortImageNamesByNumericAsc(a, b) {
   const an = getLeadingNumber(a);
   const bn = getLeadingNumber(b);
-  if (an !== null && bn !== null && an !== bn) return bn - an;
+  if (an !== null && bn !== null && an !== bn) return an - bn;
   if (an !== null && bn === null) return -1;
   if (an === null && bn !== null) return 1;
-  return b.localeCompare(a, "en", { numeric: true });
+  return a.localeCompare(b, "en", { numeric: true });
 }
 
 async function getCollectionDirs() {
@@ -141,7 +141,7 @@ async function generateCollectionImagesJson(collectionId) {
   const files = entries
     .filter((e) => e.isFile() && e.name !== "images.json" && isImage(e.name))
     .map((e) => e.name)
-    .sort(sortImageNamesByNumericDesc);
+    .sort(sortImageNamesByNumericAsc);
   const data = files.map((file) => ({
     src: `collections/${collectionId}/${file}`,
     alt: path.parse(file).name,

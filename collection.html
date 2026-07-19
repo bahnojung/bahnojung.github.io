@@ -148,8 +148,24 @@
             return;
           }
 
-          // 전역 변수에 이미지 배열 저장
-          imageList = images.filter((item) => item && item.src);
+          // 전역 변수에 이미지 배열 저장 (파일명 앞 숫자 작은 순서)
+          imageList = images
+            .filter((item) => item && item.src)
+            .sort((a, b) => {
+              const numOf = (item) => {
+                const name = (item.alt || item.src.split("/").pop() || "").replace(/\.[^.]+$/, "");
+                const m = name.match(/^(\d+)/);
+                return m ? Number.parseInt(m[1], 10) : null;
+              };
+              const an = numOf(a);
+              const bn = numOf(b);
+              if (an !== null && bn !== null && an !== bn) return an - bn;
+              if (an !== null && bn === null) return -1;
+              if (an === null && bn !== null) return 1;
+              return String(a.alt || a.src).localeCompare(String(b.alt || b.src), "en", {
+                numeric: true,
+              });
+            });
           console.log("로드된 이미지 개수:", imageList.length);
           if (imageList.length > 0) {
             console.log("첫 번째 이미지 경로:", imageList[0].src);
