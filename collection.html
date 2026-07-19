@@ -138,6 +138,13 @@
           inner.appendChild(dateEl);
         }
 
+        if (about.location) {
+          const locationEl = document.createElement("p");
+          locationEl.className = "gallery-intro-location";
+          locationEl.textContent = about.location;
+          inner.appendChild(locationEl);
+        }
+
         if (about.credit) {
           const creditEl = document.createElement("p");
           creditEl.className = "gallery-intro-credit";
