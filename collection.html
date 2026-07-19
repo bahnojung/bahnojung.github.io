@@ -122,6 +122,54 @@
         return window.location.origin + basePath + path;
       }
 
+      function appendCollectionIntro(galleryEl, about) {
+        if (!galleryEl || !about) return;
+        const figure = document.createElement("figure");
+        figure.className = "gallery-item gallery-intro";
+        figure.setAttribute("aria-label", "Collection introduction");
+
+        const inner = document.createElement("div");
+        inner.className = "gallery-intro-inner";
+
+        if (about.date) {
+          const dateEl = document.createElement("p");
+          dateEl.className = "gallery-intro-date";
+          dateEl.textContent = about.date;
+          inner.appendChild(dateEl);
+        }
+
+        if (about.credit) {
+          const creditEl = document.createElement("p");
+          creditEl.className = "gallery-intro-credit";
+          creditEl.textContent = "- " + about.credit + " -";
+          inner.appendChild(creditEl);
+        }
+
+        const body = document.createElement("div");
+        body.className = "gallery-intro-body";
+        const paragraphs = Array.isArray(about.paragraphs) ? about.paragraphs : [];
+        paragraphs.forEach((text) => {
+          if (!text) return;
+          const p = document.createElement("p");
+          p.textContent = text;
+          body.appendChild(p);
+        });
+        inner.appendChild(body);
+        figure.appendChild(inner);
+        galleryEl.appendChild(figure);
+      }
+
+      async function loadCollectionAbout(colId) {
+        try {
+          const aboutPath = `collections/${encodeURIComponent(colId)}/about.json`;
+          const res = await fetch(aboutPath, { cache: "no-store" });
+          if (!res.ok) return null;
+          return await res.json();
+        } catch (e) {
+          return null;
+        }
+      }
+
       // 컬렉션 폴더의 images.json을 불러와 갤러리를 채우는 스크립트
       async function loadGallery() {
         const galleryEl = document.getElementById("gallery");
@@ -147,6 +195,9 @@
             console.error("images.json 형식이 올바르지 않습니다.");
             return;
           }
+
+          const about = await loadCollectionAbout(collectionId);
+          if (about) appendCollectionIntro(galleryEl, about);
 
           // 전역 변수에 이미지 배열 저장 (파일명 앞 숫자 작은 순서)
           imageList = images

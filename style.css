@@ -368,6 +368,53 @@ main.main-blank {
   filter: brightness(1.02);
 }
 
+/* 컬렉션 작업소개: 사진 한 장과 같은 높이의 텍스트 카드 */
+.gallery-item.gallery-intro {
+  width: min(420px, 92vw);
+  background: #f7f7f5;
+  border: 1px solid #e8e8e4;
+  overflow: hidden;
+}
+
+.gallery-intro-inner {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.85rem 1rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  font-family: "Crimson Text", Georgia, serif;
+  color: #222222;
+}
+
+.gallery-intro-date {
+  margin: 0 0 0.35rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.gallery-intro-credit {
+  margin: 0 0 0.7rem;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #555555;
+}
+
+.gallery-intro-body {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.gallery-intro-body p {
+  margin: 0 0 0.55rem;
+}
+
+.gallery-intro-body p:last-child {
+  margin-bottom: 0;
+}
+
 /* 라이트박스(이미지 확대) */
 .lightbox {
   position: fixed;
@@ -632,6 +679,19 @@ main.main-blank {
     padding: 0 0 10px 0 !important;
     display: flex;
     box-sizing: border-box;
+  }
+
+  .gallery-item.gallery-intro {
+    width: 100%;
+  }
+
+  .gallery-intro-inner {
+    padding: 1rem 1.1rem;
+  }
+
+  .gallery-intro-body {
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 
   .gallery-item:last-child {
