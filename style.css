@@ -368,56 +368,54 @@ main.main-blank {
   filter: brightness(1.02);
 }
 
-/* 컬렉션 작업소개: 사진 한 장과 비슷한 폭, 글은 안 잘리게 전체 표시 */
-.gallery-item.gallery-intro {
-  width: min(420px, 92vw);
-  height: auto;
-  min-height: var(--gallery-row-height);
-  align-self: flex-start;
-  background: #f7f7f5;
-  border: 1px solid #e8e8e4;
-  overflow: visible;
+/* 컬렉션 작업소개: 제목 아래 전체 표시 (잘림 없음) */
+.collection-about {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 1.25rem;
+  box-sizing: border-box;
 }
 
-.gallery-intro-inner {
-  height: auto;
+.collection-about-inner {
   width: 100%;
   box-sizing: border-box;
-  padding: 0.65rem 0.75rem;
-  overflow: visible;
+  padding: 0.85rem 1rem;
+  background: #f7f7f5;
+  border: 1px solid #e8e8e4;
+  border-radius: 4px;
   font-family: "Crimson Text", Georgia, serif;
   color: #222222;
 }
 
 .gallery-intro-date {
-  margin: 0 0 0.2rem;
-  font-size: 0.72rem;
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .gallery-intro-location {
-  margin: 0 0 0.28rem;
-  font-size: 0.66rem;
-  line-height: 1.3;
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  line-height: 1.4;
   color: #444444;
 }
 
 .gallery-intro-credit {
-  margin: 0 0 0.4rem;
-  font-size: 0.68rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.86rem;
   font-style: italic;
   color: #555555;
 }
 
 .gallery-intro-body {
   margin: 0;
-  font-size: 0.64rem;
-  line-height: 1.32;
+  font-size: 0.8rem;
+  line-height: 1.45;
 }
 
 .gallery-intro-body p {
-  margin: 0 0 0.32rem;
+  margin: 0 0 0.45rem;
 }
 
 .gallery-intro-body p:last-child {
@@ -690,31 +688,30 @@ main.main-blank {
     box-sizing: border-box;
   }
 
-  .gallery-item.gallery-intro {
-    width: 100%;
-    height: auto;
-    min-height: 0;
+  .collection-about {
+    max-width: 100%;
+    margin: 0 0 1rem;
   }
 
-  .gallery-intro-inner {
-    padding: 0.75rem 0.85rem;
+  .collection-about-inner {
+    padding: 0.9rem 0.95rem;
   }
 
   .gallery-intro-date {
-    font-size: 0.78rem;
+    font-size: 0.88rem;
   }
 
   .gallery-intro-location {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
   }
 
   .gallery-intro-credit {
-    font-size: 0.74rem;
+    font-size: 0.84rem;
   }
 
   .gallery-intro-body {
-    font-size: 0.7rem;
-    line-height: 1.35;
+    font-size: 0.78rem;
+    line-height: 1.45;
   }
 
   .gallery-item:last-child {

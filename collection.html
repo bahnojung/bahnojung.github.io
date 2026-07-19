@@ -41,6 +41,7 @@
 
     <main class="main-full">
       <h2 class="collection-title" id="collection-title"></h2>
+      <aside class="collection-about" id="collection-about" hidden></aside>
       <section class="gallery" aria-label="사진 갤러리" id="gallery"></section>
     </main>
 
@@ -122,14 +123,15 @@
         return window.location.origin + basePath + path;
       }
 
-      function appendCollectionIntro(galleryEl, about) {
-        if (!galleryEl || !about) return;
-        const figure = document.createElement("figure");
-        figure.className = "gallery-item gallery-intro";
-        figure.setAttribute("aria-label", "Collection introduction");
+      function appendCollectionIntro(about) {
+        const aboutEl = document.getElementById("collection-about");
+        if (!aboutEl || !about) return;
+
+        aboutEl.innerHTML = "";
+        aboutEl.hidden = false;
 
         const inner = document.createElement("div");
-        inner.className = "gallery-intro-inner";
+        inner.className = "collection-about-inner";
 
         if (about.date) {
           const dateEl = document.createElement("p");
@@ -162,8 +164,7 @@
           body.appendChild(p);
         });
         inner.appendChild(body);
-        figure.appendChild(inner);
-        galleryEl.appendChild(figure);
+        aboutEl.appendChild(inner);
       }
 
       async function loadCollectionAbout(colId) {
@@ -204,7 +205,7 @@
           }
 
           const about = await loadCollectionAbout(collectionId);
-          if (about) appendCollectionIntro(galleryEl, about);
+          if (about) appendCollectionIntro(about);
 
           // 전역 변수에 이미지 배열 저장 (파일명 앞 숫자 작은 순서)
           imageList = images
