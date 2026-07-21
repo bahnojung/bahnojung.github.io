@@ -1,13 +1,13 @@
 [
   {
-    "id": "AMIS DU QUARTIER - SEOUL",
-    "name": "AMIS DU QUARTIER - SEOUL",
-    "path": "collection.html?collection=AMIS%20DU%20QUARTIER%20-%20SEOUL"
-  },
-  {
     "id": "Seong-woo's Blue Vacation",
     "name": "Seong-woo's Blue Vacation",
     "path": "collection.html?collection=Seong-woo's%20Blue%20Vacation"
+  },
+  {
+    "id": "AMIS DU QUARTIER - SEOUL",
+    "name": "AMIS DU QUARTIER - SEOUL",
+    "path": "collection.html?collection=AMIS%20DU%20QUARTIER%20-%20SEOUL"
   },
   {
     "id": "Colors of the Grow-rings",
