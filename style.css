@@ -422,38 +422,25 @@ main.main-blank {
   margin-bottom: 0;
 }
 
-.gallery-intro-body a {
-  color: inherit;
-  text-decoration: underline;
-  word-break: break-all;
-}
-
-.gallery-intro-body a:hover {
-  opacity: 0.7;
-}
-
+.gallery-intro-body a,
 .gallery-intro-link {
-  color: inherit;
+  color: #1a1a1a;
   text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
   word-break: break-all;
 }
 
+.gallery-intro-body a:hover,
 .gallery-intro-link:hover {
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 .gallery-intro-link-arrow {
   text-decoration: none;
   white-space: nowrap;
   font-weight: 600;
-}
-
-.gallery-intro-link-row {
-  margin: 0.75rem 0 0;
-  padding-top: 0.65rem;
-  border-top: 1px solid #e0e0dc;
-  font-size: 0.8rem;
-  line-height: 1.45;
+  margin-right: 0.05em;
 }
 
 /* 라이트박스(이미지 확대) */

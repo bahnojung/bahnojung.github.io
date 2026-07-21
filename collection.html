@@ -131,17 +131,17 @@
           if (match.index > lastIndex) {
             el.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
           }
+          const arrow = document.createElement("span");
+          arrow.className = "gallery-intro-link-arrow";
+          arrow.setAttribute("aria-hidden", "true");
+          arrow.textContent = "← ";
+          el.appendChild(arrow);
           const a = document.createElement("a");
           a.href = match[1];
           a.target = "_blank";
           a.rel = "noopener noreferrer";
           a.className = "gallery-intro-link";
           a.textContent = match[1];
-          const arrow = document.createElement("span");
-          arrow.className = "gallery-intro-link-arrow";
-          arrow.setAttribute("aria-hidden", "true");
-          arrow.textContent = " →";
-          a.appendChild(arrow);
           el.appendChild(a);
           lastIndex = match.index + match[1].length;
         }
@@ -191,25 +191,6 @@
           body.appendChild(p);
         });
         inner.appendChild(body);
-
-        if (about.link && about.link.url) {
-          const linkRow = document.createElement("p");
-          linkRow.className = "gallery-intro-link-row";
-          const a = document.createElement("a");
-          a.href = about.link.url;
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-          a.className = "gallery-intro-link";
-          a.textContent = about.link.label || about.link.url;
-          const arrow = document.createElement("span");
-          arrow.className = "gallery-intro-link-arrow";
-          arrow.setAttribute("aria-hidden", "true");
-          arrow.textContent = " →";
-          a.appendChild(arrow);
-          linkRow.appendChild(a);
-          inner.appendChild(linkRow);
-        }
-
         aboutEl.appendChild(inner);
       }
 
