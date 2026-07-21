@@ -123,6 +123,27 @@
         return window.location.origin + basePath + path;
       }
 
+      function appendTextWithLinks(el, text) {
+        const urlRe = /(https?:\/\/[^\s]+)/g;
+        let lastIndex = 0;
+        let match;
+        while ((match = urlRe.exec(text)) !== null) {
+          if (match.index > lastIndex) {
+            el.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+          }
+          const a = document.createElement("a");
+          a.href = match[1];
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.textContent = match[1];
+          el.appendChild(a);
+          lastIndex = match.index + match[1].length;
+        }
+        if (lastIndex < text.length) {
+          el.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+      }
+
       function appendCollectionIntro(about) {
         const aboutEl = document.getElementById("collection-about");
         if (!aboutEl || !about) return;
@@ -160,7 +181,7 @@
         paragraphs.forEach((text) => {
           if (!text) return;
           const p = document.createElement("p");
-          p.textContent = text;
+          appendTextWithLinks(p, text);
           body.appendChild(p);
         });
         inner.appendChild(body);
@@ -207,7 +228,8 @@
           const about = await loadCollectionAbout(collectionId);
           if (about) appendCollectionIntro(about);
 
-          // 전역 변수에 이미지 배열 저장 (파일명 앞 숫자 작은 순서)
+          // 전역 변수에 이미지 배열 저장 (기본: 작은 번호 → 큰 번호, about.sort=desc면 역순)
+          const sortDesc = about && String(about.sort).toLowerCase() === "desc";
           imageList = images
             .filter((item) => item && item.src)
             .sort((a, b) => {
@@ -218,12 +240,15 @@
               };
               const an = numOf(a);
               const bn = numOf(b);
-              if (an !== null && bn !== null && an !== bn) return an - bn;
+              if (an !== null && bn !== null && an !== bn) {
+                return sortDesc ? bn - an : an - bn;
+              }
               if (an !== null && bn === null) return -1;
               if (an === null && bn !== null) return 1;
-              return String(a.alt || a.src).localeCompare(String(b.alt || b.src), "en", {
+              const cmp = String(a.alt || a.src).localeCompare(String(b.alt || b.src), "en", {
                 numeric: true,
               });
+              return sortDesc ? -cmp : cmp;
             });
           console.log("로드된 이미지 개수:", imageList.length);
           if (imageList.length > 0) {

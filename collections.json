@@ -1,8 +1,8 @@
 [
   {
-    "id": "My Lens Mentor",
-    "name": "My Lens Mentor",
-    "path": "collection.html?collection=My%20Lens%20Mentor"
+    "id": "AMIS DU QUARTIER - SEOUL",
+    "name": "AMIS DU QUARTIER - SEOUL",
+    "path": "collection.html?collection=AMIS%20DU%20QUARTIER%20-%20SEOUL"
   },
   {
     "id": "Seong-woo's Blue Vacation",
@@ -13,6 +13,11 @@
     "id": "Colors of the Grow-rings",
     "name": "Colors of the Grow-rings",
     "path": "collection.html?collection=Colors%20of%20the%20Grow-rings"
+  },
+  {
+    "id": "My Lens Mentor",
+    "name": "My Lens Mentor",
+    "path": "collection.html?collection=My%20Lens%20Mentor"
   },
   {
     "id": "Ant",

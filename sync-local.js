@@ -29,6 +29,21 @@ function sortImageNamesByNumericAsc(a, b) {
   return a.localeCompare(b, "en", { numeric: true });
 }
 
+function sortImageNamesByNumericDesc(a, b) {
+  return sortImageNamesByNumericAsc(b, a);
+}
+
+async function getCollectionSortOrder(collectionId) {
+  const file = path.join(ROOT, "collections", collectionId, "about.json");
+  try {
+    const raw = await fs.readFile(file, "utf8");
+    const about = JSON.parse(raw);
+    return String(about.sort || "").toLowerCase() === "desc" ? "desc" : "asc";
+  } catch {
+    return "asc";
+  }
+}
+
 async function getCollectionDirs() {
   const dir = path.join(ROOT, "collections");
   try {
@@ -137,11 +152,14 @@ async function generateCollectionImagesJson(collectionId) {
   try {
     await fs.mkdir(dir, { recursive: true });
   } catch (e) {}
+  const sortOrder = await getCollectionSortOrder(collectionId);
+  const sorter =
+    sortOrder === "desc" ? sortImageNamesByNumericDesc : sortImageNamesByNumericAsc;
   const entries = await fs.readdir(dir, { withFileTypes: true });
   const files = entries
     .filter((e) => e.isFile() && e.name !== "images.json" && isImage(e.name))
     .map((e) => e.name)
-    .sort(sortImageNamesByNumericAsc);
+    .sort(sorter);
   const data = files.map((file) => ({
     src: `collections/${collectionId}/${file}`,
     alt: path.parse(file).name,
@@ -158,7 +176,6 @@ async function runSync() {
   let changed = false;
 
   const collectionDirs = await getCollectionDirs();
-  const collectionDirsByCreation = await getCollectionDirsByCreationOrder();
   let collections = await loadCollectionsJson();
   const byId = new Map(collections.map((c) => [c.id, c]));
 
@@ -184,12 +201,17 @@ async function runSync() {
     console.log(`📁 새 컬렉션 추가: ${id}`);
   }
 
-  const creationOrdered = collectionDirsByCreation
-    .filter((id) => byId.has(id))
-    .map((id) => byId.get(id));
-  const ordered = creationOrdered.map((c) => ({
-    ...c,
-    path: `collection.html?collection=${encodeURIComponent(c.id)}`,
+  // collections.json에 적어 둔 순서를 유지 (새 컬렉션만 맨 앞에 추가)
+  const orderedIds = [];
+  for (const c of collections) {
+    if (collectionDirs.includes(c.id)) orderedIds.push(c.id);
+  }
+  for (const id of collectionDirs) {
+    if (!orderedIds.includes(id)) orderedIds.unshift(id);
+  }
+  const ordered = orderedIds.map((id) => ({
+    ...byId.get(id),
+    path: `collection.html?collection=${encodeURIComponent(id)}`,
   }));
   await saveCollectionsJson(ordered);
 
