@@ -2,23 +2,22 @@
  * 사이트 배경음악 (YouTube 임베드)
  * music.json 의 youtubeUrl 만 채우면 동작합니다.
  *
- * 브라우저는 소리 있는 자동재생을 막기 때문에, 먼저 소리와 함께 재생을 시도하고
- * 막히면 음소거 상태로 재생해 두었다가 첫 클릭/스크롤/키 입력에서 소리를 켭니다.
+ * 자동재생 없이, 오른쪽 아래 재생 버튼을 누르면 그 자리에서 노래가 나옵니다.
+ * 재생 중에 다른 페이지로 이동하면 이어서 재생됩니다.
  */
 (function () {
   "use strict";
 
   var TIME_KEY = "bahno-music-time";
-  var OFF_KEY = "bahno-music-off";
+  var PLAYING_KEY = "bahno-music-playing";
 
   var config = null;
   var player = null;
+  var playerReady = false;
   var videoId = "";
   var toggleEl = null;
-  var soundOn = false;
-  var userTurnedOff = false;
-  var gestureArmed = false;
-  var saveTimer = null;
+  var playing = false;
+  var pendingPlay = false;
 
   function readYouTubeId(url) {
     if (!url) return "";
@@ -36,39 +35,70 @@
     return "";
   }
 
-  function storage(get, key, value) {
+  function sessionGet(key) {
     try {
-      if (get) return window.sessionStorage.getItem(key);
-      window.sessionStorage.setItem(key, value);
-    } catch (e) {}
-    return null;
-  }
-
-  function persistedOff() {
-    try {
-      return window.localStorage.getItem(OFF_KEY) === "1";
+      return window.sessionStorage.getItem(key);
     } catch (e) {
-      return false;
+      return null;
     }
   }
 
-  function persistOff(off) {
+  function sessionSet(key, value) {
     try {
-      window.localStorage.setItem(OFF_KEY, off ? "1" : "0");
+      window.sessionStorage.setItem(key, value);
     } catch (e) {}
   }
 
   function savedTime() {
-    var raw = storage(true, TIME_KEY);
-    var t = raw ? Number.parseFloat(raw) : NaN;
+    var t = Number.parseFloat(sessionGet(TIME_KEY) || "");
     return Number.isFinite(t) && t > 0 ? t : config.startAt || 0;
   }
 
   function saveTime() {
-    if (!player || typeof player.getCurrentTime !== "function") return;
+    if (!playerReady || typeof player.getCurrentTime !== "function") return;
     try {
-      storage(false, TIME_KEY, String(player.getCurrentTime()));
+      sessionSet(TIME_KEY, String(player.getCurrentTime()));
     } catch (e) {}
+  }
+
+  function renderToggle() {
+    if (!toggleEl) return;
+    toggleEl.textContent = playing ? "❚❚" : "▶";
+    toggleEl.classList.toggle("is-on", playing);
+    var label = playing ? "음악 일시정지" : "음악 재생";
+    toggleEl.setAttribute("aria-label", label);
+    toggleEl.title = config.title ? config.title + " — " + label : label;
+  }
+
+  function play() {
+    if (!playerReady) {
+      pendingPlay = true;
+      loadYouTubeApi();
+      playing = true;
+      renderToggle();
+      return;
+    }
+    try {
+      player.unMute();
+      player.setVolume(config.volume);
+      player.playVideo();
+    } catch (e) {}
+    playing = true;
+    sessionSet(PLAYING_KEY, "1");
+    renderToggle();
+  }
+
+  function pause() {
+    if (playerReady) {
+      try {
+        player.pauseVideo();
+      } catch (e) {}
+      saveTime();
+    }
+    playing = false;
+    pendingPlay = false;
+    sessionSet(PLAYING_KEY, "0");
+    renderToggle();
   }
 
   function buildToggle() {
@@ -76,123 +106,43 @@
     toggleEl.type = "button";
     toggleEl.className = "music-toggle";
     toggleEl.addEventListener("click", function () {
-      if (soundOn) {
-        turnOff();
+      if (playing) {
+        pause();
       } else {
-        turnOn();
+        play();
       }
     });
     document.body.appendChild(toggleEl);
     renderToggle();
   }
 
-  function renderToggle() {
-    if (!toggleEl) return;
-    var label = soundOn ? "음악 끄기" : "음악 켜기";
-    toggleEl.textContent = soundOn ? "♪" : "♪̸";
-    toggleEl.classList.toggle("is-on", soundOn);
-    toggleEl.setAttribute("aria-label", label);
-    toggleEl.title = config.title ? config.title + " — " + label : label;
-  }
-
-  function turnOn() {
-    if (!player) return;
-    userTurnedOff = false;
-    persistOff(false);
-    try {
-      player.unMute();
-      player.setVolume(config.volume);
-      player.playVideo();
-    } catch (e) {}
-    soundOn = true;
-    renderToggle();
-  }
-
-  function turnOff() {
-    if (!player) return;
-    userTurnedOff = true;
-    persistOff(true);
-    try {
-      player.mute();
-      player.pauseVideo();
-    } catch (e) {}
-    soundOn = false;
-    renderToggle();
-  }
-
-  /** 자동재생이 막혔을 때, 사용자의 첫 동작에서 소리를 켠다 */
-  function armFirstGesture() {
-    if (gestureArmed) return;
-    gestureArmed = true;
-    var events = ["pointerdown", "keydown", "touchstart", "wheel", "scroll"];
-
-    function onGesture() {
-      events.forEach(function (name) {
-        window.removeEventListener(name, onGesture);
-      });
-      if (!userTurnedOff) turnOn();
-    }
-
-    events.forEach(function (name) {
-      window.addEventListener(name, onGesture, { once: true, passive: true });
-    });
-  }
-
   function onPlayerReady() {
+    playerReady = true;
     try {
       player.setVolume(config.volume);
       player.seekTo(savedTime(), true);
     } catch (e) {}
-
-    if (userTurnedOff) {
-      try {
-        player.mute();
-      } catch (e) {}
-      renderToggle();
-      return;
+    if (pendingPlay) {
+      pendingPlay = false;
+      play();
     }
-
-    // 1) 소리와 함께 자동재생 시도
-    try {
-      player.unMute();
-      player.playVideo();
-    } catch (e) {}
-
-    // 2) 막혔는지 확인 후, 음소거 재생 + 첫 동작에서 소리 켜기
-    window.setTimeout(function () {
-      var state = -1;
-      try {
-        state = player.getPlayerState();
-      } catch (e) {}
-      var playing = state === 1 || state === 3;
-      var muted = true;
-      try {
-        muted = player.isMuted();
-      } catch (e) {}
-
-      if (playing && !muted) {
-        soundOn = true;
-        renderToggle();
-        return;
-      }
-
-      try {
-        player.mute();
-        player.playVideo();
-      } catch (e) {}
-      soundOn = false;
-      renderToggle();
-      armFirstGesture();
-    }, 1200);
   }
 
   function onPlayerStateChange(event) {
-    // 반복 재생 (playlist 파라미터가 동작하지 않는 경우 대비)
     if (event.data === 0 && config.loop) {
+      // 곡이 끝나면 처음부터 반복
       try {
         player.seekTo(config.startAt || 0, true);
         player.playVideo();
       } catch (e) {}
+      return;
+    }
+    if (event.data === 1) {
+      playing = true;
+      renderToggle();
+    } else if (event.data === 2) {
+      playing = false;
+      renderToggle();
     }
   }
 
@@ -203,14 +153,12 @@
     document.body.appendChild(mount);
 
     var playerVars = {
-      autoplay: 1,
       controls: 0,
       disablekb: 1,
       fs: 0,
       modestbranding: 1,
       playsinline: 1,
       rel: 0,
-      start: Math.floor(config.startAt || 0),
     };
     if (config.loop) {
       playerVars.loop = 1;
@@ -227,33 +175,24 @@
     });
   }
 
+  var apiRequested = false;
+
   function loadYouTubeApi() {
     if (window.YT && window.YT.Player) {
-      createPlayer();
+      if (!player) createPlayer();
       return;
     }
+    if (apiRequested) return;
+    apiRequested = true;
     var prev = window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady = function () {
       if (typeof prev === "function") prev();
       createPlayer();
     };
-    if (!document.getElementById("youtube-iframe-api")) {
-      var script = document.createElement("script");
-      script.id = "youtube-iframe-api";
-      script.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(script);
-    }
-  }
-
-  function start() {
-    buildToggle();
-    loadYouTubeApi();
-
-    saveTimer = window.setInterval(saveTime, 1000);
-    window.addEventListener("pagehide", saveTime);
-    document.addEventListener("visibilitychange", function () {
-      if (document.visibilityState === "hidden") saveTime();
-    });
+    var script = document.createElement("script");
+    script.id = "youtube-iframe-api";
+    script.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(script);
   }
 
   fetch("music.json", { cache: "no-store" })
@@ -271,8 +210,16 @@
         volume: Number.isFinite(Number(data.volume)) ? Number(data.volume) : 30,
         loop: data.loop !== false,
       };
-      userTurnedOff = persistedOff();
-      start();
+
+      buildToggle();
+
+      window.setInterval(saveTime, 1000);
+      window.addEventListener("pagehide", saveTime);
+
+      // 재생 중에 페이지를 이동한 경우 이어서 재생
+      if (sessionGet(PLAYING_KEY) === "1") {
+        play();
+      }
     })
     .catch(function () {});
 })();
