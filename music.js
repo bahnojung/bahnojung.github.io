@@ -197,12 +197,21 @@
     document.head.appendChild(script);
   }
 
+  function isAllowedPage(collectionId) {
+    if (!collectionId) return false;
+    if (!/collection\.html$/i.test(window.location.pathname)) return false;
+    var current = new URLSearchParams(window.location.search).get("collection") || "";
+    return current === collectionId;
+  }
+
   fetch("music.json", { cache: "no-store" })
     .then(function (res) {
       return res.ok ? res.json() : null;
     })
     .then(function (data) {
       if (!data || data.enabled === false) return;
+      if (!isAllowedPage(data.collection || "Seong-woo's Blue Vacation")) return;
+
       videoId = readYouTubeId(data.youtubeUrl || "");
       if (!videoId) return;
 
@@ -218,7 +227,7 @@
       window.setInterval(saveTime, 1000);
       window.addEventListener("pagehide", saveTime);
 
-      // 재생 중에 페이지를 이동한 경우 이어서 재생
+      // 재생 중에 같은 컬렉션 페이지를 새로고침한 경우 이어서 재생
       if (sessionGet(PLAYING_KEY) === "1") {
         play();
       }
