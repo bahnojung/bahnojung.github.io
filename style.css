@@ -467,8 +467,6 @@ main.main-blank {
   border-radius: 50%;
   background: transparent;
   color: #111111;
-  font-size: 0.95rem;
-  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -483,7 +481,13 @@ main.main-blank {
 
 .music-toggle.is-on {
   opacity: 0.8;
-  font-size: 0.8rem;
+}
+
+.music-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  display: block;
+  fill: currentColor;
 }
 
 @media (max-width: 768px) {

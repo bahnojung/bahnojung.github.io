@@ -63,7 +63,9 @@
 
   function renderToggle() {
     if (!toggleEl) return;
-    toggleEl.textContent = playing ? "❚❚" : "▶";
+    toggleEl.innerHTML = playing
+      ? '<svg class="music-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>'
+      : '<svg class="music-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
     toggleEl.classList.toggle("is-on", playing);
     var label = playing ? "음악 일시정지" : "음악 재생";
     toggleEl.setAttribute("aria-label", label);
