@@ -233,14 +233,32 @@
 
           const about = await loadCollectionAbout(collectionId);
           const introAfterFirst = !!(about && about.afterFirst);
+          const forceLandscapeIds = new Set(
+            (about && Array.isArray(about.forceLandscape) ? about.forceLandscape : []).map(String)
+          );
+          const forcePortraitIds = new Set(
+            (about && Array.isArray(about.forcePortrait) ? about.forcePortrait : []).map(String)
+          );
+          const customOrder = about && Array.isArray(about.order) ? about.order.map(String) : null;
+          const orderIndex = customOrder
+            ? new Map(customOrder.map((id, i) => [id, i]))
+            : null;
+
+          const itemId = (item) =>
+            (item.alt || item.src.split("/").pop() || "").replace(/\.[^.]+$/, "");
 
           // 전역 변수에 이미지 배열 저장 (기본: 작은 번호 → 큰 번호, about.sort=desc면 역순)
           const sortDesc = about && String(about.sort).toLowerCase() === "desc";
           imageList = images
             .filter((item) => item && item.src)
             .sort((a, b) => {
+              if (orderIndex) {
+                const ai = orderIndex.has(itemId(a)) ? orderIndex.get(itemId(a)) : Number.MAX_SAFE_INTEGER;
+                const bi = orderIndex.has(itemId(b)) ? orderIndex.get(itemId(b)) : Number.MAX_SAFE_INTEGER;
+                if (ai !== bi) return ai - bi;
+              }
               const numOf = (item) => {
-                const name = (item.alt || item.src.split("/").pop() || "").replace(/\.[^.]+$/, "");
+                const name = itemId(item);
                 const m = name.match(/^(\d+(?:\.\d+)?)/);
                 return m ? Number.parseFloat(m[1]) : null;
               };
@@ -305,6 +323,8 @@
           imageList.forEach((item, index) => {
             const figure = document.createElement("figure");
             figure.className = "gallery-item";
+            const id = itemId(item);
+            figure.dataset.photoId = id;
 
             const img = document.createElement("img");
             img.src = imageUrlForItem(collectionId, item);
@@ -313,8 +333,11 @@
 
             const applyOrientation = () => {
               if (!img.naturalWidth || !img.naturalHeight) return;
-              figure.classList.toggle("landscape", img.naturalWidth > img.naturalHeight);
-              figure.classList.toggle("portrait", img.naturalWidth <= img.naturalHeight);
+              let isLandscape = img.naturalWidth > img.naturalHeight;
+              if (forceLandscapeIds.has(id)) isLandscape = true;
+              if (forcePortraitIds.has(id)) isLandscape = false;
+              figure.classList.toggle("landscape", isLandscape);
+              figure.classList.toggle("portrait", !isLandscape);
               updatePairSolos();
             };
             img.addEventListener("load", applyOrientation);
