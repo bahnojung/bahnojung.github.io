@@ -447,6 +447,17 @@ main.main-blank {
   background-color: transparent;
 }
 
+/* 세로 사진은 절반 크기 */
+.gallery.gallery-layout-stack .gallery-item.portrait {
+  width: 50% !important;
+  max-width: 450px;
+}
+
+.gallery.gallery-layout-stack .gallery-item.landscape {
+  width: 100% !important;
+  max-width: 900px;
+}
+
 .gallery.gallery-layout-stack .gallery-item img {
   width: 100% !important;
   height: auto !important;
@@ -924,6 +935,15 @@ main.main-blank {
     height: auto !important;
     padding: 0 !important;
     margin: 0 !important;
+  }
+
+  .gallery.gallery-layout-stack .gallery-item.portrait {
+    width: 50% !important;
+    max-width: 450px;
+  }
+
+  .gallery.gallery-layout-stack .gallery-item.landscape {
+    width: 100% !important;
   }
 
   .gallery.gallery-layout-stack .gallery-item img {
