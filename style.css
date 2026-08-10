@@ -368,6 +368,38 @@ main.main-blank {
   filter: brightness(1.02);
 }
 
+/* 세로 2장 / 가로 1장 레이아웃 (about.layout = pair) */
+.gallery.gallery-layout-pair {
+  --gallery-row-height: auto;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.55rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gallery.gallery-layout-pair .gallery-item {
+  height: auto;
+  width: calc(50% - 0.275rem);
+  background-color: transparent;
+}
+
+.gallery.gallery-layout-pair .gallery-item.landscape {
+  width: 100%;
+}
+
+.gallery.gallery-layout-pair .gallery-item img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.gallery.gallery-layout-pair .gallery-item:hover img {
+  transform: none;
+  filter: none;
+}
+
 /* 컬렉션 작업소개: 제목 아래 전체 표시 (잘림 없음) */
 .collection-about {
   width: 100%;
@@ -769,6 +801,34 @@ main.main-blank {
     padding: 0 0 10px 0 !important;
     display: flex;
     box-sizing: border-box;
+  }
+
+  /* 모바일에서도 세로 2장 / 가로 1장 */
+  .gallery.gallery-layout-pair {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.35rem !important;
+    row-gap: 0.35rem !important;
+    column-gap: 0.35rem !important;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .gallery.gallery-layout-pair .gallery-item {
+    width: calc(50% - 0.175rem);
+    height: auto;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .gallery.gallery-layout-pair .gallery-item.landscape {
+    width: 100%;
+  }
+
+  .gallery.gallery-layout-pair .gallery-item img {
+    width: 100%;
+    height: auto;
   }
 
   .collection-about {

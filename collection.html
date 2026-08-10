@@ -263,6 +263,9 @@
 
           if (about && !introAfterFirst) appendCollectionIntro(about);
 
+          const pairLayout = about && String(about.layout).toLowerCase() === "pair";
+          if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
+
           imageList.forEach((item, index) => {
             const figure = document.createElement("figure");
             figure.className = "gallery-item";
@@ -272,9 +275,13 @@
             img.alt = item.alt || "";
             img.loading = "lazy";
 
-            img.addEventListener("load", () => {
-              if (img.naturalWidth > img.naturalHeight) figure.classList.add("landscape");
-            });
+            const applyOrientation = () => {
+              if (!img.naturalWidth || !img.naturalHeight) return;
+              figure.classList.toggle("landscape", img.naturalWidth > img.naturalHeight);
+              figure.classList.toggle("portrait", img.naturalWidth <= img.naturalHeight);
+            };
+            img.addEventListener("load", applyOrientation);
+            if (img.complete) applyOrientation();
 
             img.addEventListener("click", () => {
               openLightbox(index);
