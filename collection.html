@@ -239,6 +239,9 @@
           const forcePortraitIds = new Set(
             (about && Array.isArray(about.forcePortrait) ? about.forcePortrait : []).map(String)
           );
+          const forceSoloIds = new Set(
+            (about && Array.isArray(about.forceSolo) ? about.forceSolo : []).map(String)
+          );
           const customOrder = about && Array.isArray(about.order) ? about.order.map(String) : null;
           const orderIndex = customOrder
             ? new Map(customOrder.map((id, i) => [id, i]))
@@ -307,6 +310,11 @@
               const ready =
                 el.classList.contains("portrait") || el.classList.contains("landscape");
               if (!ready) continue;
+              if (el.classList.contains("force-solo")) {
+                flush();
+                el.classList.add("gallery-item-solo");
+                continue;
+              }
               if (el.classList.contains("landscape")) {
                 flush();
                 continue;
@@ -325,6 +333,7 @@
             figure.className = "gallery-item";
             const id = itemId(item);
             figure.dataset.photoId = id;
+            if (forceSoloIds.has(id)) figure.classList.add("force-solo");
 
             const img = document.createElement("img");
             img.src = imageUrlForItem(collectionId, item);
@@ -335,7 +344,7 @@
               if (!img.naturalWidth || !img.naturalHeight) return;
               let isLandscape = img.naturalWidth > img.naturalHeight;
               if (forceLandscapeIds.has(id)) isLandscape = true;
-              if (forcePortraitIds.has(id)) isLandscape = false;
+              if (forcePortraitIds.has(id) || forceSoloIds.has(id)) isLandscape = false;
               figure.classList.toggle("landscape", isLandscape);
               figure.classList.toggle("portrait", !isLandscape);
               updatePairSolos();
