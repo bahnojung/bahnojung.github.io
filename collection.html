@@ -266,6 +266,42 @@
           const pairLayout = about && String(about.layout).toLowerCase() === "pair";
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
 
+          function updatePairSolos() {
+            if (!pairLayout) return;
+            const children = Array.from(galleryEl.children);
+            children.forEach((el) => {
+              if (el.classList && el.classList.contains("gallery-item")) {
+                el.classList.remove("gallery-item-solo");
+              }
+            });
+            let pending = null;
+            const flush = () => {
+              if (pending) {
+                pending.classList.add("gallery-item-solo");
+                pending = null;
+              }
+            };
+            for (const el of children) {
+              if (!el.classList || !el.classList.contains("gallery-item")) {
+                flush();
+                continue;
+              }
+              const ready =
+                el.classList.contains("portrait") || el.classList.contains("landscape");
+              if (!ready) continue;
+              if (el.classList.contains("landscape")) {
+                flush();
+                continue;
+              }
+              if (pending) {
+                pending = null;
+              } else {
+                pending = el;
+              }
+            }
+            flush();
+          }
+
           imageList.forEach((item, index) => {
             const figure = document.createElement("figure");
             figure.className = "gallery-item";
@@ -279,6 +315,7 @@
               if (!img.naturalWidth || !img.naturalHeight) return;
               figure.classList.toggle("landscape", img.naturalWidth > img.naturalHeight);
               figure.classList.toggle("portrait", img.naturalWidth <= img.naturalHeight);
+              updatePairSolos();
             };
             img.addEventListener("load", applyOrientation);
             if (img.complete) applyOrientation();
@@ -297,8 +334,11 @@
                 aboutEl.classList.add("collection-about-after-first");
                 galleryEl.appendChild(aboutEl);
               }
+              updatePairSolos();
             }
           });
+
+          updatePairSolos();
         } catch (error) {
           console.error("갤러리 로드 중 오류:", error);
         }

@@ -368,25 +368,44 @@ main.main-blank {
   filter: brightness(1.02);
 }
 
-/* 세로 2장 / 가로 1장 레이아웃 (about.layout = pair) */
+/* 세로 2장 / 가로 1장 레이아웃 (about.layout = pair) — 데스크톱도 모바일과 동일 */
 .gallery.gallery-layout-pair {
+  --pair-gap: 0.35rem;
   --gallery-row-height: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 0.55rem;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: var(--pair-gap);
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .gallery.gallery-layout-pair .gallery-item {
+  flex: 0 0 calc(50% - var(--pair-gap) / 2);
+  width: calc(50% - var(--pair-gap) / 2);
   height: auto;
-  width: calc(50% - 0.275rem);
+  margin: 0;
+  padding: 0;
   background-color: transparent;
+  box-sizing: border-box;
 }
 
 .gallery.gallery-layout-pair .gallery-item.landscape {
+  flex: 0 0 100%;
   width: 100%;
+}
+
+/* 세로가 한 장만 남는 행 → 중앙 배치 */
+.gallery.gallery-layout-pair .gallery-item.gallery-item-solo {
+  flex: 0 0 calc(50% - var(--pair-gap) / 2);
+  width: calc(50% - var(--pair-gap) / 2);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .gallery.gallery-layout-pair .gallery-item img {
@@ -411,7 +430,8 @@ main.main-blank {
 /* 0번 사진 바로 아래 소개 (갤러리 한 줄 전체 차지) */
 .gallery > .collection-about-after-first {
   flex: 1 1 100%;
-  max-width: 720px;
+  width: 100%;
+  max-width: 100%;
   margin: 0.35rem auto 1rem;
   order: 0;
 }
@@ -803,27 +823,34 @@ main.main-blank {
     box-sizing: border-box;
   }
 
-  /* 모바일에서도 세로 2장 / 가로 1장 */
+  /* 모바일에서도 세로 2장 / 가로 1장 (데스크톱과 동일 규칙) */
   .gallery.gallery-layout-pair {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 0.35rem !important;
-    row-gap: 0.35rem !important;
-    column-gap: 0.35rem !important;
-    margin: 0;
+    gap: var(--pair-gap) !important;
+    row-gap: var(--pair-gap) !important;
+    column-gap: var(--pair-gap) !important;
+    margin: 0 auto;
     padding: 0;
-    max-width: 100%;
+    max-width: 560px;
   }
 
   .gallery.gallery-layout-pair .gallery-item {
-    width: calc(50% - 0.175rem);
+    flex: 0 0 calc(50% - var(--pair-gap) / 2);
+    width: calc(50% - var(--pair-gap) / 2);
     height: auto;
     padding: 0 !important;
     margin: 0 !important;
   }
 
   .gallery.gallery-layout-pair .gallery-item.landscape {
+    flex: 0 0 100%;
     width: 100%;
+  }
+
+  .gallery.gallery-layout-pair .gallery-item.gallery-item-solo {
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .gallery.gallery-layout-pair .gallery-item img {
