@@ -376,6 +376,14 @@ main.main-blank {
   box-sizing: border-box;
 }
 
+/* 0번 사진 바로 아래 소개 (갤러리 한 줄 전체 차지) */
+.gallery > .collection-about-after-first {
+  flex: 1 1 100%;
+  max-width: 720px;
+  margin: 0.35rem auto 1rem;
+  order: 0;
+}
+
 .collection-about-inner {
   width: 100%;
   box-sizing: border-box;

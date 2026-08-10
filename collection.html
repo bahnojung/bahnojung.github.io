@@ -232,7 +232,7 @@
           }
 
           const about = await loadCollectionAbout(collectionId);
-          if (about) appendCollectionIntro(about);
+          const introAfterFirst = !!(about && about.afterFirst);
 
           // 전역 변수에 이미지 배열 저장 (기본: 작은 번호 → 큰 번호, about.sort=desc면 역순)
           const sortDesc = about && String(about.sort).toLowerCase() === "desc";
@@ -241,8 +241,8 @@
             .sort((a, b) => {
               const numOf = (item) => {
                 const name = (item.alt || item.src.split("/").pop() || "").replace(/\.[^.]+$/, "");
-                const m = name.match(/^(\d+)/);
-                return m ? Number.parseInt(m[1], 10) : null;
+                const m = name.match(/^(\d+(?:\.\d+)?)/);
+                return m ? Number.parseFloat(m[1]) : null;
               };
               const an = numOf(a);
               const bn = numOf(b);
@@ -260,6 +260,8 @@
           if (imageList.length > 0) {
             console.log("첫 번째 이미지 경로:", imageList[0].src);
           }
+
+          if (about && !introAfterFirst) appendCollectionIntro(about);
 
           imageList.forEach((item, index) => {
             const figure = document.createElement("figure");
@@ -280,6 +282,15 @@
 
             figure.appendChild(img);
             galleryEl.appendChild(figure);
+
+            if (introAfterFirst && index === 0) {
+              appendCollectionIntro(about);
+              const aboutEl = document.getElementById("collection-about");
+              if (aboutEl) {
+                aboutEl.classList.add("collection-about-after-first");
+                galleryEl.appendChild(aboutEl);
+              }
+            }
           });
         } catch (error) {
           console.error("갤러리 로드 중 오류:", error);

@@ -16,8 +16,8 @@ function isImage(name) {
 
 function getLeadingNumber(name) {
   const base = path.parse(name).name;
-  const m = base.match(/^(\d+)/);
-  return m ? Number.parseInt(m[1], 10) : null;
+  const m = base.match(/^(\d+(?:\.\d+)?)/);
+  return m ? Number.parseFloat(m[1]) : null;
 }
 
 function sortImageNamesByNumericAsc(a, b) {
