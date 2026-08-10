@@ -307,14 +307,16 @@
                 flush();
                 continue;
               }
-              const ready =
-                el.classList.contains("portrait") || el.classList.contains("landscape");
-              if (!ready) continue;
               if (el.classList.contains("force-solo")) {
                 flush();
+                el.classList.add("portrait");
+                el.classList.remove("landscape");
                 el.classList.add("gallery-item-solo");
                 continue;
               }
+              const ready =
+                el.classList.contains("portrait") || el.classList.contains("landscape");
+              if (!ready) continue;
               if (el.classList.contains("landscape")) {
                 flush();
                 continue;
@@ -333,18 +335,26 @@
             figure.className = "gallery-item";
             const id = itemId(item);
             figure.dataset.photoId = id;
-            if (forceSoloIds.has(id)) figure.classList.add("force-solo");
+            if (forceSoloIds.has(id)) {
+              figure.classList.add("force-solo", "portrait", "gallery-item-solo");
+            }
 
             const img = document.createElement("img");
             img.src = imageUrlForItem(collectionId, item);
             img.alt = item.alt || "";
-            img.loading = "lazy";
+            img.loading = pairLayout && Number(id) <= 15 ? "eager" : "lazy";
 
             const applyOrientation = () => {
+              if (forceSoloIds.has(id)) {
+                figure.classList.add("force-solo", "portrait", "gallery-item-solo");
+                figure.classList.remove("landscape");
+                updatePairSolos();
+                return;
+              }
               if (!img.naturalWidth || !img.naturalHeight) return;
               let isLandscape = img.naturalWidth > img.naturalHeight;
               if (forceLandscapeIds.has(id)) isLandscape = true;
-              if (forcePortraitIds.has(id) || forceSoloIds.has(id)) isLandscape = false;
+              if (forcePortraitIds.has(id)) isLandscape = false;
               figure.classList.toggle("landscape", isLandscape);
               figure.classList.toggle("portrait", !isLandscape);
               updatePairSolos();
