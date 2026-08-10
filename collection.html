@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=20260811stack" />
   </head>
   <body class="collection-page">
     <header class="site-header">
@@ -296,9 +296,22 @@
           if (about && !introAfterFirst) appendCollectionIntro(about);
 
           const pairLayout = about && String(about.layout).toLowerCase() === "pair";
-          const stackLayout = about && String(about.layout).toLowerCase() === "stack";
+          const stackLayout =
+            (about && String(about.layout).toLowerCase() === "stack") ||
+            collectionId === "Sunflowers of Seoul";
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
-          if (stackLayout) galleryEl.classList.add("gallery-layout-stack");
+          if (stackLayout) {
+            galleryEl.classList.add("gallery-layout-stack");
+            if (!document.getElementById("stack-layout-fallback")) {
+              const style = document.createElement("style");
+              style.id = "stack-layout-fallback";
+              style.textContent =
+                ".gallery.gallery-layout-stack{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:center;gap:0.85rem;width:100%;max-width:900px;margin:0 auto;padding:0}" +
+                ".gallery.gallery-layout-stack .gallery-item{flex:0 0 auto!important;width:100%!important;height:auto!important;margin:0!important;padding:0!important;background:transparent}" +
+                ".gallery.gallery-layout-stack .gallery-item img{width:100%!important;height:auto!important;display:block;object-fit:contain!important}";
+              document.head.appendChild(style);
+            }
+          }
 
           function updatePairSolos() {
             if (!pairLayout) return;
