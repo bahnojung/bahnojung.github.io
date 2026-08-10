@@ -285,7 +285,9 @@
           if (about && !introAfterFirst) appendCollectionIntro(about);
 
           const pairLayout = about && String(about.layout).toLowerCase() === "pair";
+          const stackLayout = about && String(about.layout).toLowerCase() === "stack";
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
+          if (stackLayout) galleryEl.classList.add("gallery-layout-stack");
 
           function updatePairSolos() {
             if (!pairLayout) return;

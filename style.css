@@ -423,6 +423,40 @@ main.main-blank {
   max-width: 100%;
 }
 
+/* 한 장씩 세로 나열 (about.layout = stack) */
+.gallery.gallery-layout-stack {
+  --gallery-row-height: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.gallery.gallery-layout-stack .gallery-item {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.gallery.gallery-layout-stack .gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.gallery.gallery-layout-stack .gallery-item:hover img {
+  transform: none;
+  filter: none;
+}
+
 /* 컬렉션 작업소개: 제목 아래 전체 표시 (잘림 없음) */
 .collection-about {
   width: 100%;
@@ -869,6 +903,29 @@ main.main-blank {
 
   .gallery.gallery-layout-pair > .collection-about-after-first {
     grid-column: 1 / -1;
+  }
+
+  /* 모바일: stack도 한 장씩 세로 (고정 높이 없이) */
+  .gallery.gallery-layout-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    gap: 0.65rem !important;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .gallery.gallery-layout-stack .gallery-item {
+    width: 100%;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .gallery.gallery-layout-stack .gallery-item img {
+    width: 100%;
+    height: auto;
   }
 
   .collection-about {
