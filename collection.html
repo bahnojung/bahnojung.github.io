@@ -154,6 +154,16 @@
         const aboutEl = document.getElementById("collection-about");
         if (!aboutEl || !about) return;
 
+        const paragraphs = Array.isArray(about.paragraphs)
+          ? about.paragraphs.filter((text) => !!text)
+          : [];
+        const hasContent = !!(about.date || about.location || about.credit || paragraphs.length);
+        if (!hasContent) {
+          aboutEl.innerHTML = "";
+          aboutEl.hidden = true;
+          return;
+        }
+
         aboutEl.innerHTML = "";
         aboutEl.hidden = false;
 
@@ -181,16 +191,17 @@
           inner.appendChild(creditEl);
         }
 
-        const body = document.createElement("div");
-        body.className = "gallery-intro-body";
-        const paragraphs = Array.isArray(about.paragraphs) ? about.paragraphs : [];
-        paragraphs.forEach((text) => {
-          if (!text) return;
-          const p = document.createElement("p");
-          appendTextWithLinks(p, text);
-          body.appendChild(p);
-        });
-        inner.appendChild(body);
+        if (paragraphs.length) {
+          const body = document.createElement("div");
+          body.className = "gallery-intro-body";
+          paragraphs.forEach((text) => {
+            const p = document.createElement("p");
+            appendTextWithLinks(p, text);
+            body.appendChild(p);
+          });
+          inner.appendChild(body);
+        }
+
         aboutEl.appendChild(inner);
       }
 
