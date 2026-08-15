@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260811stack2" />
+    <link rel="stylesheet" href="style.css?v=20260815slide" />
   </head>
   <body class="collection-page">
     <header class="site-header">
@@ -259,7 +259,10 @@
             : null;
 
           const itemId = (item) =>
-            (item.alt || item.src.split("/").pop() || "").replace(/\.[^.]+$/, "");
+            (item.alt || item.src.split("/").pop() || "").replace(
+              /\.(jpe?g|png|gif|webp)$/i,
+              ""
+            );
 
           // 전역 변수에 이미지 배열 저장 (기본: 작은 번호 → 큰 번호, about.sort=desc면 역순)
           const sortDesc = about && String(about.sort).toLowerCase() === "desc";
@@ -299,6 +302,9 @@
           const stackLayout =
             (about && String(about.layout).toLowerCase() === "stack") ||
             collectionId === "Sunflowers of Seoul";
+          const slideLayout =
+            (about && String(about.layout).toLowerCase() === "slide") ||
+            collectionId === "Colors of the Grow-rings";
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
           if (stackLayout) {
             galleryEl.classList.add("gallery-layout-stack");
@@ -314,6 +320,7 @@
               document.head.appendChild(style);
             }
           }
+          if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
 
           function updatePairSolos() {
             if (!pairLayout) return;
@@ -394,7 +401,14 @@
               openLightbox(index);
             });
 
-            figure.appendChild(img);
+            if (slideLayout) {
+              const mount = document.createElement("div");
+              mount.className = "slide-mount-frame";
+              mount.appendChild(img);
+              figure.appendChild(mount);
+            } else {
+              figure.appendChild(img);
+            }
             galleryEl.appendChild(figure);
 
             if (introAfterFirst && index === 0) {
