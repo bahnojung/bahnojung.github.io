@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260815slidepair" />
+    <link rel="stylesheet" href="style.css?v=20260815sliderevert" />
   </head>
   <body class="collection-page">
     <header class="site-header">
@@ -323,7 +323,7 @@
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
 
           function updatePairSolos() {
-            if (!pairLayout && !slideLayout) return;
+            if (!pairLayout) return;
             const children = Array.from(galleryEl.children);
             children.forEach((el) => {
               if (el.classList && el.classList.contains("gallery-item")) {

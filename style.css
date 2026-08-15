@@ -473,23 +473,20 @@ main.main-blank {
   filter: none;
 }
 
-/* Matin식 ABS 슬라이드 마운트 — 세로 2 / 가로 1 (about.layout = slide) */
+/* Matin식 ABS 슬라이드 마운트 (about.layout = slide) */
 .gallery.gallery-layout-slide {
   --gallery-row-height: auto;
-  --slide-mount-border: clamp(30px, 5.5vw, 42px);
-  --slide-gap: 0.7rem;
-  --slide-row-gap: 1.05rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: var(--slide-gap);
-  row-gap: var(--slide-row-gap);
+  --slide-img-h: 160px;
+  --slide-mount-border: 46px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 1rem;
   width: 100%;
-  max-width: 720px;
+  max-width: 1080px;
   margin: 0.4rem auto 1.75rem;
   padding: 0.35rem 0 1.5rem;
   justify-content: center;
   align-content: flex-start;
-  align-items: start;
   box-sizing: border-box;
   border-radius: 0;
   background-color: transparent;
@@ -498,32 +495,18 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-slide .gallery-item {
-  width: 100%;
   height: auto;
   margin: 0;
   padding: 0;
   border-radius: 0;
   background-color: transparent;
   overflow: visible;
-  min-width: 0;
+  flex: 0 0 auto;
   display: block;
-  box-sizing: border-box;
-}
-
-.gallery.gallery-layout-slide .gallery-item.landscape {
-  grid-column: 1 / -1;
-  width: 100%;
-}
-
-.gallery.gallery-layout-slide .gallery-item.gallery-item-solo {
-  grid-column: 1 / -1;
-  width: calc(50% - var(--slide-gap) / 2);
-  justify-self: center;
 }
 
 .gallery.gallery-layout-slide .slide-mount-shadow {
-  display: block;
-  width: 100%;
+  display: inline-block;
   line-height: 0;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.12));
   transform: rotate(var(--slide-tilt, 0deg));
@@ -531,25 +514,24 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 1) {
-  --slide-tilt: -0.35deg;
+  --slide-tilt: -0.5deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 2) {
-  --slide-tilt: 0.25deg;
+  --slide-tilt: 0.35deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 3) {
-  --slide-tilt: -0.15deg;
+  --slide-tilt: -0.2deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 4) {
-  --slide-tilt: 0.4deg;
+  --slide-tilt: 0.55deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 5) {
-  --slide-tilt: -0.1deg;
+  --slide-tilt: -0.12deg;
 }
 
 /* 실사 Matin ABS 마운트 (이젝터 핀·홈·클램프 디테일) */
 .gallery.gallery-layout-slide .slide-mount-frame {
-  display: block;
-  width: 100%;
+  display: inline-block;
   line-height: 0;
   box-sizing: border-box;
   padding: 0;
@@ -573,7 +555,6 @@ main.main-blank {
 
 .gallery.gallery-layout-slide .slide-mount-window {
   display: block;
-  width: 100%;
   line-height: 0;
   background: #050505;
   box-shadow:
@@ -582,9 +563,9 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-slide .slide-mount-frame img {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
+  height: var(--slide-img-h);
+  width: auto;
+  max-width: min(56vw, 320px);
   display: block;
   object-fit: contain;
   background: #0a0a0a;
@@ -600,9 +581,9 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-slide > .collection-about-after-first {
-  grid-column: 1 / -1;
+  flex: 0 0 100%;
   width: 100%;
-  max-width: 100%;
+  max-width: 720px;
   margin-left: auto;
   margin-right: auto;
   background: transparent;
@@ -1086,41 +1067,30 @@ main.main-blank {
     width: 100% !important;
   }
 
-  /* 모바일: 슬라이드도 세로 2 / 가로 1 */
+  /* 모바일: 슬라이드 마운트 — 한 열, 흰 배경 */
   .gallery.gallery-layout-slide {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    flex-direction: unset;
-    flex-wrap: unset;
-    gap: unset !important;
-    column-gap: var(--slide-gap, 0.55rem) !important;
-    row-gap: var(--slide-row-gap, 0.9rem) !important;
-    max-width: min(560px, 100%);
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: 1rem !important;
+    max-width: 100%;
     margin: 0.25rem auto 1.25rem;
     padding: 0.25rem 0 1.25rem;
+    --slide-img-h: auto;
     background: transparent;
-    --slide-mount-border: clamp(22px, 7vw, 32px);
   }
 
   .gallery.gallery-layout-slide .gallery-item {
-    width: 100%;
+    width: min(100%, 320px);
     height: auto !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
   .gallery.gallery-layout-slide .gallery-item.landscape {
-    grid-column: 1 / -1;
     width: 100%;
     max-width: 100%;
-  }
-
-  .gallery.gallery-layout-slide .gallery-item.gallery-item-solo {
-    grid-column: 1 / -1;
-    width: calc(50% - var(--slide-gap, 0.55rem) / 2) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    justify-self: center;
   }
 
   .gallery.gallery-layout-slide .slide-mount-shadow,
@@ -1131,8 +1101,9 @@ main.main-blank {
 
   .gallery.gallery-layout-slide .slide-mount-frame {
     padding: 0;
-    border-width: var(--slide-mount-border);
-    border-image-width: var(--slide-mount-border);
+    --slide-mount-border: 32px;
+    border-width: 32px;
+    border-image-width: 32px;
   }
 
   .gallery.gallery-layout-slide .slide-mount-frame img {
@@ -1142,7 +1113,6 @@ main.main-blank {
   }
 
   .gallery.gallery-layout-slide > .collection-about-after-first {
-    grid-column: 1 / -1;
     width: 100%;
     max-width: 100%;
   }
