@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260815slide" />
+    <link rel="stylesheet" href="style.css?v=20260815slidecase3" />
   </head>
   <body class="collection-page">
     <header class="site-header">
@@ -402,10 +402,16 @@
             });
 
             if (slideLayout) {
+              const shadow = document.createElement("div");
+              shadow.className = "slide-mount-shadow";
               const mount = document.createElement("div");
               mount.className = "slide-mount-frame";
-              mount.appendChild(img);
-              figure.appendChild(mount);
+              const windowEl = document.createElement("div");
+              windowEl.className = "slide-mount-window";
+              windowEl.appendChild(img);
+              mount.appendChild(windowEl);
+              shadow.appendChild(mount);
+              figure.appendChild(shadow);
             } else {
               figure.appendChild(img);
             }
