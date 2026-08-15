@@ -473,31 +473,32 @@ main.main-blank {
   filter: none;
 }
 
-/* 슬라이드 케이스 + 실사 카드보드 마운트 (about.layout = slide) */
+/* Matin식 ABS 슬라이드 마운트 + 케이스 (about.layout = slide) */
 .gallery.gallery-layout-slide {
   --gallery-row-height: auto;
-  --slide-img-h: 168px;
-  --slide-mount-border: 42px;
+  --slide-img-h: 160px;
+  --slide-mount-border: 46px;
   display: flex;
   flex-wrap: wrap;
-  gap: 1.15rem 0.95rem;
+  gap: 1.2rem 1rem;
   width: 100%;
   max-width: 1080px;
   margin: 0.4rem auto 1.75rem;
-  padding: 1.6rem 1.35rem 1.9rem;
+  padding: 1.7rem 1.4rem 2rem;
   justify-content: center;
   align-content: flex-start;
   box-sizing: border-box;
-  border-radius: 6px;
-  background-color: #6e7378;
+  border-radius: 7px;
+  background-color: #5f6469;
   background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.18)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.22)),
     url("assets/slide-case.jpg");
   background-size: cover;
   background-position: center;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -10px 28px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.2),
+    inset 0 -12px 30px rgba(0, 0, 0, 0.3),
     0 18px 40px rgba(0, 0, 0, 0.16);
 }
 
@@ -515,45 +516,49 @@ main.main-blank {
 .gallery.gallery-layout-slide .slide-mount-shadow {
   display: inline-block;
   line-height: 0;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)) drop-shadow(0 10px 18px rgba(0, 0, 0, 0.28));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4)) drop-shadow(0 9px 16px rgba(0, 0, 0, 0.32));
   transform: rotate(var(--slide-tilt, 0deg));
   transform-origin: 50% 60%;
 }
 
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 1) {
-  --slide-tilt: -0.55deg;
+  --slide-tilt: -0.5deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 2) {
-  --slide-tilt: 0.4deg;
+  --slide-tilt: 0.35deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 3) {
-  --slide-tilt: -0.25deg;
+  --slide-tilt: -0.2deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 4) {
-  --slide-tilt: 0.65deg;
+  --slide-tilt: 0.55deg;
 }
 .gallery.gallery-layout-slide .gallery-item:nth-child(5n + 5) {
-  --slide-tilt: -0.15deg;
+  --slide-tilt: -0.12deg;
 }
 
+/* 실사 Matin ABS 마운트 (이젝터 핀·홈·클램프 디테일) */
 .gallery.gallery-layout-slide .slide-mount-frame {
   display: inline-block;
   line-height: 0;
   box-sizing: border-box;
-  padding: 2.15rem 2rem 2.35rem;
-  border-radius: 0.35rem;
-  background-color: #ebe6da;
-  background-image: url("assets/slide-cardboard.jpg");
-  background-size: 140px 140px;
-  background-repeat: repeat;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(70, 60, 40, 0.14),
-    inset 0 0 0 1px rgba(90, 78, 55, 0.2);
+  padding: 0;
+  border-style: solid;
+  border-color: transparent;
+  border-width: var(--slide-mount-border);
+  border-image-source: url("assets/slide-mount-landscape.png");
+  border-image-slice: 26.8% 17.5% 26.9% 17.6% fill;
+  border-image-width: var(--slide-mount-border);
+  border-image-repeat: stretch;
+  background: url("assets/slide-plastic.jpg") center / 120px 120px repeat;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .gallery.gallery-layout-slide .gallery-item.portrait .slide-mount-frame {
-  padding: 2rem 2.15rem 2.2rem;
+  border-image-source: url("assets/slide-mount-portrait.png");
+  border-image-slice: 17.6% 26.8% 17.5% 26.9% fill;
+  padding: 0;
 }
 
 .gallery.gallery-layout-slide .slide-mount-window {
@@ -561,15 +566,14 @@ main.main-blank {
   line-height: 0;
   background: #050505;
   box-shadow:
-    inset 0 0 0 1px rgba(20, 16, 10, 0.85),
-    inset 0 3px 7px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.12);
+    inset 0 0 0 1px rgba(0, 0, 0, 0.65),
+    inset 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .gallery.gallery-layout-slide .slide-mount-frame img {
   height: var(--slide-img-h);
   width: auto;
-  max-width: min(58vw, 340px);
+  max-width: min(56vw, 320px);
   display: block;
   object-fit: contain;
   background: #0a0a0a;
@@ -581,7 +585,7 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-slide .gallery-item:hover .slide-mount-shadow {
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4)) drop-shadow(0 14px 22px rgba(0, 0, 0, 0.34));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45)) drop-shadow(0 12px 20px rgba(0, 0, 0, 0.38));
 }
 
 .gallery.gallery-layout-slide > .collection-about-after-first {
@@ -590,7 +594,7 @@ main.main-blank {
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 2px;
   padding: 0.35rem 0.5rem;
   box-sizing: border-box;
@@ -1103,7 +1107,10 @@ main.main-blank {
   }
 
   .gallery.gallery-layout-slide .slide-mount-frame {
-    padding: 1.35rem 1.25rem 1.5rem;
+    padding: 0;
+    --slide-mount-border: 32px;
+    border-width: 32px;
+    border-image-width: 32px;
   }
 
   .gallery.gallery-layout-slide .slide-mount-frame img {
