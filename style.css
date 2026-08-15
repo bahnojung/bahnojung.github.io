@@ -473,7 +473,7 @@ main.main-blank {
   filter: none;
 }
 
-/* Matin식 ABS 슬라이드 마운트 + 케이스 (about.layout = slide) */
+/* Matin식 ABS 슬라이드 마운트 (about.layout = slide) */
 .gallery.gallery-layout-slide {
   --gallery-row-height: auto;
   --slide-img-h: 160px;
@@ -484,22 +484,14 @@ main.main-blank {
   width: 100%;
   max-width: 1080px;
   margin: 0.4rem auto 1.75rem;
-  padding: 1.7rem 1.4rem 2rem;
+  padding: 0.35rem 0 1.5rem;
   justify-content: center;
   align-content: flex-start;
   box-sizing: border-box;
-  border-radius: 7px;
-  background-color: #5f6469;
-  background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.22)),
-    url("assets/slide-case.jpg");
-  background-size: cover;
-  background-position: center;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.2),
-    inset 0 -12px 30px rgba(0, 0, 0, 0.3),
-    0 18px 40px rgba(0, 0, 0, 0.16);
+  border-radius: 0;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
 }
 
 .gallery.gallery-layout-slide .gallery-item {
@@ -516,7 +508,7 @@ main.main-blank {
 .gallery.gallery-layout-slide .slide-mount-shadow {
   display: inline-block;
   line-height: 0;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4)) drop-shadow(0 9px 16px rgba(0, 0, 0, 0.32));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.12));
   transform: rotate(var(--slide-tilt, 0deg));
   transform-origin: 50% 60%;
 }
@@ -585,7 +577,7 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-slide .gallery-item:hover .slide-mount-shadow {
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45)) drop-shadow(0 12px 20px rgba(0, 0, 0, 0.38));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.14));
 }
 
 .gallery.gallery-layout-slide > .collection-about-after-first {
@@ -594,9 +586,9 @@ main.main-blank {
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 2px;
-  padding: 0.35rem 0.5rem;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -1075,7 +1067,7 @@ main.main-blank {
     width: 100% !important;
   }
 
-  /* 모바일: 슬라이드 케이스 — 한 열, 마운트 유지 */
+  /* 모바일: 슬라이드 마운트 — 한 열, 흰 배경 */
   .gallery.gallery-layout-slide {
     display: flex !important;
     flex-direction: column !important;
@@ -1084,8 +1076,9 @@ main.main-blank {
     gap: 1rem !important;
     max-width: 100%;
     margin: 0.25rem auto 1.25rem;
-    padding: 1.1rem 0.75rem 1.35rem;
+    padding: 0.25rem 0 1.25rem;
     --slide-img-h: auto;
+    background: transparent;
   }
 
   .gallery.gallery-layout-slide .gallery-item {
