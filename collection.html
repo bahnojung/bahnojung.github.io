@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260815sliderevert" />
+    <link rel="stylesheet" href="style.css?v=20260816soloright" />
   </head>
   <body class="collection-page">
     <header class="site-header">
@@ -253,6 +253,9 @@
           const forceSoloIds = new Set(
             (about && Array.isArray(about.forceSolo) ? about.forceSolo : []).map(String)
           );
+          const forceSoloRightIds = new Set(
+            (about && Array.isArray(about.forceSoloRight) ? about.forceSoloRight : []).map(String)
+          );
           const customOrder = about && Array.isArray(about.order) ? about.order.map(String) : null;
           const orderIndex = customOrder
             ? new Map(customOrder.map((id, i) => [id, i]))
@@ -347,6 +350,9 @@
                 el.classList.add("portrait");
                 el.classList.remove("landscape");
                 el.classList.add("gallery-item-solo");
+                if (el.classList.contains("solo-right")) {
+                  el.classList.add("solo-right");
+                }
                 continue;
               }
               const ready =
@@ -372,6 +378,7 @@
             figure.dataset.photoId = id;
             if (forceSoloIds.has(id)) {
               figure.classList.add("force-solo", "portrait", "gallery-item-solo");
+              if (forceSoloRightIds.has(id)) figure.classList.add("solo-right");
             }
 
             const img = document.createElement("img");
@@ -382,6 +389,7 @@
             const applyOrientation = () => {
               if (forceSoloIds.has(id)) {
                 figure.classList.add("force-solo", "portrait", "gallery-item-solo");
+                if (forceSoloRightIds.has(id)) figure.classList.add("solo-right");
                 figure.classList.remove("landscape");
                 updatePairSolos();
                 return;

@@ -407,6 +407,10 @@ main.main-blank {
   justify-self: center;
 }
 
+.gallery.gallery-layout-pair .gallery-item.gallery-item-solo.solo-right {
+  justify-self: end;
+}
+
 .gallery.gallery-layout-pair .gallery-item img {
   width: 100%;
   height: auto;
@@ -1029,6 +1033,12 @@ main.main-blank {
     margin-left: auto !important;
     margin-right: auto !important;
     justify-self: center;
+  }
+
+  .gallery.gallery-layout-pair .gallery-item.gallery-item-solo.solo-right {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    justify-self: end;
   }
 
   .gallery.gallery-layout-pair .gallery-item img {

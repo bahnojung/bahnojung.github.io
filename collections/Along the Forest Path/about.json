@@ -1,8 +1,7 @@
 {
-  "layout": "pair",
+  "layout": "stack",
   "sort": "asc",
   "afterFirst": true,
-  "forceSolo": ["00"],
   "order": [
     "00",
     "01",
