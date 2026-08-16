@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816pathvar" />
+    <link rel="stylesheet" href="style.css?v=20260816pathmobile" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -386,38 +386,38 @@
             return svg;
           }
 
-          // 좌우 규칙 반복 대신 불규칙 리듬 (같은 쪽 연속·깊이·폭 다양)
+          // 모바일과 같은 좁은 폭 기준 — 좌우·깊이·세로 간격 불규칙
           const PATH_RHYTHM = [
-            { side: "left", inset: "1%", w: "56%", tilt: "-0.6deg", swing: 0.9, through: 0.2 },
-            { side: "right", inset: "10%", w: "48%", tilt: "1.2deg", swing: 0.78, through: 0.78 },
-            { side: "left", inset: "16%", w: "52%", tilt: "-1.4deg", swing: 0.62, through: 0.28 },
-            { side: "left", inset: "4%", w: "60%", tilt: "-0.3deg", swing: 0.55, through: 0.15 },
-            { side: "right", inset: "2%", w: "50%", tilt: "0.9deg", swing: 0.92, through: 0.85 },
-            { side: "right", inset: "14%", w: "44%", tilt: "1.6deg", swing: 0.7, through: 0.7 },
-            { side: "left", inset: "8%", w: "54%", tilt: "-1.1deg", swing: 0.84, through: 0.22 },
-            { side: "right", inset: "6%", w: "58%", tilt: "0.5deg", swing: 0.66, through: 0.8 },
-            { side: "left", inset: "20%", w: "46%", tilt: "-1.8deg", swing: 0.5, through: 0.35 },
-            { side: "right", inset: "3%", w: "55%", tilt: "1.0deg", swing: 0.88, through: 0.88 },
-            { side: "left", inset: "0%", w: "62%", tilt: "-0.4deg", swing: 0.94, through: 0.12 },
-            { side: "right", inset: "18%", w: "47%", tilt: "1.5deg", swing: 0.58, through: 0.72 },
-            { side: "left", inset: "11%", w: "51%", tilt: "-0.9deg", swing: 0.8, through: 0.25 },
-            { side: "left", inset: "7%", w: "49%", tilt: "-1.3deg", swing: 0.72, through: 0.3 },
-            { side: "right", inset: "1%", w: "57%", tilt: "0.7deg", swing: 0.91, through: 0.82 },
-            { side: "right", inset: "12%", w: "45%", tilt: "1.8deg", swing: 0.64, through: 0.68 },
-            { side: "left", inset: "5%", w: "53%", tilt: "-0.5deg", swing: 0.86, through: 0.18 },
-            { side: "right", inset: "9%", w: "59%", tilt: "1.1deg", swing: 0.74, through: 0.9 },
-            { side: "left", inset: "15%", w: "48%", tilt: "-1.6deg", swing: 0.52, through: 0.32 },
-            { side: "right", inset: "4%", w: "54%", tilt: "0.4deg", swing: 0.83, through: 0.76 },
-            { side: "left", inset: "2%", w: "61%", tilt: "-0.7deg", swing: 0.93, through: 0.14 },
-            { side: "right", inset: "17%", w: "46%", tilt: "1.4deg", swing: 0.6, through: 0.7 },
-            { side: "left", inset: "9%", w: "50%", tilt: "-1.0deg", swing: 0.77, through: 0.26 },
-            { side: "right", inset: "0%", w: "56%", tilt: "0.8deg", swing: 0.89, through: 0.86 },
-            { side: "left", inset: "13%", w: "47%", tilt: "-1.5deg", swing: 0.57, through: 0.34 },
-            { side: "right", inset: "7%", w: "52%", tilt: "1.3deg", swing: 0.81, through: 0.74 },
-            { side: "left", inset: "3%", w: "58%", tilt: "-0.2deg", swing: 0.95, through: 0.16 },
-            { side: "right", inset: "11%", w: "49%", tilt: "1.7deg", swing: 0.68, through: 0.79 },
-            { side: "left", inset: "6%", w: "55%", tilt: "-1.2deg", swing: 0.73, through: 0.24 },
-            { side: "right", inset: "5%", w: "51%", tilt: "0.6deg", swing: 0.87, through: 0.84 },
+            { side: "left", inset: "0%", w: "68%", tilt: "-0.6deg", swing: 0.9, through: 0.2, mb: "1.1rem" },
+            { side: "right", inset: "8%", w: "52%", tilt: "1.4deg", swing: 0.72, through: 0.78, mb: "2.8rem" },
+            { side: "left", inset: "18%", w: "58%", tilt: "-1.6deg", swing: 0.55, through: 0.28, mb: "0.7rem" },
+            { side: "left", inset: "3%", w: "72%", tilt: "-0.2deg", swing: 0.48, through: 0.15, mb: "3.4rem" },
+            { side: "right", inset: "0%", w: "54%", tilt: "1.0deg", swing: 0.94, through: 0.85, mb: "1.6rem" },
+            { side: "right", inset: "14%", w: "46%", tilt: "1.8deg", swing: 0.62, through: 0.7, mb: "2.2rem" },
+            { side: "left", inset: "6%", w: "64%", tilt: "-1.1deg", swing: 0.84, through: 0.22, mb: "4.0rem" },
+            { side: "right", inset: "4%", w: "70%", tilt: "0.5deg", swing: 0.66, through: 0.8, mb: "1.0rem" },
+            { side: "left", inset: "22%", w: "48%", tilt: "-1.9deg", swing: 0.42, through: 0.35, mb: "2.5rem" },
+            { side: "right", inset: "2%", w: "60%", tilt: "1.2deg", swing: 0.88, through: 0.88, mb: "0.55rem" },
+            { side: "left", inset: "0%", w: "74%", tilt: "-0.4deg", swing: 0.96, through: 0.12, mb: "3.1rem" },
+            { side: "right", inset: "16%", w: "50%", tilt: "1.5deg", swing: 0.5, through: 0.72, mb: "1.4rem" },
+            { side: "left", inset: "10%", w: "56%", tilt: "-0.9deg", swing: 0.8, through: 0.25, mb: "2.0rem" },
+            { side: "left", inset: "5%", w: "62%", tilt: "-1.3deg", swing: 0.7, through: 0.3, mb: "3.6rem" },
+            { side: "right", inset: "1%", w: "66%", tilt: "0.7deg", swing: 0.91, through: 0.82, mb: "0.9rem" },
+            { side: "right", inset: "12%", w: "44%", tilt: "2.0deg", swing: 0.58, through: 0.68, mb: "2.7rem" },
+            { side: "left", inset: "4%", w: "58%", tilt: "-0.5deg", swing: 0.86, through: 0.18, mb: "1.8rem" },
+            { side: "right", inset: "7%", w: "72%", tilt: "1.1deg", swing: 0.74, through: 0.9, mb: "4.2rem" },
+            { side: "left", inset: "15%", w: "50%", tilt: "-1.7deg", swing: 0.46, through: 0.32, mb: "1.2rem" },
+            { side: "right", inset: "3%", w: "60%", tilt: "0.4deg", swing: 0.83, through: 0.76, mb: "2.4rem" },
+            { side: "left", inset: "1%", w: "70%", tilt: "-0.8deg", swing: 0.93, through: 0.14, mb: "0.65rem" },
+            { side: "right", inset: "19%", w: "48%", tilt: "1.6deg", swing: 0.54, through: 0.7, mb: "3.0rem" },
+            { side: "left", inset: "8%", w: "54%", tilt: "-1.0deg", swing: 0.77, through: 0.26, mb: "1.5rem" },
+            { side: "right", inset: "0%", w: "68%", tilt: "0.9deg", swing: 0.89, through: 0.86, mb: "2.9rem" },
+            { side: "left", inset: "12%", w: "52%", tilt: "-1.5deg", swing: 0.5, through: 0.34, mb: "0.8rem" },
+            { side: "right", inset: "6%", w: "58%", tilt: "1.3deg", swing: 0.81, through: 0.74, mb: "3.5rem" },
+            { side: "left", inset: "2%", w: "64%", tilt: "-0.3deg", swing: 0.95, through: 0.16, mb: "1.9rem" },
+            { side: "right", inset: "11%", w: "46%", tilt: "1.7deg", swing: 0.64, through: 0.79, mb: "2.6rem" },
+            { side: "left", inset: "5%", w: "60%", tilt: "-1.2deg", swing: 0.73, through: 0.24, mb: "1.3rem" },
+            { side: "right", inset: "4%", w: "56%", tilt: "0.6deg", swing: 0.87, through: 0.84, mb: "2.1rem" },
           ];
 
           function pathRhythmFor(index) {
@@ -429,14 +429,19 @@
             figure.style.removeProperty("--path-inset");
             figure.style.removeProperty("--path-w");
             figure.style.removeProperty("--path-tilt");
+            figure.style.removeProperty("--path-mb");
             figure.dataset.pathSwing = "";
             figure.dataset.pathThrough = "";
-            if (isLandscape) return;
+            if (isLandscape) {
+              figure.style.setProperty("--path-mb", "2.4rem");
+              return;
+            }
             const rh = pathRhythmFor(index);
             figure.classList.add(rh.side === "left" ? "path-side-left" : "path-side-right");
             figure.style.setProperty("--path-inset", rh.inset);
             figure.style.setProperty("--path-w", rh.w);
             figure.style.setProperty("--path-tilt", rh.tilt);
+            figure.style.setProperty("--path-mb", rh.mb || "2.1rem");
             figure.dataset.pathSwing = String(rh.swing);
             figure.dataset.pathThrough = String(rh.through);
           }
