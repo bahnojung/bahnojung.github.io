@@ -390,13 +390,6 @@ main.main-blank {
     0 0 0 1px rgba(0, 0, 0, 0.28);
 }
 
-.cursed-refresh.is-black .cursed-refresh-face {
-  box-shadow:
-    inset 0 2px 3px rgba(255, 255, 255, 0.12),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.75),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
-}
-
 .cursed-refresh.is-pressed {
   transform: rotate(var(--cursed-rot)) scale(0.94);
   filter: brightness(0.9) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
