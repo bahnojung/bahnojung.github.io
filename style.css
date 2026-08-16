@@ -546,8 +546,8 @@ body.collection-path-page {
 
 .gallery.gallery-layout-path .gallery-item {
   flex: 0 0 auto !important;
-  width: min(58%, 300px) !important;
-  max-width: 300px;
+  width: min(var(--path-w, 58%), 300px) !important;
+  max-width: 320px;
   height: auto !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -561,19 +561,23 @@ body.collection-path-page {
   width: min(90%, 560px) !important;
   max-width: 560px;
   align-self: center !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   transform: none !important;
 }
 
 .gallery.gallery-layout-path .gallery-item.path-side-left {
   align-self: flex-start;
-  margin-left: 2% !important;
-  transform: rotate(-0.8deg);
+  margin-left: var(--path-inset, 2%) !important;
+  margin-right: 0 !important;
+  transform: rotate(var(--path-tilt, -0.8deg));
 }
 
 .gallery.gallery-layout-path .gallery-item.path-side-right {
   align-self: flex-end;
-  margin-right: 2% !important;
-  transform: rotate(0.8deg);
+  margin-right: var(--path-inset, 2%) !important;
+  margin-left: 0 !important;
+  transform: rotate(var(--path-tilt, 0.8deg));
 }
 
 .gallery.gallery-layout-path .gallery-item img {
@@ -627,22 +631,22 @@ body.collection-path-page {
 @keyframes path-photo-settle-left {
   from {
     opacity: 0;
-    transform: rotate(-0.8deg) translate(-14px, 14px);
+    transform: rotate(var(--path-tilt, -0.8deg)) translate(-14px, 14px);
   }
   to {
     opacity: 1;
-    transform: rotate(-0.8deg);
+    transform: rotate(var(--path-tilt, -0.8deg));
   }
 }
 
 @keyframes path-photo-settle-right {
   from {
     opacity: 0;
-    transform: rotate(0.8deg) translate(14px, 14px);
+    transform: rotate(var(--path-tilt, 0.8deg)) translate(14px, 14px);
   }
   to {
     opacity: 1;
-    transform: rotate(0.8deg);
+    transform: rotate(var(--path-tilt, 0.8deg));
   }
 }
 
