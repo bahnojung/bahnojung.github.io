@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816cursedbtn" />
+    <link rel="stylesheet" href="style.css?v=20260816arcade" />
   </head>
   <body class="main-page">
     <nav class="collection-nav" id="collection-nav">
@@ -55,12 +55,8 @@
       title="누르면 안 됩니다"
       hidden
     >
-      <span class="cursed-refresh-base" aria-hidden="true"></span>
-      <span class="cursed-refresh-stem" aria-hidden="true"></span>
-      <span class="cursed-refresh-cap" aria-hidden="true">
-        <span class="cursed-refresh-label" id="cursed-refresh-label">DO NOT</span>
-      </span>
-      <span class="cursed-refresh-scratch" aria-hidden="true"></span>
+      <span class="cursed-refresh-bezel" aria-hidden="true"></span>
+      <span class="cursed-refresh-face" aria-hidden="true"></span>
     </button>
 
     <script>
@@ -125,31 +121,11 @@
 
       (function placeCursedRefresh() {
         const btn = document.getElementById("cursed-refresh");
-        const labelEl = document.getElementById("cursed-refresh-label");
-        if (!btn || !labelEl) return;
-
-        const labels = [
-          "DO NOT",
-          "NO",
-          "STOP",
-          "절대금지",
-          "누르지마",
-          "⚠︎",
-          "DEAD",
-          "???",
-          "끝",
-          "금지",
-        ];
-        labelEl.textContent = labels[Math.floor(Math.random() * labels.length)];
-
-        const variants = ["rust", "bio", "panic", "melt", "tape"];
-        btn.classList.add(
-          "is-" + variants[Math.floor(Math.random() * variants.length)]
-        );
+        if (!btn) return;
 
         const vw = Math.max(document.documentElement.clientWidth, 320);
         const vh = Math.max(document.documentElement.clientHeight, 480);
-        const size = 72 + Math.random() * 36;
+        const size = 64 + Math.random() * 28;
         const pad = 16;
         const topMin = pad;
         const topMax = Math.max(pad, vh * 0.42 - size);
@@ -157,7 +133,7 @@
         const leftMax = Math.max(pad, vw - size - pad - 56);
         const top = topMin + Math.random() * Math.max(0, topMax - topMin);
         const left = leftMin + Math.random() * Math.max(0, leftMax - leftMin);
-        const rot = (Math.random() * 28 - 14).toFixed(1);
+        const rot = (Math.random() * 16 - 8).toFixed(1);
 
         btn.style.setProperty("--cursed-size", size.toFixed(0) + "px");
         btn.style.top = top.toFixed(0) + "px";
@@ -169,7 +145,7 @@
           btn.classList.add("is-pressed");
           window.setTimeout(function () {
             window.location.reload();
-          }, 180);
+          }, 160);
         });
       })();
     </script>
