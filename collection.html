@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816pathgreen" />
+    <link rel="stylesheet" href="style.css?v=20260816pathfix" />
   </head>
   <body class="collection-page">
     <header class="site-header">
@@ -357,27 +357,41 @@
             let svg = galleryEl.querySelector(".forest-path-svg");
             if (svg) return svg;
             const NS = "http://www.w3.org/2000/svg";
+            const uid = `fp-${Date.now().toString(36)}`;
             svg = document.createElementNS(NS, "svg");
             svg.classList.add("forest-path-svg");
             svg.setAttribute("aria-hidden", "true");
+            svg.dataset.filterUid = uid;
+
             const defs = document.createElementNS(NS, "defs");
-            defs.innerHTML =
-              '<filter id="crayon-grain" x="-30%" y="-30%" width="160%" height="160%">' +
-              '<feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="5" stitchTiles="stitch" result="noise"/>' +
-              '<feDisplacementMap in="SourceGraphic" in2="noise" scale="4.5" xChannelSelector="R" yChannelSelector="G"/>' +
-              "</filter>" +
-              '<filter id="crayon-grain-soft" x="-30%" y="-30%" width="160%" height="160%">' +
-              '<feTurbulence type="fractalNoise" baseFrequency="1.25" numOctaves="4" stitchTiles="stitch" result="noise"/>' +
-              '<feDisplacementMap in="SourceGraphic" in2="noise" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>' +
-              "</filter>";
+            const filter = document.createElementNS(NS, "filter");
+            filter.setAttribute("id", `${uid}-crayon`);
+            filter.setAttribute("x", "-40%");
+            filter.setAttribute("y", "-40%");
+            filter.setAttribute("width", "180%");
+            filter.setAttribute("height", "180%");
+            filter.innerHTML =
+              '<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"/>' +
+              '<feDisplacementMap in="SourceGraphic" in2="noise" scale="2.8" xChannelSelector="R" yChannelSelector="G"/>';
+            defs.appendChild(filter);
             svg.appendChild(defs);
-            ["path-stroke-back", "path-stroke-mid", "path-stroke-edge"].forEach((cls, i) => {
+
+            // 쿼리스트링 페이지에서도 필터가 먹도록 절대 해시 참조
+            const filterRef = `url(#${uid}-crayon)`;
+            [
+              ["path-stroke-back", "28", "#1b6b2a", "0.35"],
+              ["path-stroke-mid", "15", "#2f9a3c", "0.9"],
+              ["path-stroke-edge", "6", "#7dce5c", "0.75"],
+            ].forEach(([cls, width, color, opacity]) => {
               const p = document.createElementNS(NS, "path");
               p.classList.add(cls);
-              p.setAttribute(
-                "filter",
-                i === 0 ? "url(#crayon-grain)" : "url(#crayon-grain-soft)"
-              );
+              p.setAttribute("fill", "none");
+              p.setAttribute("stroke", color);
+              p.setAttribute("stroke-width", width);
+              p.setAttribute("stroke-linecap", "round");
+              p.setAttribute("stroke-linejoin", "round");
+              p.setAttribute("opacity", opacity);
+              p.setAttribute("filter", filterRef);
               svg.appendChild(p);
             });
             galleryEl.insertBefore(svg, galleryEl.firstChild);
@@ -394,72 +408,63 @@
                   el.classList.contains("collection-about-after-first"))
             );
             if (!nodes.length) return;
-            const gRect = galleryEl.getBoundingClientRect();
-            const height = Math.max(galleryEl.scrollHeight, 1);
-            const width = Math.max(galleryEl.clientWidth, 1);
+
+            const height = Math.max(galleryEl.scrollHeight, galleryEl.offsetHeight, 1);
+            const width = Math.max(galleryEl.clientWidth, galleryEl.offsetWidth, 1);
+            svg.style.position = "absolute";
+            svg.style.left = "0";
+            svg.style.top = "0";
+            svg.style.width = `${width}px`;
+            svg.style.height = `${height}px`;
             svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
             svg.setAttribute("width", String(width));
             svg.setAttribute("height", String(height));
 
+            const gRect = galleryEl.getBoundingClientRect();
             const points = [];
             nodes.forEach((el, i) => {
               const r = el.getBoundingClientRect();
+              if (r.height < 2 || r.width < 2) return;
               const top = r.top - gRect.top + galleryEl.scrollTop;
               const left = r.left - gRect.left + galleryEl.scrollLeft;
               const midY = top + r.height * 0.5;
               const isLeft = el.classList.contains("path-side-left");
               const isRight = el.classList.contains("path-side-right");
-              // 사진 바깥쪽(마진)으로 크게 꺾여 사진 뒤로만 스치듯 통과
               const outerX = isLeft
-                ? Math.max(14, left + r.width * 0.12)
+                ? Math.max(16, left + r.width * 0.18)
                 : isRight
-                  ? Math.min(width - 14, left + r.width * 0.88)
+                  ? Math.min(width - 16, left + r.width * 0.82)
                   : left + r.width * 0.5;
-              const farX = isLeft
-                ? Math.max(8, width * 0.08)
-                : isRight
-                  ? Math.min(width - 8, width * 0.92)
-                  : width * 0.5;
+              const farX = isLeft ? width * 0.1 : isRight ? width * 0.9 : width * 0.5;
 
               if (i === 0) {
-                points.push({ x: farX, y: Math.max(8, top - 18) });
+                points.push({ x: farX, y: Math.max(6, top - 24) });
               } else {
-                // 사진 사이 공백에서 반대편으로 크게 꺾기
                 const prev = nodes[i - 1].getBoundingClientRect();
                 const gapY =
                   (prev.bottom - gRect.top + (r.top - gRect.top)) / 2 + galleryEl.scrollTop;
-                const swingX = isLeft ? width * 0.88 : width * 0.12;
-                points.push({ x: swingX, y: gapY });
+                points.push({ x: isLeft ? width * 0.86 : width * 0.14, y: gapY });
               }
-              points.push({ x: outerX, y: top + r.height * 0.22 });
-              points.push({ x: outerX + (isLeft ? 10 : isRight ? -10 : 0), y: midY });
-              points.push({ x: outerX, y: top + r.height * 0.78 });
+              points.push({ x: outerX, y: top + r.height * 0.2 });
+              points.push({ x: outerX + (isLeft ? 8 : isRight ? -8 : 0), y: midY });
+              points.push({ x: outerX, y: top + r.height * 0.8 });
             });
 
-            // 마지막에 살짝 루프 느낌
+            if (points.length < 2) return;
+
             const last = points[points.length - 1];
-            if (last) {
-              points.push({
-                x: last.x + (last.x < width / 2 ? 28 : -28),
-                y: last.y + 36,
-              });
-            }
+            points.push({
+              x: last.x + (last.x < width / 2 ? 32 : -32),
+              y: last.y + 40,
+            });
 
             const d = buildSmoothPath(points);
             svg.querySelectorAll("path").forEach((pathEl, idx) => {
               pathEl.setAttribute("d", d);
-              // 레이어마다 미세한 오프셋으로 크레파스 겹침
-              if (idx === 0) pathEl.setAttribute("transform", "translate(1.5, 0.5)");
-              if (idx === 2) pathEl.setAttribute("transform", "translate(-1.2, -0.8)");
-              const len = pathEl.getTotalLength ? pathEl.getTotalLength() : 0;
-              if (len > 0 && !pathEl.dataset.drawn) {
-                pathEl.style.strokeDasharray = String(len);
-                pathEl.style.strokeDashoffset = String(len);
-                pathEl.getBoundingClientRect();
-                pathEl.style.transition = `stroke-dashoffset ${1.1 + idx * 0.15}s ease-out`;
-                pathEl.style.strokeDashoffset = "0";
-                pathEl.dataset.drawn = "1";
-              }
+              pathEl.style.strokeDasharray = "none";
+              pathEl.style.strokeDashoffset = "0";
+              if (idx === 0) pathEl.setAttribute("transform", "translate(1.2, 0.4)");
+              if (idx === 2) pathEl.setAttribute("transform", "translate(-1, -0.6)");
             });
           }
 
