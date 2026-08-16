@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816arcade" />
+    <link rel="stylesheet" href="style.css?v=20260816buzzer" />
   </head>
   <body class="main-page">
     <nav class="collection-nav" id="collection-nav">
@@ -55,7 +55,8 @@
       title="누르면 안 됩니다"
       hidden
     >
-      <span class="cursed-refresh-bezel" aria-hidden="true"></span>
+      <span class="cursed-refresh-base" aria-hidden="true"></span>
+      <span class="cursed-refresh-rim" aria-hidden="true"></span>
       <span class="cursed-refresh-face" aria-hidden="true"></span>
     </button>
 
@@ -125,7 +126,7 @@
 
         const vw = Math.max(document.documentElement.clientWidth, 320);
         const vh = Math.max(document.documentElement.clientHeight, 480);
-        const size = 64 + Math.random() * 28;
+        const size = 42 + Math.random() * 10;
         const pad = 16;
         const topMin = pad;
         const topMax = Math.max(pad, vh * 0.42 - size);
