@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816soloright" />
+    <link rel="stylesheet" href="style.css?v=20260816pathgreen" />
   </head>
   <body class="collection-page">
     <header class="site-header">
@@ -302,13 +302,21 @@
           if (about && !introAfterFirst) appendCollectionIntro(about);
 
           const pairLayout = about && String(about.layout).toLowerCase() === "pair";
+          const pathLayout =
+            (about && String(about.layout).toLowerCase() === "path") ||
+            collectionId === "Along the Forest Path";
           const stackLayout =
-            (about && String(about.layout).toLowerCase() === "stack") ||
-            collectionId === "Sunflowers of Seoul";
+            ((about && String(about.layout).toLowerCase() === "stack") ||
+              collectionId === "Sunflowers of Seoul") &&
+            !pathLayout;
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
             collectionId === "Colors of the Grow-rings";
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
+          if (pathLayout) {
+            galleryEl.classList.add("gallery-layout-path");
+            document.body.classList.add("collection-path-page");
+          }
           if (stackLayout) {
             galleryEl.classList.add("gallery-layout-stack");
             if (!document.getElementById("stack-layout-fallback")) {
@@ -324,6 +332,143 @@
             }
           }
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
+
+          function buildSmoothPath(points) {
+            if (!points.length) return "";
+            if (points.length === 1) {
+              return `M ${points[0].x} ${points[0].y}`;
+            }
+            let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+            for (let i = 0; i < points.length - 1; i++) {
+              const p0 = points[Math.max(0, i - 1)];
+              const p1 = points[i];
+              const p2 = points[i + 1];
+              const p3 = points[Math.min(points.length - 1, i + 2)];
+              const cp1x = p1.x + (p2.x - p0.x) / 6;
+              const cp1y = p1.y + (p2.y - p0.y) / 6;
+              const cp2x = p2.x - (p3.x - p1.x) / 6;
+              const cp2y = p2.y - (p3.y - p1.y) / 6;
+              d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+            }
+            return d;
+          }
+
+          function ensureForestPathSvg() {
+            let svg = galleryEl.querySelector(".forest-path-svg");
+            if (svg) return svg;
+            const NS = "http://www.w3.org/2000/svg";
+            svg = document.createElementNS(NS, "svg");
+            svg.classList.add("forest-path-svg");
+            svg.setAttribute("aria-hidden", "true");
+            const defs = document.createElementNS(NS, "defs");
+            defs.innerHTML =
+              '<filter id="crayon-grain" x="-30%" y="-30%" width="160%" height="160%">' +
+              '<feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="5" stitchTiles="stitch" result="noise"/>' +
+              '<feDisplacementMap in="SourceGraphic" in2="noise" scale="4.5" xChannelSelector="R" yChannelSelector="G"/>' +
+              "</filter>" +
+              '<filter id="crayon-grain-soft" x="-30%" y="-30%" width="160%" height="160%">' +
+              '<feTurbulence type="fractalNoise" baseFrequency="1.25" numOctaves="4" stitchTiles="stitch" result="noise"/>' +
+              '<feDisplacementMap in="SourceGraphic" in2="noise" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>' +
+              "</filter>";
+            svg.appendChild(defs);
+            ["path-stroke-back", "path-stroke-mid", "path-stroke-edge"].forEach((cls, i) => {
+              const p = document.createElementNS(NS, "path");
+              p.classList.add(cls);
+              p.setAttribute(
+                "filter",
+                i === 0 ? "url(#crayon-grain)" : "url(#crayon-grain-soft)"
+              );
+              svg.appendChild(p);
+            });
+            galleryEl.insertBefore(svg, galleryEl.firstChild);
+            return svg;
+          }
+
+          function redrawForestPath() {
+            if (!pathLayout) return;
+            const svg = ensureForestPathSvg();
+            const nodes = Array.from(galleryEl.children).filter(
+              (el) =>
+                el.classList &&
+                (el.classList.contains("gallery-item") ||
+                  el.classList.contains("collection-about-after-first"))
+            );
+            if (!nodes.length) return;
+            const gRect = galleryEl.getBoundingClientRect();
+            const height = Math.max(galleryEl.scrollHeight, 1);
+            const width = Math.max(galleryEl.clientWidth, 1);
+            svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+            svg.setAttribute("width", String(width));
+            svg.setAttribute("height", String(height));
+
+            const points = [];
+            nodes.forEach((el, i) => {
+              const r = el.getBoundingClientRect();
+              const top = r.top - gRect.top + galleryEl.scrollTop;
+              const left = r.left - gRect.left + galleryEl.scrollLeft;
+              const midY = top + r.height * 0.5;
+              const isLeft = el.classList.contains("path-side-left");
+              const isRight = el.classList.contains("path-side-right");
+              // 사진 바깥쪽(마진)으로 크게 꺾여 사진 뒤로만 스치듯 통과
+              const outerX = isLeft
+                ? Math.max(14, left + r.width * 0.12)
+                : isRight
+                  ? Math.min(width - 14, left + r.width * 0.88)
+                  : left + r.width * 0.5;
+              const farX = isLeft
+                ? Math.max(8, width * 0.08)
+                : isRight
+                  ? Math.min(width - 8, width * 0.92)
+                  : width * 0.5;
+
+              if (i === 0) {
+                points.push({ x: farX, y: Math.max(8, top - 18) });
+              } else {
+                // 사진 사이 공백에서 반대편으로 크게 꺾기
+                const prev = nodes[i - 1].getBoundingClientRect();
+                const gapY =
+                  (prev.bottom - gRect.top + (r.top - gRect.top)) / 2 + galleryEl.scrollTop;
+                const swingX = isLeft ? width * 0.88 : width * 0.12;
+                points.push({ x: swingX, y: gapY });
+              }
+              points.push({ x: outerX, y: top + r.height * 0.22 });
+              points.push({ x: outerX + (isLeft ? 10 : isRight ? -10 : 0), y: midY });
+              points.push({ x: outerX, y: top + r.height * 0.78 });
+            });
+
+            // 마지막에 살짝 루프 느낌
+            const last = points[points.length - 1];
+            if (last) {
+              points.push({
+                x: last.x + (last.x < width / 2 ? 28 : -28),
+                y: last.y + 36,
+              });
+            }
+
+            const d = buildSmoothPath(points);
+            svg.querySelectorAll("path").forEach((pathEl, idx) => {
+              pathEl.setAttribute("d", d);
+              // 레이어마다 미세한 오프셋으로 크레파스 겹침
+              if (idx === 0) pathEl.setAttribute("transform", "translate(1.5, 0.5)");
+              if (idx === 2) pathEl.setAttribute("transform", "translate(-1.2, -0.8)");
+              const len = pathEl.getTotalLength ? pathEl.getTotalLength() : 0;
+              if (len > 0 && !pathEl.dataset.drawn) {
+                pathEl.style.strokeDasharray = String(len);
+                pathEl.style.strokeDashoffset = String(len);
+                pathEl.getBoundingClientRect();
+                pathEl.style.transition = `stroke-dashoffset ${1.1 + idx * 0.15}s ease-out`;
+                pathEl.style.strokeDashoffset = "0";
+                pathEl.dataset.drawn = "1";
+              }
+            });
+          }
+
+          let pathRedrawTimer = null;
+          function scheduleForestPathRedraw() {
+            if (!pathLayout) return;
+            clearTimeout(pathRedrawTimer);
+            pathRedrawTimer = setTimeout(redrawForestPath, 60);
+          }
 
           function updatePairSolos() {
             if (!pairLayout) return;
@@ -371,6 +516,7 @@
             flush();
           }
 
+          let pathPhotoIndex = 0;
           imageList.forEach((item, index) => {
             const figure = document.createElement("figure");
             figure.className = "gallery-item";
@@ -384,7 +530,7 @@
             const img = document.createElement("img");
             img.src = imageUrlForItem(collectionId, item);
             img.alt = item.alt || "";
-            img.loading = pairLayout && Number(id) <= 15 ? "eager" : "lazy";
+            img.loading = (pairLayout || pathLayout) && Number(id) <= 15 ? "eager" : "lazy";
 
             const applyOrientation = () => {
               if (forceSoloIds.has(id)) {
@@ -392,6 +538,7 @@
                 if (forceSoloRightIds.has(id)) figure.classList.add("solo-right");
                 figure.classList.remove("landscape");
                 updatePairSolos();
+                scheduleForestPathRedraw();
                 return;
               }
               if (!img.naturalWidth || !img.naturalHeight) return;
@@ -400,7 +547,15 @@
               if (forcePortraitIds.has(id)) isLandscape = false;
               figure.classList.toggle("landscape", isLandscape);
               figure.classList.toggle("portrait", !isLandscape);
+              if (pathLayout) {
+                figure.classList.remove("path-side-left", "path-side-right");
+                if (!isLandscape) {
+                  const idx = Number(figure.dataset.pathIndex || 0);
+                  figure.classList.add(idx % 2 === 0 ? "path-side-left" : "path-side-right");
+                }
+              }
               updatePairSolos();
+              scheduleForestPathRedraw();
             };
             img.addEventListener("load", applyOrientation);
             if (img.complete) applyOrientation();
@@ -423,6 +578,14 @@
             } else {
               figure.appendChild(img);
             }
+
+            if (pathLayout) {
+              const side = pathPhotoIndex % 2 === 0 ? "left" : "right";
+              figure.classList.add(side === "left" ? "path-side-left" : "path-side-right");
+              figure.dataset.pathIndex = String(pathPhotoIndex);
+              pathPhotoIndex += 1;
+            }
+
             galleryEl.appendChild(figure);
 
             if (introAfterFirst && index === 0) {
@@ -433,10 +596,34 @@
                 galleryEl.appendChild(aboutEl);
               }
               updatePairSolos();
+              scheduleForestPathRedraw();
             }
           });
 
           updatePairSolos();
+          if (pathLayout) {
+            scheduleForestPathRedraw();
+            window.addEventListener("resize", scheduleForestPathRedraw);
+            if ("ResizeObserver" in window) {
+              const ro = new ResizeObserver(scheduleForestPathRedraw);
+              ro.observe(galleryEl);
+            }
+            const reveal = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    entry.target.classList.add("is-path-visible");
+                    reveal.unobserve(entry.target);
+                  }
+                });
+              },
+              { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
+            );
+            galleryEl.querySelectorAll(".gallery-item").forEach((el) => reveal.observe(el));
+            // redraw after fonts/images settle
+            setTimeout(scheduleForestPathRedraw, 400);
+            setTimeout(scheduleForestPathRedraw, 1200);
+          }
         } catch (error) {
           console.error("갤러리 로드 중 오류:", error);
         }

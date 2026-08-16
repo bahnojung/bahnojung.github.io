@@ -1,5 +1,5 @@
 {
-  "layout": "stack",
+  "layout": "path",
   "sort": "asc",
   "afterFirst": true,
   "order": [

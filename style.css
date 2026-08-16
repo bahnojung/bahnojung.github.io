@@ -477,6 +477,173 @@ main.main-blank {
   filter: none;
 }
 
+/* 오솔길: 크레파스 줄기 — 사진 뒤로만 통과 (about.layout = path) */
+body.collection-path-page {
+  background: #fafaf8;
+}
+
+.gallery.gallery-layout-path {
+  --path-gap: 2.8rem;
+  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--path-gap);
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0.75rem 0.5rem 4.5rem;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+.gallery.gallery-layout-path .forest-path-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.gallery.gallery-layout-path .forest-path-svg .path-stroke-back {
+  fill: none;
+  stroke: #1e5c28;
+  stroke-width: 28;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.28;
+}
+
+.gallery.gallery-layout-path .forest-path-svg .path-stroke-mid {
+  fill: none;
+  stroke: #2f8a3a;
+  stroke-width: 16;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.82;
+}
+
+.gallery.gallery-layout-path .forest-path-svg .path-stroke-edge {
+  fill: none;
+  stroke: #6cbc55;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.65;
+}
+
+.gallery.gallery-layout-path .gallery-item,
+.gallery.gallery-layout-path > .collection-about-after-first {
+  position: relative;
+  z-index: 2;
+}
+
+.gallery.gallery-layout-path .gallery-item {
+  flex: 0 0 auto !important;
+  width: min(58%, 300px) !important;
+  max-width: 300px;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #fafaf8;
+  box-shadow: 0 8px 22px rgba(20, 40, 20, 0.1);
+  border-radius: 2px;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery.gallery-layout-path .gallery-item.landscape {
+  width: min(90%, 560px) !important;
+  max-width: 560px;
+  align-self: center !important;
+  transform: none !important;
+}
+
+.gallery.gallery-layout-path .gallery-item.path-side-left {
+  align-self: flex-start;
+  margin-left: 2% !important;
+  transform: rotate(-0.8deg);
+}
+
+.gallery.gallery-layout-path .gallery-item.path-side-right {
+  align-self: flex-end;
+  margin-right: 2% !important;
+  transform: rotate(0.8deg);
+}
+
+.gallery.gallery-layout-path .gallery-item img {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  object-fit: contain !important;
+  border-radius: 2px;
+  position: relative;
+  z-index: 1;
+  background: #fafaf8;
+}
+
+.gallery.gallery-layout-path .gallery-item:hover img {
+  transform: none;
+  filter: none;
+}
+
+.gallery.gallery-layout-path > .collection-about-after-first {
+  width: min(86%, 400px);
+  align-self: center;
+  margin: 0.2rem 0 0.4rem;
+  padding: 0.85rem 1rem 1rem;
+  background: rgba(250, 250, 248, 0.94);
+  border: 1px solid rgba(47, 138, 58, 0.12);
+  box-shadow: 0 6px 16px rgba(30, 60, 30, 0.06);
+}
+
+.gallery.gallery-layout-path .gallery-item.is-path-visible {
+  animation: path-photo-settle 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes path-photo-settle {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.gallery.gallery-layout-path .gallery-item.path-side-left.is-path-visible {
+  animation-name: path-photo-settle-left;
+}
+
+.gallery.gallery-layout-path .gallery-item.path-side-right.is-path-visible {
+  animation-name: path-photo-settle-right;
+}
+
+@keyframes path-photo-settle-left {
+  from {
+    opacity: 0;
+    transform: rotate(-0.8deg) translate(-14px, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-0.8deg);
+  }
+}
+
+@keyframes path-photo-settle-right {
+  from {
+    opacity: 0;
+    transform: rotate(0.8deg) translate(14px, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0.8deg);
+  }
+}
+
 /* Matin식 ABS 슬라이드 마운트 (about.layout = slide) */
 .gallery.gallery-layout-slide {
   --gallery-row-height: auto;
@@ -1075,6 +1242,32 @@ main.main-blank {
 
   .gallery.gallery-layout-stack .gallery-item.landscape {
     width: 100% !important;
+  }
+
+  .gallery.gallery-layout-path {
+    gap: 2.1rem !important;
+    max-width: 100%;
+    padding: 0.35rem 0.35rem 3.5rem;
+  }
+
+  .gallery.gallery-layout-path .gallery-item {
+    width: min(62%, 250px) !important;
+  }
+
+  .gallery.gallery-layout-path .gallery-item.landscape {
+    width: min(94%, 100%) !important;
+  }
+
+  .gallery.gallery-layout-path .forest-path-svg .path-stroke-back {
+    stroke-width: 22;
+  }
+
+  .gallery.gallery-layout-path .forest-path-svg .path-stroke-mid {
+    stroke-width: 13;
+  }
+
+  .gallery.gallery-layout-path > .collection-about-after-first {
+    width: min(92%, 100%);
   }
 
   /* 모바일: 슬라이드 마운트 — 한 열, 흰 배경 */
