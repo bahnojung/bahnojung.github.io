@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816buzzer2" />
+    <link rel="stylesheet" href="style.css?v=20260816top6" />
   </head>
   <body class="main-page">
     <nav class="collection-nav" id="collection-nav">
@@ -123,10 +123,25 @@
         const btn = document.getElementById("cursed-refresh");
         if (!btn) return;
 
+        // 참고 사진 6색: 파랑·노랑·검정·흰색·빨강·초록
+        const palette = [
+          { name: "blue", face: "#1e6fff", hi: "#5a9bff", lo: "#0d47d1" },
+          { name: "yellow", face: "#ffd400", hi: "#ffe566", lo: "#e6b800" },
+          { name: "black", face: "#1a1a1a", hi: "#3a3a3a", lo: "#0a0a0a" },
+          { name: "white", face: "#f2f2f2", hi: "#ffffff", lo: "#d0d0d0" },
+          { name: "red", face: "#e60000", hi: "#ff4040", lo: "#b30000" },
+          { name: "green", face: "#1db954", hi: "#4dff88", lo: "#128a3c" },
+        ];
+        const swatch = palette[Math.floor(Math.random() * palette.length)];
+        btn.classList.add("is-" + swatch.name);
+        btn.style.setProperty("--btn-face", swatch.face);
+        btn.style.setProperty("--btn-face-hi", swatch.hi);
+        btn.style.setProperty("--btn-face-lo", swatch.lo);
+
         const vw = Math.max(document.documentElement.clientWidth, 320);
         const vh = Math.max(document.documentElement.clientHeight, 480);
         const size = 42 + Math.random() * 10;
-        const h = size * 0.92;
+        const h = size;
         const pad = 16;
         const clear = 28;
 
@@ -177,16 +192,14 @@
           }
         }
         if (!placed) {
-          // 실패 시 좌·우 상단 코너 (앨범 중앙 영역 밖)
           left = Math.random() < 0.5 ? pad : Math.max(pad, vw - size - pad);
           top = pad + Math.random() * Math.max(0, Math.min(80, topMax - topMin));
         }
 
-        const rot = (Math.random() * 16 - 8).toFixed(1);
         btn.style.setProperty("--cursed-size", size.toFixed(0) + "px");
         btn.style.top = top.toFixed(0) + "px";
         btn.style.left = left.toFixed(0) + "px";
-        btn.style.setProperty("--cursed-rot", rot + "deg");
+        btn.style.setProperty("--cursed-rot", "0deg");
         btn.hidden = false;
 
         btn.addEventListener("click", function () {
