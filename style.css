@@ -317,6 +317,190 @@ main.main-blank {
   min-height: 50vh;
 }
 
+/* 시작 화면: 절대 누르면 안 될 것 같은 새로고침 버튼 */
+.cursed-refresh {
+  --cursed-size: 88px;
+  --cursed-rot: -6deg;
+  position: fixed;
+  z-index: 8;
+  width: var(--cursed-size);
+  height: calc(var(--cursed-size) * 1.15);
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: not-allowed;
+  transform: rotate(var(--cursed-rot));
+  filter: contrast(1.15) saturate(0.85) drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.35));
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.cursed-refresh:focus-visible {
+  outline: 2px dashed #8b0000;
+  outline-offset: 4px;
+}
+
+.cursed-refresh-base {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 0;
+  height: 28%;
+  border-radius: 6px / 10px;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #111 0 6px,
+      #f0c000 6px 12px
+    );
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.55),
+    0 3px 0 #1a1a1a;
+}
+
+.cursed-refresh-stem {
+  position: absolute;
+  left: 38%;
+  right: 38%;
+  bottom: 22%;
+  height: 22%;
+  background: linear-gradient(90deg, #3a3a3a, #7a7a7a 45%, #2c2c2c);
+  border-radius: 2px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.7);
+}
+
+.cursed-refresh-cap {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 0;
+  height: 62%;
+  border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+  background:
+    radial-gradient(120% 90% at 35% 28%, rgba(255, 180, 160, 0.45), transparent 42%),
+    radial-gradient(80% 70% at 70% 70%, rgba(0, 0, 0, 0.35), transparent 55%),
+    linear-gradient(160deg, #c62828 0%, #8b0000 42%, #4a0000 100%);
+  box-shadow:
+    inset 0 8px 10px rgba(255, 255, 255, 0.18),
+    inset 0 -10px 14px rgba(0, 0, 0, 0.55),
+    0 2px 0 #2a0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cursed-refresh-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-bauhaus);
+  font-size: clamp(0.55rem, 2.4vw, 0.72rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: rgba(255, 236, 200, 0.55);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.75);
+  text-transform: uppercase;
+  transform: rotate(-8deg);
+  user-select: none;
+  max-width: 78%;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.cursed-refresh-scratch {
+  position: absolute;
+  inset: 6% 12% 40%;
+  border-radius: 50%;
+  background:
+    linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.12) 41%, transparent 43%),
+    linear-gradient(28deg, transparent 55%, rgba(0, 0, 0, 0.35) 56%, transparent 58%),
+    linear-gradient(160deg, transparent 30%, rgba(0, 0, 0, 0.25) 31%, transparent 33%);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+
+.cursed-refresh.is-rust .cursed-refresh-cap {
+  background:
+    radial-gradient(100% 80% at 30% 25%, rgba(255, 200, 140, 0.35), transparent 40%),
+    linear-gradient(155deg, #a0522d 0%, #6b1c0f 38%, #2d0a05 100%);
+  filter: sepia(0.35);
+}
+
+.cursed-refresh.is-bio .cursed-refresh-cap {
+  background:
+    radial-gradient(110% 90% at 40% 30%, rgba(200, 255, 120, 0.25), transparent 45%),
+    linear-gradient(160deg, #6b8e23 0%, #3d5a1a 45%, #1a2a0a 100%);
+}
+
+.cursed-refresh.is-bio .cursed-refresh-base {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #1a2a0a 0 6px,
+      #c6ff00 6px 12px
+    );
+}
+
+.cursed-refresh.is-panic .cursed-refresh-cap {
+  background:
+    radial-gradient(circle at 50% 40%, #ff1744 0%, #b71c1c 55%, #3d0000 100%);
+  animation: cursed-panic-pulse 1.8s ease-in-out infinite;
+}
+
+.cursed-refresh.is-melt .cursed-refresh-cap {
+  border-radius: 48% 52% 58% 42% / 62% 48% 55% 40%;
+  background:
+    radial-gradient(90% 80% at 45% 20%, rgba(255, 120, 80, 0.4), transparent 50%),
+    linear-gradient(170deg, #7a1f1f, #2b0505 70%, #0a0a0a);
+  transform: scaleY(1.06) skewX(-3deg);
+}
+
+.cursed-refresh.is-tape .cursed-refresh-label {
+  color: rgba(20, 10, 0, 0.55);
+  text-shadow: none;
+}
+
+.cursed-refresh.is-tape .cursed-refresh-cap {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #111 0 8px,
+      #f5d000 8px 16px
+    );
+  box-shadow:
+    inset 0 0 0 3px #111,
+    inset 0 -8px 12px rgba(0, 0, 0, 0.4);
+}
+
+.cursed-refresh.is-pressed {
+  transform: rotate(var(--cursed-rot)) translateY(4px) scale(0.94);
+  filter: brightness(0.75) contrast(1.2);
+}
+
+.cursed-refresh.is-pressed .cursed-refresh-cap {
+  top: 6%;
+  height: 54%;
+}
+
+@keyframes cursed-panic-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.25);
+  }
+}
+
+@media (max-width: 640px) {
+  .cursed-refresh {
+    z-index: 4;
+  }
+}
+
 .intro {
   margin-bottom: 1.5rem;
   max-width: 720px;
