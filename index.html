@@ -151,7 +151,8 @@
 
         const vw = Math.max(document.documentElement.clientWidth, 320);
         const vh = Math.max(document.documentElement.clientHeight, 480);
-        const size = 42 + Math.random() * 10;
+        const isMobile = window.matchMedia("(max-width: 640px)").matches;
+        const size = isMobile ? 21 + Math.random() * 5 : 42 + Math.random() * 10;
         const h = size;
         const pad = 16;
         const clear = 28;
