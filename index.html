@@ -130,7 +130,20 @@
           { name: "red", face: "#e60000", hi: "#ff4040", lo: "#b30000" },
           { name: "green", face: "#1db954", hi: "#4dff88", lo: "#128a3c" },
         ];
-        const swatch = palette[Math.floor(Math.random() * palette.length)];
+        let lastName = "";
+        try {
+          lastName = sessionStorage.getItem("cursed-refresh-color") || "";
+        } catch (e) {}
+        const choices = palette.filter(function (c) {
+          return c.name !== lastName;
+        });
+        const swatch =
+          (choices.length ? choices : palette)[
+            Math.floor(Math.random() * (choices.length || palette.length))
+          ];
+        try {
+          sessionStorage.setItem("cursed-refresh-color", swatch.name);
+        } catch (e) {}
         btn.classList.add("is-" + swatch.name);
         btn.style.setProperty("--btn-face", swatch.face);
         btn.style.setProperty("--btn-face-hi", swatch.hi);
