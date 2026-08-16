@@ -154,6 +154,30 @@ body.main-page main {
   width: 100%;
 }
 
+/* 홈: 버튼으로 흰/검 배경 전환 */
+html.home-theme-dark body.main-page,
+body.main-page.theme-dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+html.home-theme-dark body.main-page .site-header,
+body.main-page.theme-dark .site-header {
+  background-color: #000000;
+}
+
+html.home-theme-dark body.main-page .site-title,
+html.home-theme-dark body.main-page .site-title-link,
+body.main-page.theme-dark .site-title,
+body.main-page.theme-dark .site-title-link {
+  color: #ffffff;
+}
+
+html.home-theme-dark body.main-page .music-toggle,
+body.main-page.theme-dark .music-toggle {
+  color: #ffffff;
+}
+
 /* 컬렉션 링크 (메인 + 기타에서 재사용) */
 .sidebar-link,
 .collection-nav a {

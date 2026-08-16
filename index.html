@@ -26,7 +26,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816top6" />
+    <link rel="stylesheet" href="style.css?v=20260816theme" />
+    <script>
+      (function () {
+        try {
+          if (sessionStorage.getItem("bahno-home-theme") === "dark") {
+            document.documentElement.classList.add("home-theme-dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="main-page">
     <nav class="collection-nav" id="collection-nav">
@@ -216,10 +225,21 @@
 
         btn.addEventListener("click", function () {
           btn.classList.add("is-pressed");
+          try {
+            var next =
+              sessionStorage.getItem("bahno-home-theme") === "dark"
+                ? "light"
+                : "dark";
+            sessionStorage.setItem("bahno-home-theme", next);
+          } catch (e) {}
           window.setTimeout(function () {
             window.location.reload();
           }, 160);
         });
+      }
+
+      if (document.documentElement.classList.contains("home-theme-dark")) {
+        document.body.classList.add("theme-dark");
       }
 
       loadSidebar().then(function () {
