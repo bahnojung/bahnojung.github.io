@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260816buzzer" />
+    <link rel="stylesheet" href="style.css?v=20260816buzzer2" />
   </head>
   <body class="main-page">
     <nav class="collection-nav" id="collection-nav">
@@ -118,24 +118,71 @@
           });
         } catch (e) {}
       }
-      loadSidebar();
 
-      (function placeCursedRefresh() {
+      function placeCursedRefresh() {
         const btn = document.getElementById("cursed-refresh");
         if (!btn) return;
 
         const vw = Math.max(document.documentElement.clientWidth, 320);
         const vh = Math.max(document.documentElement.clientHeight, 480);
         const size = 42 + Math.random() * 10;
+        const h = size * 0.92;
         const pad = 16;
-        const topMin = pad;
-        const topMax = Math.max(pad, vh * 0.42 - size);
-        const leftMin = pad;
-        const leftMax = Math.max(pad, vw - size - pad - 56);
-        const top = topMin + Math.random() * Math.max(0, topMax - topMin);
-        const left = leftMin + Math.random() * Math.max(0, leftMax - leftMin);
-        const rot = (Math.random() * 16 - 8).toFixed(1);
+        const clear = 28;
 
+        const avoidEls = [
+          document.getElementById("collection-nav"),
+          document.querySelector("body.main-page .site-header"),
+          document.querySelector(".music-toggle"),
+        ].filter(Boolean);
+
+        function hitsAvoid(left, top) {
+          const a = {
+            left: left,
+            top: top,
+            right: left + size,
+            bottom: top + h,
+          };
+          return avoidEls.some(function (el) {
+            const r = el.getBoundingClientRect();
+            if (r.width < 2 || r.height < 2) return false;
+            return !(
+              a.right < r.left - clear ||
+              a.left > r.right + clear ||
+              a.bottom < r.top - clear ||
+              a.top > r.bottom + clear
+            );
+          });
+        }
+
+        // 앨범 목록·로고 위쪽 빈 공간만 사용
+        const nav = document.getElementById("collection-nav");
+        const navTop = nav ? nav.getBoundingClientRect().top : vh * 0.55;
+        const topMin = pad;
+        const topMax = Math.max(pad, Math.min(vh * 0.38, navTop - clear) - h);
+        const leftMin = pad;
+        const leftMax = Math.max(pad, vw - size - pad);
+
+        let top = topMin;
+        let left = leftMin;
+        let placed = false;
+        for (let i = 0; i < 48; i++) {
+          const t = topMin + Math.random() * Math.max(0, topMax - topMin);
+          const l = leftMin + Math.random() * Math.max(0, leftMax - leftMin);
+          if (!hitsAvoid(l, t)) {
+            top = t;
+            left = l;
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) {
+          // 실패 시 좌·우 상단 코너 (앨범 중앙 영역 밖)
+          left = Math.random() < 0.5 ? pad : Math.max(pad, vw - size - pad);
+          top = pad + Math.random() * Math.max(0, Math.min(80, topMax - topMin));
+        }
+
+        const rot = (Math.random() * 16 - 8).toFixed(1);
         btn.style.setProperty("--cursed-size", size.toFixed(0) + "px");
         btn.style.top = top.toFixed(0) + "px";
         btn.style.left = left.toFixed(0) + "px";
@@ -148,7 +195,11 @@
             window.location.reload();
           }, 160);
         });
-      })();
+      }
+
+      loadSidebar().then(function () {
+        requestAnimationFrame(placeCursedRefresh);
+      });
     </script>
     <script src="music.js" defer></script>
   </body>
