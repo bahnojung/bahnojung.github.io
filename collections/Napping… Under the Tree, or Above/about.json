@@ -1,6 +1,12 @@
 {
   "layout": "stack",
   "sort": "asc",
+  "date": "May 2026",
+  "location": "the Netherlands",
+  "paragraphs": [
+    "A birthday spent in the Netherlands.",
+    "Napping… under a tree, or above……"
+  ],
   "order": [
     "02",
     "03",
