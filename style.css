@@ -1227,11 +1227,11 @@ body.collection-path-page {
 
   body.main-page .collection-nav a,
   .sidebar-link {
-    font-size: clamp(0.72rem, 3.35vw, 1.05rem);
+    font-size: clamp(0.95rem, 4.5vw, 1.2rem);
     white-space: nowrap;
     min-width: 0;
     max-width: 100%;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     line-height: 1.2;
     padding: 0.32rem 0;
   }
@@ -1263,8 +1263,8 @@ body.collection-path-page {
   }
 
   .collection-title {
-    font-size: clamp(0.78rem, 3.5vw, 1.15rem);
-    letter-spacing: 0.02em;
+    font-size: clamp(1rem, 4.6vw, 1.35rem);
+    letter-spacing: 0.03em;
     white-space: nowrap;
     text-align: center;
     padding: 0 0.3em;
