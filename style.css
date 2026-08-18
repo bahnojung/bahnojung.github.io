@@ -191,6 +191,7 @@ body.main-page.theme-dark .music-toggle {
   display: block;
   white-space: nowrap;
   min-width: min-content;
+  text-align: center;
 }
 
 /* WALL 링크 다음에 간격 추가 */
@@ -289,12 +290,17 @@ body.collection-page .site-header {
 /* 컬렉션 제목: 폴더명과 동일하게 표시(대소문자 그대로) */
 .collection-title {
   font-family: var(--font-bauhaus);
-  font-size: clamp(1.5rem, 6vw, 4rem);
+  font-size: clamp(1.15rem, 4.2vw, 2.6rem);
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   margin: 0 0 1.5rem;
   color: #111111;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding-inline: 0.4em;
+  box-sizing: border-box;
 }
 
 /* 컬렉션 페이지 하단 도달 시 표시되는 메인 이동 버튼 */
@@ -1166,11 +1172,20 @@ body.collection-path-page {
 
   body.main-page .collection-nav {
     padding: 0 1rem 1rem 1rem;
+    width: calc(100% - 2rem);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   body.main-page .collection-nav a,
   .sidebar-link {
     font-size: 2.2rem;
+    white-space: normal;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    line-height: 1.15;
   }
 
   main {
@@ -1204,11 +1219,21 @@ body.collection-path-page {
   body.main-page .collection-nav {
     bottom: calc(env(safe-area-inset-bottom) + var(--logo-block-height));
     padding: 0 0.75rem 0.15rem 0.75rem;
+    width: calc(100% - 1.5rem);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   body.main-page .collection-nav a,
   .sidebar-link {
     font-size: 1.2rem;
+    white-space: normal;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+    padding: 0.35rem 0.2rem;
   }
 
   /* 모바일: 메인 페이지 헤더를 컬렉션 페이지와 동일하게 */
