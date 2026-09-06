@@ -215,14 +215,14 @@ body.main-page .collection-nav .wall-link {
 
   body.main-page .collection-nav a,
   body.main-page .sidebar-link {
-    font-size: clamp(1.15rem, 2.45vh, 1.75rem);
+    font-size: clamp(1.35rem, 2.9vh, 2.05rem);
     letter-spacing: 0.06em;
-    padding: 0.22vh 0;
+    padding: 0.28vh 0;
     line-height: 1.22;
   }
 
   body.main-page .collection-nav .wall-link {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
   }
 }
 
