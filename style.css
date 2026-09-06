@@ -626,6 +626,23 @@ main.main-blank {
   filter: none;
 }
 
+/* Mars 등: 데스크톱에서만 한 장씩 더 크게 (모바일은 기존 stack 유지) */
+@media (min-width: 901px) {
+  .gallery.gallery-layout-stack.gallery-layout-stack-large {
+    max-width: min(1320px, 94vw);
+    gap: 1.35rem;
+  }
+
+  .gallery.gallery-layout-stack.gallery-layout-stack-large .gallery-item.landscape {
+    max-width: min(1320px, 94vw);
+  }
+
+  .gallery.gallery-layout-stack.gallery-layout-stack-large .gallery-item.portrait {
+    width: 62% !important;
+    max-width: 720px;
+  }
+}
+
 /* 오솔길: 크레파스 줄기 — 사진 뒤로만 통과 (about.layout = path) */
 body.collection-path-page {
   background: #fafaf8;

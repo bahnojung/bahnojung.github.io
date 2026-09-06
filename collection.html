@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260906mars7" />
+    <link rel="stylesheet" href="style.css?v=20260906mars8" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -310,7 +310,8 @@
             collectionId === "Along the Forest Path";
           const stackLayout =
             ((about && String(about.layout).toLowerCase() === "stack") ||
-              collectionId === "Sunflowers of Seoul") &&
+              collectionId === "Sunflowers of Seoul" ||
+              collectionId === "Mars") &&
             !pathLayout;
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
@@ -322,6 +323,10 @@
           }
           if (stackLayout) {
             galleryEl.classList.add("gallery-layout-stack");
+            const stackLarge =
+              collectionId === "Mars" ||
+              (about && String(about.stackSize).toLowerCase() === "large");
+            if (stackLarge) galleryEl.classList.add("gallery-layout-stack-large");
             if (!document.getElementById("stack-layout-fallback")) {
               const style = document.createElement("style");
               style.id = "stack-layout-fallback";
