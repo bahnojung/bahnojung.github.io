@@ -209,7 +209,7 @@ body.main-page .collection-nav .wall-link {
     max-height: none;
     overflow-x: hidden;
     overflow-y: auto;
-    justify-content: flex-end;
+    justify-content: center;
     -webkit-overflow-scrolling: touch;
   }
 
