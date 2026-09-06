@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260906mars10" />
+    <link rel="stylesheet" href="style.css?v=20260906lb1" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -808,9 +808,11 @@
       // 터치 스와이프 감지
       let touchStartX = 0;
       let touchEndX = 0;
+      let lightboxDidSwipe = false;
 
       function handleTouchStart(e) {
         touchStartX = e.changedTouches[0].screenX;
+        lightboxDidSwipe = false;
       }
 
       function handleTouchEnd(e) {
@@ -826,6 +828,7 @@
         const diff = touchStartX - touchEndX;
 
         if (Math.abs(diff) > swipeThreshold) {
+          lightboxDidSwipe = true;
           if (diff > 0) {
             // 왼쪽으로 스와이프 (다음 이미지)
             navigateImage("next");
@@ -847,17 +850,28 @@
 
         lightbox.addEventListener("click", (event) => {
           const target = event.target;
-          if (
-            target instanceof HTMLElement &&
-            target.hasAttribute("data-lightbox-close")
-          ) {
-            closeLightbox();
-          } else if (
-            target instanceof HTMLElement &&
-            target.hasAttribute("data-lightbox-nav")
-          ) {
+          if (!(target instanceof HTMLElement)) return;
+
+          if (lightboxDidSwipe) {
+            lightboxDidSwipe = false;
+            return;
+          }
+
+          if (target.hasAttribute("data-lightbox-nav")) {
             const direction = target.getAttribute("data-lightbox-nav");
             navigateImage(direction);
+            return;
+          }
+
+          // 배경·X·사진 다시 탭 → 닫기 (뒤로 가는 느낌)
+          if (
+            target.hasAttribute("data-lightbox-close") ||
+            target.id === "lightbox-image" ||
+            target.classList.contains("lightbox-content") ||
+            target.classList.contains("lightbox-backdrop") ||
+            target === lightbox
+          ) {
+            closeLightbox();
           }
         });
 
