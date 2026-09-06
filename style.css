@@ -199,14 +199,14 @@ body.main-page .collection-nav .wall-link {
   margin-bottom: 2.0rem;
 }
 
-/* 데스크톱 홈: 글씨 크게 + 로고 바로 위에 붙임 (넘치면 위로 스크롤) */
+/* 데스크톱 홈: 글씨 크게 + 로고 위쪽에 여유 두고 붙임 (Ant 잘림 방지) */
 @media (min-width: 901px) {
   body.main-page .collection-nav {
     top: auto;
-    bottom: calc(env(safe-area-inset-bottom) + var(--logo-block-height) + 0.35rem);
+    bottom: calc(env(safe-area-inset-bottom) + var(--logo-block-height) + 1.35rem);
     gap: 0.12rem;
-    padding: 0 1.5rem 0.5rem 1.5rem;
-    max-height: calc(100vh - env(safe-area-inset-bottom) - var(--logo-block-height) - 1.2rem);
+    padding: 0 1.5rem 0.65rem 1.5rem;
+    max-height: calc(100vh - env(safe-area-inset-bottom) - var(--logo-block-height) - 2.2rem);
     overflow-x: hidden;
     overflow-y: auto;
     justify-content: flex-end;
