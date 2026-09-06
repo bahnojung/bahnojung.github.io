@@ -1,5 +1,10 @@
 [
   {
+    "id": "Mars",
+    "name": "Mars",
+    "path": "collection.html?collection=Mars"
+  },
+  {
     "id": "Seong-woo's Blue Vacation",
     "name": "Seong-woo's Blue Vacation",
     "path": "collection.html?collection=Seong-woo's%20Blue%20Vacation"

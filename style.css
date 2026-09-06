@@ -199,6 +199,29 @@ body.main-page .collection-nav .wall-link {
   margin-bottom: 2.0rem;
 }
 
+/* 데스크톱 홈: 앨범 목록이 한 화면에 들어가도록 vh 기준 축소 (모바일은 기존 유지) */
+@media (min-width: 901px) {
+  body.main-page .collection-nav {
+    gap: 0;
+    bottom: calc(env(safe-area-inset-bottom) + var(--logo-block-height) + 0.5rem);
+    padding: 0 1.5rem 0.5rem 1.5rem;
+    max-height: calc(100vh - env(safe-area-inset-bottom) - var(--logo-block-height) - 1rem);
+    overflow: visible;
+  }
+
+  body.main-page .collection-nav a,
+  body.main-page .sidebar-link {
+    font-size: clamp(0.95rem, 2.35vh, 1.45rem);
+    letter-spacing: 0.05em;
+    padding: 0.18vh 0;
+    line-height: 1.2;
+  }
+
+  body.main-page .collection-nav .wall-link {
+    margin-bottom: 0.85rem;
+  }
+}
+
 .sidebar-link:hover,
 .collection-nav a:hover {
   color: #111111;
