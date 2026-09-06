@@ -199,30 +199,30 @@ body.main-page .collection-nav .wall-link {
   margin-bottom: 2.0rem;
 }
 
-/* 데스크톱 홈: 상·하단 고정 영역 안에 전체 앨범이 들어오게 (Mars 잘림 방지) */
+/* 데스크톱 홈: 글씨 크게 + 영역 안에서 스크롤 (Mars가 위로 잘리지 않게) */
 @media (min-width: 901px) {
   body.main-page .collection-nav {
-    top: 0.5rem;
+    top: 0.75rem;
     bottom: calc(env(safe-area-inset-bottom) + var(--logo-block-height) + 0.35rem);
-    gap: 0.05rem;
-    padding: 0 1.5rem 0.4rem 1.5rem;
+    gap: 0.12rem;
+    padding: 0 1.5rem 0.5rem 1.5rem;
     max-height: none;
     overflow-x: hidden;
     overflow-y: auto;
-    justify-content: center;
+    justify-content: flex-start;
     -webkit-overflow-scrolling: touch;
   }
 
   body.main-page .collection-nav a,
   body.main-page .sidebar-link {
-    font-size: clamp(1.35rem, 2.9vh, 2.05rem);
-    letter-spacing: 0.06em;
-    padding: 0.28vh 0;
-    line-height: 1.22;
+    font-size: clamp(2.1rem, 4.2vh, 2.85rem);
+    letter-spacing: 0.08em;
+    padding: 0.35vh 0;
+    line-height: 1.2;
   }
 
   body.main-page .collection-nav .wall-link {
-    margin-bottom: 0.85rem;
+    margin-bottom: 1.25rem;
   }
 }
 
