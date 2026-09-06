@@ -630,10 +630,12 @@ main.main-blank {
 @media (min-width: 901px) {
   .gallery.gallery-layout-stack.gallery-layout-stack-large {
     --stack-view-h: calc(
-      100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
-        var(--logo-block-height) - 3.5rem
+      (
+          100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
+            var(--logo-block-height) - 3.5rem
+        ) * 0.95
     );
-    max-width: min(1320px, 94vw);
+    max-width: min(1254px, 89vw);
     gap: 1.5rem;
   }
 
@@ -642,20 +644,20 @@ main.main-blank {
     align-items: center;
     justify-content: center;
     width: 100% !important;
-    max-width: min(1320px, 94vw);
+    max-width: min(1254px, 89vw);
     max-height: var(--stack-view-h);
   }
 
   .gallery.gallery-layout-stack.gallery-layout-stack-large .gallery-item.landscape,
   .gallery.gallery-layout-stack.gallery-layout-stack-large .gallery-item.portrait {
     width: 100% !important;
-    max-width: min(1320px, 94vw);
+    max-width: min(1254px, 89vw);
   }
 
   .gallery.gallery-layout-stack.gallery-layout-stack-large .gallery-item img {
     width: auto !important;
     height: auto !important;
-    max-width: min(1320px, 94vw) !important;
+    max-width: min(1254px, 89vw) !important;
     max-height: var(--stack-view-h) !important;
     object-fit: contain !important;
   }
