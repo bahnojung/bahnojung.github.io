@@ -141,6 +141,123 @@ async function saveCollectionsJson(list) {
   await fs.writeFile(file, JSON.stringify(list, null, 2), "utf8");
 }
 
+const SITE_ORIGIN = "https://bahnojung.github.io";
+
+function formatSitemapDate(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+async function getPathLastmod(relPath) {
+  try {
+    const stat = await fs.stat(path.join(ROOT, relPath));
+    return formatSitemapDate(stat.mtime);
+  } catch {
+    return formatSitemapDate(new Date());
+  }
+}
+
+async function getCollectionLastmod(collectionId) {
+  const dir = path.join(ROOT, "collections", collectionId);
+  try {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    let newest = 0;
+    for (const e of entries) {
+      if (!e.isFile()) continue;
+      if (e.name === "images.json" || e.name === "about.json") continue;
+      if (!isImage(e.name)) continue;
+      try {
+        const stat = await fs.stat(path.join(dir, e.name));
+        newest = Math.max(newest, stat.mtimeMs || 0);
+      } catch {
+        /* ignore */
+      }
+    }
+    if (!newest) {
+      const stat = await fs.stat(dir);
+      newest = stat.mtimeMs || Date.now();
+    }
+    return formatSitemapDate(new Date(newest));
+  } catch {
+    return formatSitemapDate(new Date());
+  }
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/** encodeURIComponent는 ' 를 남기므로 사이트맵 URL용으로 %27 처리 */
+function collectionLoc(collectionId) {
+  const q = encodeURIComponent(collectionId).replace(/'/g, "%27");
+  return `${SITE_ORIGIN}/collection.html?collection=${q}`;
+}
+
+/** collections.json 기준으로 sitemap.xml 생성 (컬렉션·사진 변경 시 lastmod 갱신) */
+async function generateSitemap(collections) {
+  const urls = [];
+
+  urls.push({
+    loc: `${SITE_ORIGIN}/`,
+    lastmod: await getPathLastmod("index.html"),
+    changefreq: "weekly",
+    priority: "1.0",
+  });
+
+  try {
+    await fs.access(path.join(ROOT, "wall.html"));
+    urls.push({
+      loc: `${SITE_ORIGIN}/wall.html`,
+      lastmod: await getPathLastmod("wall.html"),
+      changefreq: "monthly",
+      priority: "0.6",
+    });
+  } catch {
+    /* wall.html 없음 */
+  }
+
+  for (const c of collections || []) {
+    if (!c || !c.id) continue;
+    urls.push({
+      loc: collectionLoc(c.id),
+      lastmod: await getCollectionLastmod(c.id),
+      changefreq: "monthly",
+      priority: "0.8",
+    });
+  }
+
+  const body = urls
+    .map(
+      (u) => `  <url>
+    <loc>${escapeXml(u.loc)}</loc>
+    <lastmod>${u.lastmod}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`
+    )
+    .join("\n");
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${body}
+</urlset>
+`;
+
+  const outFile = path.join(ROOT, "sitemap.xml");
+  let prev = null;
+  try {
+    prev = await fs.readFile(outFile, "utf8");
+  } catch {
+    prev = null;
+  }
+  if (prev === xml) return false;
+  await fs.writeFile(outFile, xml, "utf8");
+  return true;
+}
+
 function run(cmd, cwd = ROOT) {
   execSync(cmd, { cwd, stdio: "inherit", shell: true });
 }
@@ -226,6 +343,18 @@ async function runSync() {
     }
   }
 
+  try {
+    const sitemapChanged = await generateSitemap(ordered);
+    if (sitemapChanged) {
+      changed = true;
+      console.log(`🗺 sitemap.xml 갱신 (${ordered.length}개 컬렉션)`);
+    } else {
+      console.log("🗺 sitemap.xml 변경 없음");
+    }
+  } catch (err) {
+    console.error("❌ sitemap.xml 생성 실패:", err.message);
+  }
+
   if (!changed) {
     console.log("\n✅ 적용할 변경 없음 (컬렉션 폴더 없음).");
   } else {
@@ -235,4 +364,4 @@ async function runSync() {
   return changed;
 }
 
-module.exports = { runSync };
+module.exports = { runSync, generateSitemap };
