@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260906lb1" />
+    <link rel="stylesheet" href="style.css?v=20261011grid1" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -316,12 +316,15 @@
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
             collectionId === "Colors of the Grow-rings";
+          const gridLayout =
+            (about && String(about.layout).toLowerCase() === "grid") ||
+            collectionId === "Leo-do";
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
           if (pathLayout) {
             galleryEl.classList.add("gallery-layout-path");
             document.body.classList.add("collection-path-page");
           }
-          if (stackLayout) {
+          if (stackLayout && !gridLayout) {
             galleryEl.classList.add("gallery-layout-stack");
             const stackLarge =
               collectionId === "Mars" ||
@@ -340,6 +343,7 @@
             }
           }
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
+          if (gridLayout) galleryEl.classList.add("gallery-layout-grid");
 
           function buildSmoothPath(points) {
             if (!points.length) return "";
