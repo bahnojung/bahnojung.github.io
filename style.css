@@ -663,14 +663,16 @@ main.main-blank {
   }
 }
 
-/* 한 팔레트 메이슨리 (about.layout = grid) — 크롭 없음, 비율 유지 */
+/* 한 팔레트 (about.layout = grid) — 크롭 없음, 숫자 순 좌→우 */
 .gallery.gallery-layout-grid {
   --gallery-row-height: auto;
   --grid-gap: 0.2rem;
   --grid-cols: 5;
-  display: block;
-  column-count: var(--grid-cols);
-  column-gap: var(--grid-gap);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: var(--grid-gap);
   width: 100%;
   max-width: 1400px;
   margin: 0 auto 2rem;
@@ -684,23 +686,25 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-grid .gallery-item {
-  display: inline-block;
-  width: 100%;
+  display: block;
+  width: calc(
+    (100% - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols)
+  );
+  flex: 0 0
+    calc((100% - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols));
   height: auto;
-  margin: 0 0 var(--grid-gap);
+  margin: 0;
   padding: 0;
   border-radius: 0;
   background: transparent;
   overflow: visible;
-  flex: unset;
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
 }
 
 .gallery.gallery-layout-grid .gallery-item.portrait,
 .gallery.gallery-layout-grid .gallery-item.landscape {
-  width: 100%;
+  width: calc(
+    (100% - (var(--grid-cols) - 1) * var(--grid-gap)) / var(--grid-cols)
+  );
   max-width: none;
 }
 
@@ -710,7 +714,6 @@ main.main-blank {
   max-width: 100%;
   display: block;
   object-fit: contain;
-  vertical-align: top;
   transition: none;
 }
 
@@ -720,8 +723,9 @@ main.main-blank {
 }
 
 .gallery.gallery-layout-grid > .collection-about-after-first {
-  break-inside: avoid;
-  margin-bottom: var(--grid-gap);
+  flex: 0 0 100%;
+  width: 100%;
+  margin: 0;
 }
 
 @media (max-width: 1100px) {
