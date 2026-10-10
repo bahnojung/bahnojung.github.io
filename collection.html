@@ -26,7 +26,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011grid6" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <link rel="stylesheet" href="style.css?v=20261011grid7" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -343,12 +344,8 @@
             }
           }
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
-          let gridPalette = null;
           if (gridLayout) {
             galleryEl.classList.add("gallery-layout-grid");
-            gridPalette = document.createElement("div");
-            gridPalette.className = "gallery-grid-palette";
-            galleryEl.appendChild(gridPalette);
           }
 
           function buildSmoothPath(points) {
@@ -627,7 +624,14 @@
             const img = document.createElement("img");
             img.src = imageUrlForItem(collectionId, item);
             img.alt = item.alt || "";
-            img.loading = (pairLayout || pathLayout) && Number(id) <= 15 ? "eager" : "lazy";
+            // grid는 로드 순서에 따라 배치가 흔들리지 않도록 eager
+            img.loading =
+              gridLayout || ((pairLayout || pathLayout) && Number(id) <= 15)
+                ? "eager"
+                : "lazy";
+            if (gridLayout) {
+              figure.style.order = String(index);
+            }
 
             const applyOrientation = () => {
               if (forceSoloIds.has(id)) {
@@ -679,11 +683,7 @@
               pathPhotoIndex += 1;
             }
 
-            if (gridLayout && gridPalette) {
-              gridPalette.appendChild(figure);
-            } else {
-              galleryEl.appendChild(figure);
-            }
+            galleryEl.appendChild(figure);
 
             if (introAfterFirst && index === 0) {
               appendCollectionIntro(about);
