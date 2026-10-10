@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011grid4" />
+    <link rel="stylesheet" href="style.css?v=20261011grid5" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -349,13 +349,6 @@
             gridPalette = document.createElement("div");
             gridPalette.className = "gallery-grid-palette";
             galleryEl.appendChild(gridPalette);
-            // 한 팔레트 안 랜덤 배치 (원본 리스트는 라이트박스 순서 유지)
-            for (let i = imageList.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              const tmp = imageList[i];
-              imageList[i] = imageList[j];
-              imageList[j] = tmp;
-            }
           }
 
           function buildSmoothPath(points) {
