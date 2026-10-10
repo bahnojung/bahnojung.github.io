@@ -663,21 +663,28 @@ main.main-blank {
   }
 }
 
-/* 균일 그리드 (about.layout = grid) — 4열 contact-sheet */
+/* 가로/세로 반반 그리드 (about.layout = grid) — 왼: landscape, 오른: portrait */
 .gallery.gallery-layout-grid {
   --gallery-row-height: auto;
   --grid-gap: 3px;
-  --grid-cols: 4;
+  --grid-inner-cols: 2;
   display: grid;
-  grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--grid-gap);
   width: 100%;
   max-width: 1400px;
   margin: 0 auto 2rem;
   padding: 0;
-  align-content: start;
-  justify-content: stretch;
+  align-items: start;
   background: #fff;
+}
+
+.gallery.gallery-layout-grid .gallery-grid-col {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-inner-cols), minmax(0, 1fr));
+  gap: var(--grid-gap);
+  align-content: start;
+  min-width: 0;
 }
 
 .gallery.gallery-layout-grid .gallery-item {
@@ -687,9 +694,16 @@ main.main-blank {
   padding: 0;
   border-radius: 0;
   background: #111;
-  aspect-ratio: 16 / 9;
   overflow: hidden;
   flex: unset;
+}
+
+.gallery.gallery-layout-grid .gallery-grid-landscapes .gallery-item {
+  aspect-ratio: 16 / 9;
+}
+
+.gallery.gallery-layout-grid .gallery-grid-portraits .gallery-item {
+  aspect-ratio: 3 / 4;
 }
 
 .gallery.gallery-layout-grid .gallery-item.portrait,
@@ -718,14 +732,9 @@ main.main-blank {
 
 @media (max-width: 900px) {
   .gallery.gallery-layout-grid {
-    --grid-cols: 2;
+    grid-template-columns: 1fr;
     --grid-gap: 2px;
-  }
-}
-
-@media (max-width: 480px) {
-  .gallery.gallery-layout-grid {
-    --grid-cols: 2;
+    --grid-inner-cols: 2;
   }
 }
 

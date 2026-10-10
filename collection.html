@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011grid1" />
+    <link rel="stylesheet" href="style.css?v=20261011grid2" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -343,7 +343,17 @@
             }
           }
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
-          if (gridLayout) galleryEl.classList.add("gallery-layout-grid");
+          let gridLandCol = null;
+          let gridPortCol = null;
+          if (gridLayout) {
+            galleryEl.classList.add("gallery-layout-grid");
+            gridLandCol = document.createElement("div");
+            gridLandCol.className = "gallery-grid-col gallery-grid-landscapes";
+            gridPortCol = document.createElement("div");
+            gridPortCol.className = "gallery-grid-col gallery-grid-portraits";
+            galleryEl.appendChild(gridLandCol);
+            galleryEl.appendChild(gridPortCol);
+          }
 
           function buildSmoothPath(points) {
             if (!points.length) return "";
@@ -638,6 +648,10 @@
               if (forcePortraitIds.has(id)) isLandscape = false;
               figure.classList.toggle("landscape", isLandscape);
               figure.classList.toggle("portrait", !isLandscape);
+              if (gridLayout && gridLandCol && gridPortCol) {
+                const col = isLandscape ? gridLandCol : gridPortCol;
+                if (figure.parentElement !== col) col.appendChild(figure);
+              }
               if (pathLayout) {
                 const idx = Number(figure.dataset.pathIndex || 0);
                 applyPathPlacement(figure, idx, isLandscape);
@@ -673,7 +687,11 @@
               pathPhotoIndex += 1;
             }
 
-            galleryEl.appendChild(figure);
+            if (gridLayout && gridLandCol) {
+              gridLandCol.appendChild(figure);
+            } else {
+              galleryEl.appendChild(figure);
+            }
 
             if (introAfterFirst && index === 0) {
               appendCollectionIntro(about);
