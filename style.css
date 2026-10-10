@@ -666,15 +666,15 @@ main.main-blank {
 /* 한 팔레트 메이슨리 (about.layout = grid) — 크롭 없음, 비율 유지 */
 .gallery.gallery-layout-grid {
   --gallery-row-height: auto;
-  --grid-gap: 0.45rem;
-  --grid-cols: 3;
+  --grid-gap: 0.2rem;
+  --grid-cols: 5;
   display: block;
   column-count: var(--grid-cols);
   column-gap: var(--grid-gap);
   width: 100%;
   max-width: 1400px;
   margin: 0 auto 2rem;
-  padding: 0.15rem;
+  padding: 0.2rem;
   background: #f3f1ec;
   box-sizing: border-box;
 }
@@ -724,16 +724,22 @@ main.main-blank {
   margin-bottom: var(--grid-gap);
 }
 
+@media (max-width: 1100px) {
+  .gallery.gallery-layout-grid {
+    --grid-cols: 4;
+  }
+}
+
 @media (max-width: 900px) {
   .gallery.gallery-layout-grid {
-    --grid-cols: 2;
-    --grid-gap: 0.35rem;
+    --grid-cols: 3;
+    --grid-gap: 0.15rem;
   }
 }
 
 @media (max-width: 520px) {
   .gallery.gallery-layout-grid {
-    --grid-cols: 1;
+    --grid-cols: 2;
   }
 }
 
