@@ -27,7 +27,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <link rel="stylesheet" href="style.css?v=20261011grid7" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <link rel="stylesheet" href="style.css?v=20261011grid8" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -346,6 +347,13 @@
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
           if (gridLayout) {
             galleryEl.classList.add("gallery-layout-grid");
+            if (!document.getElementById("grid-layout-fallback")) {
+              const style = document.createElement("style");
+              style.id = "grid-layout-fallback";
+              style.textContent =
+                "@media (max-width:640px){.gallery.gallery-layout-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:.15rem!important;column-count:unset!important}.gallery.gallery-layout-grid .gallery-item{width:100%!important;margin:0!important;break-inside:auto!important}}";
+              document.head.appendChild(style);
+            }
           }
 
           function buildSmoothPath(points) {
