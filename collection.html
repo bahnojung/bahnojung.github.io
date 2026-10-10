@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261011grid8" />
+    <link rel="stylesheet" href="style.css?v=20261011mobile53" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -632,11 +632,16 @@
             const img = document.createElement("img");
             img.src = imageUrlForItem(collectionId, item);
             img.alt = item.alt || "";
-            // grid는 로드 순서에 따라 배치가 흔들리지 않도록 eager
+            img.decoding = "async";
+            // 모바일에서 전체 eager는 메모리로 일부 이미지가 비는 경우가 있어
+            // 앞쪽만 eager, 나머지는 lazy (grid 순서/order는 DOM으로 고정)
+            const eagerCount = gridLayout ? 8 : 15;
             img.loading =
-              gridLayout || ((pairLayout || pathLayout) && Number(id) <= 15)
+              (gridLayout && index < eagerCount) ||
+              ((pairLayout || pathLayout) && Number(id) <= eagerCount)
                 ? "eager"
                 : "lazy";
+            if (index < 2) img.fetchPriority = "high";
             if (gridLayout) {
               figure.style.order = String(index);
             }
