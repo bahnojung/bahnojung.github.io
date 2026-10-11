@@ -1851,12 +1851,16 @@ body.collection-path-page {
 /* ——— CONTACT (Bahno 에디토리얼 — 밑줄 폼, 박스 그리드 아님) ——— */
 body.contact-page {
   min-height: 100dvh;
+  min-height: 100svh;
+  height: 100dvh;
+  height: 100svh;
   padding-bottom: 0;
   background: #ffffff !important;
   color: #111111;
   display: flex;
   flex-direction: column;
   color-scheme: light;
+  overflow: hidden;
 }
 
 .contact-top {
@@ -1892,6 +1896,7 @@ body.contact-page {
 
 .contact-main {
   flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
   max-width: 560px;
   margin: 0;
@@ -1910,6 +1915,9 @@ body.contact-page {
     )
     1;
   padding-left: clamp(1.1rem, 3vw, 1.75rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .contact-intro {
@@ -2065,6 +2073,9 @@ body.contact-page {
   letter-spacing: 0.06em;
   color: #555555;
   line-height: 1.5;
+  background: #ffffff;
+  position: relative;
+  z-index: 6;
 }
 
 .contact-foot-sep {
@@ -2080,88 +2091,109 @@ body.contact-page {
   color: #111111;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   body.contact-page {
-    min-height: 100dvh;
-    min-height: 100svh;
+    height: 100dvh;
+    height: 100svh;
+    overflow: hidden;
   }
 
   .contact-top {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.2rem;
-    padding: 0.85rem 1rem 0.25rem;
+    gap: 0.15rem;
+    padding: 0.7rem 0.95rem 0.2rem;
   }
 
   .contact-brand {
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
 
   .contact-mail {
     text-align: left;
-    font-size: 0.68rem;
+    font-size: 0.66rem;
   }
 
   .contact-main {
-    margin-left: 0.9rem;
-    margin-right: 0.9rem;
+    margin-left: 0.85rem;
+    margin-right: 0.85rem;
     max-width: none;
-    padding: 0.85rem 0 0.6rem;
-    padding-left: 0.85rem;
+    padding: 0.55rem 0 0.5rem;
+    padding-left: 0.75rem;
     border-left-width: 4px;
-    /* 푸터가 바로 보이도록 메인 영역 압축 */
     flex: 1 1 auto;
     min-height: 0;
+    overflow-y: auto;
   }
 
   .contact-intro {
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.65rem;
   }
 
   .contact-heading {
-    font-size: clamp(1.85rem, 9vw, 2.4rem);
-    margin-bottom: 0.25rem;
+    font-size: clamp(1.7rem, 8.5vw, 2.2rem);
+    margin-bottom: 0.2rem;
   }
 
   .contact-lede {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
+    line-height: 1.3;
   }
 
   .contact-form {
-    gap: 0.7rem;
+    gap: 0.55rem;
   }
 
   .contact-label {
-    font-size: 0.58rem;
-    margin-bottom: 0.15rem;
+    font-size: 0.55rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .contact-field {
+    padding-bottom: 0.15rem;
   }
 
   .contact-field input,
   .contact-field textarea {
-    font-size: 0.9rem;
-    padding: 0.05rem 0 0.2rem;
+    font-size: 0.88rem;
+    padding: 0.02rem 0 0.15rem;
   }
 
   .contact-field textarea {
-    min-height: 3.4rem;
+    min-height: 2.8rem;
   }
 
   .contact-actions {
-    padding-top: 0.25rem;
+    padding-top: 0.2rem;
   }
 
   .contact-submit {
-    padding: 0.58rem 1.2rem;
-    font-size: 0.85rem;
+    display: inline-block;
+    min-width: 7.5rem;
+    padding: 0.65rem 1.35rem;
+    font-size: 0.88rem;
+    background: #111111 !important;
+    border: 2px solid #111111 !important;
+    color: #ffffff;
+    box-shadow: 0 2px 0 #000000;
   }
 
+  .contact-submit:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: none;
+  }
+
+  /* 항상 화면 하단에 고정 — 스크롤 없이 born in korea 보임 */
   .contact-foot {
-    padding: 0.35rem 1rem calc(0.55rem + env(safe-area-inset-bottom));
-    font-size: 0.68rem;
+    flex-shrink: 0;
+    padding: 0.45rem 0.95rem calc(0.55rem + env(safe-area-inset-bottom));
+    font-size: 0.7rem;
+    border-top: 1px solid #ececec;
+    background: #ffffff;
   }
 
   .contact-bio {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
   }
 }
 
