@@ -1848,7 +1848,7 @@ body.collection-path-page {
   }
 }
 
-/* ——— CONTACT (참고 레이아웃 + 사이트 글씨체) ——— */
+/* ——— CONTACT (Bahno 에디토리얼 — 밑줄 폼, 박스 그리드 아님) ——— */
 body.contact-page {
   min-height: 100dvh;
   padding-bottom: 0;
@@ -1861,93 +1861,124 @@ body.contact-page {
 
 .contact-top {
   flex: 0 0 auto;
-  padding: 1.35rem 1.5rem 0.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 1.75rem 0.75rem;
 }
 
 .contact-brand {
   font-family: var(--font-bauhaus);
-  font-size: 0.95rem;
+  font-size: clamp(1.35rem, 3.5vw, 1.85rem);
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-transform: none;
   color: #111111;
 }
 
-.contact-brand:hover {
-  opacity: 0.65;
+.contact-brand:hover,
+.contact-mail:hover {
+  opacity: 0.7;
+}
+
+.contact-mail {
+  font-family: var(--font-bauhaus);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #111111;
+  text-align: right;
 }
 
 .contact-main {
   flex: 1 1 auto;
   width: 100%;
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 4.5rem 1.5rem 3rem;
+  max-width: 560px;
+  margin: 0;
+  margin-left: clamp(1.25rem, 8vw, 7rem);
+  padding: 2.5rem 1.5rem 3rem 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  border-left: 6px solid transparent;
+  border-image: linear-gradient(
+      #ffd000 0%,
+      #e53935 25%,
+      #1565c0 50%,
+      #00c853 75%,
+      #ff4081 100%
+    )
+    1;
+  padding-left: clamp(1.1rem, 3vw, 1.75rem);
+}
+
+.contact-intro {
+  margin-bottom: 2.4rem;
 }
 
 .contact-heading {
-  margin: 0 0 2.4rem;
-  font-family: "Crimson Text", "Times New Roman", serif;
-  font-weight: 400;
-  font-size: clamp(2.4rem, 6vw, 3.4rem);
-  letter-spacing: 0.06em;
-  text-align: center;
-  line-height: 1.1;
+  margin: 0 0 0.55rem;
+  font-family: var(--font-bauhaus);
+  font-weight: 600;
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  letter-spacing: 0.08em;
+  text-align: left;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.contact-lede {
+  margin: 0;
+  max-width: 22rem;
+  font-family: var(--font-bauhaus);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  color: #333333;
 }
 
 .contact-sent {
   margin: 0 0 1.5rem;
-  font-family: "Crimson Text", "Times New Roman", serif;
-  font-style: italic;
-  font-size: 1.15rem;
-  text-align: center;
+  font-family: var(--font-bauhaus);
+  font-size: 1.05rem;
+  text-align: left;
   color: #333333;
 }
 
 .contact-form {
   width: 100%;
-  border: 1px solid #111111;
-  background: #ffffff;
-}
-
-.contact-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.contact-row + .contact-row,
-.contact-row + .contact-field-message {
-  border-top: 1px solid #111111;
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
 }
 
 .contact-field {
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: 0.55rem 0.75rem 0.65rem;
-  min-height: 4.1rem;
+  padding: 0 0 0.35rem;
+  min-height: 0;
   box-sizing: border-box;
-}
-
-.contact-row .contact-field + .contact-field {
-  border-left: 1px solid #111111;
+  border-bottom: 2px solid #111111;
 }
 
 .contact-field-message {
-  min-height: 12rem;
-  border-top: 1px solid #111111;
+  min-height: 0;
+  border-bottom: 2px solid #111111;
 }
 
 .contact-label {
-  font-family: "Crimson Text", "Times New Roman", serif;
-  font-style: italic;
-  font-size: 0.92rem;
+  font-family: var(--font-bauhaus);
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   line-height: 1.2;
   color: #222222;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.35rem;
   pointer-events: none;
 }
 
@@ -1958,11 +1989,11 @@ body.contact-page {
   outline: none;
   resize: none;
   margin: 0;
-  padding: 0.15rem 0 0;
+  padding: 0.15rem 0 0.45rem;
   background: transparent;
   color: #111111;
   font-family: var(--font-bauhaus);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   letter-spacing: 0.02em;
   line-height: 1.4;
   border-radius: 0;
@@ -1972,7 +2003,7 @@ body.contact-page {
 
 .contact-field textarea {
   flex: 1 1 auto;
-  min-height: 9.5rem;
+  min-height: 7rem;
 }
 
 .contact-field input:focus,
@@ -1980,40 +2011,41 @@ body.contact-page {
   outline: none;
 }
 
+.contact-field:focus-within {
+  border-bottom-color: #1565c0;
+}
+
 .contact-actions {
   display: flex;
-  justify-content: flex-end;
-  padding: 0.85rem 0.75rem 0.85rem;
-  border-top: 1px solid #111111;
-  background: #ffffff;
+  justify-content: flex-start;
+  padding: 0.35rem 0 0;
+  border: none;
+  background: transparent;
 }
 
 .contact-submit {
   border: none;
   margin: 0;
-  padding: 0.7rem 1.35rem;
-  background: #141414;
-  color: #ffffff;
+  padding: 0.35rem 0;
+  background: transparent;
+  color: #111111;
   font-family: var(--font-bauhaus);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   cursor: pointer;
   border-radius: 0;
   -webkit-tap-highlight-color: transparent;
 }
 
-.contact-submit span {
-  color: inherit;
-}
-
 .contact-submit:hover {
-  background: #000000;
+  background: transparent;
+  opacity: 0.75;
 }
 
 .contact-submit:focus-visible {
   outline: 2px solid #111111;
-  outline-offset: 3px;
+  outline-offset: 4px;
 }
 
 .contact-foot {
@@ -2022,7 +2054,7 @@ body.contact-page {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.45rem 0.55rem;
-  padding: 1rem 1.5rem 1.35rem;
+  padding: 1rem 1.75rem 1.45rem;
   font-family: var(--font-bauhaus);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
@@ -2036,29 +2068,41 @@ body.contact-page {
 
 .contact-bio {
   margin: 0;
-  font-family: "Crimson Text", "Times New Roman", serif;
-  font-size: 0.92rem;
-  letter-spacing: 0.02em;
+  font-family: var(--font-bauhaus);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
   line-height: 1.45;
   color: #111111;
 }
 
 @media (max-width: 640px) {
+  .contact-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 1.2rem 1.1rem 0.5rem;
+  }
+
+  .contact-mail {
+    text-align: left;
+    font-size: 0.72rem;
+  }
+
   .contact-main {
-    padding: 3rem 1rem 2.5rem;
+    margin-left: 1.1rem;
+    margin-right: 1.1rem;
+    max-width: none;
+    padding: 1.75rem 0 2.5rem;
+    padding-left: 1rem;
+    border-left-width: 5px;
   }
 
-  .contact-row {
-    grid-template-columns: 1fr;
-  }
-
-  .contact-row .contact-field + .contact-field {
-    border-left: none;
-    border-top: 1px solid #111111;
+  .contact-intro {
+    margin-bottom: 1.8rem;
   }
 
   .contact-heading {
-    margin-bottom: 1.8rem;
+    font-size: clamp(2.3rem, 12vw, 3.2rem);
   }
 }
 

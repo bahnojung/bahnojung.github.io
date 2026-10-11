@@ -17,22 +17,24 @@
       property="og:image"
       content="https://bahnojung.github.io/og-bahnojung-v2.png?v=20260331b"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
-      rel="stylesheet"
-    />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <link rel="stylesheet" href="style.css?v=20261011contact6" />
+    <link rel="stylesheet" href="style.css?v=20261011contact7" />
   </head>
   <body class="contact-page">
     <header class="contact-top">
       <a href="index.html" class="contact-brand" id="contact-brand">Bahno Jung</a>
+      <a href="mailto:jungbahno@gmail.com" class="contact-mail" id="contact-mail"
+        >jungbahno@gmail.com</a
+      >
     </header>
 
     <main class="contact-main">
-      <h1 class="contact-heading" id="contact-heading">CONTACT</h1>
+      <div class="contact-intro">
+        <h1 class="contact-heading" id="contact-heading">CONTACT</h1>
+        <p class="contact-lede" id="contact-lede">
+          For commissions, prints, and everything else —
+        </p>
+      </div>
 
       <p class="contact-sent" id="contact-sent" hidden>Message sent. Thank you.</p>
 
@@ -58,46 +60,29 @@
           autocomplete="off"
         />
 
-        <div class="contact-row">
-          <label class="contact-field">
-            <span class="contact-label">First name</span>
-            <input
-              type="text"
-              name="first_name"
-              required
-              autocomplete="given-name"
-            />
-          </label>
-          <label class="contact-field">
-            <span class="contact-label">Last name</span>
-            <input
-              type="text"
-              name="last_name"
-              required
-              autocomplete="family-name"
-            />
-          </label>
-        </div>
+        <label class="contact-field">
+          <span class="contact-label">Name</span>
+          <input type="text" name="name" required autocomplete="name" />
+        </label>
 
-        <div class="contact-row">
-          <label class="contact-field">
-            <span class="contact-label">Email</span>
-            <input type="email" name="email" required autocomplete="email" />
-          </label>
-          <label class="contact-field">
-            <span class="contact-label">Phone</span>
-            <input type="tel" name="phone" autocomplete="tel" />
-          </label>
-        </div>
+        <label class="contact-field">
+          <span class="contact-label">Email</span>
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+
+        <label class="contact-field">
+          <span class="contact-label">Phone</span>
+          <input type="tel" name="phone" autocomplete="tel" />
+        </label>
 
         <label class="contact-field contact-field-message">
           <span class="contact-label">Message</span>
-          <textarea name="message" rows="8" required></textarea>
+          <textarea name="message" rows="5" required></textarea>
         </label>
 
         <div class="contact-actions">
           <button type="submit" class="contact-submit" id="contact-submit">
-            Send
+            Send →
           </button>
         </div>
       </form>
@@ -116,7 +101,6 @@
         function colorizeLetters(element) {
           if (!element) return;
           var text = element.textContent || "";
-          // 이미 span으로 칠해져 있으면 텍스트만 다시 모음
           if (element.querySelector("span")) {
             text = Array.prototype.map
               .call(element.childNodes, function (n) {
@@ -148,7 +132,9 @@
 
         function paintAll() {
           colorizeLetters(document.getElementById("contact-brand"));
+          colorizeLetters(document.getElementById("contact-mail"));
           colorizeLetters(document.getElementById("contact-heading"));
+          colorizeLetters(document.getElementById("contact-lede"));
           colorizeLetters(document.getElementById("contact-submit"));
           colorizeLetters(document.getElementById("contact-bio"));
           colorizeLetters(document.getElementById("contact-foot"));
@@ -159,7 +145,6 @@
         }
 
         paintAll();
-        // 일부 모바일 브라우저 페인트 타이밍 보정
         setTimeout(paintAll, 0);
 
         var params = new URLSearchParams(window.location.search);
