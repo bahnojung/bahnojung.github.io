@@ -21,15 +21,15 @@
       href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css?v=20261011contact" />
+    <link rel="stylesheet" href="style.css?v=20261011contact2" />
   </head>
   <body class="contact-page">
     <header class="contact-top">
-      <a href="index.html" class="contact-brand">Bahno Jung</a>
+      <a href="index.html" class="contact-brand" id="contact-brand">Bahno Jung</a>
     </header>
 
     <main class="contact-main">
-      <h1 class="contact-heading">CONTACT</h1>
+      <h1 class="contact-heading" id="contact-heading">CONTACT</h1>
 
       <p class="contact-sent" id="contact-sent" hidden>Message sent. Thank you.</p>
 
@@ -77,22 +77,58 @@
         </label>
 
         <div class="contact-actions">
-          <button type="submit" class="contact-submit">Send</button>
+          <button type="submit" class="contact-submit" id="contact-submit">Send</button>
         </div>
       </form>
     </main>
 
     <footer class="contact-foot">
-      <span>© Bahno Jung</span>
+      <span id="contact-foot">© Bahno Jung</span>
     </footer>
 
     <script>
       (function () {
+        var MONDRIAN_COLORS = ["#FFD000", "#E53935", "#1565C0", "#00C853", "#FF4081"];
+
+        function colorizeLetters(element) {
+          if (!element) return;
+          var text = element.textContent || "";
+          element.textContent = "";
+          var prevColor = null;
+          for (var i = 0; i < text.length; i++) {
+            var ch = text.charAt(i);
+            if (ch === " ") {
+              element.appendChild(document.createTextNode(" "));
+              continue;
+            }
+            var choices = prevColor
+              ? MONDRIAN_COLORS.filter(function (c) {
+                  return c !== prevColor;
+                })
+              : MONDRIAN_COLORS;
+            var color = choices[Math.floor(Math.random() * choices.length)];
+            prevColor = color;
+            var span = document.createElement("span");
+            span.textContent = ch;
+            span.style.color = color;
+            element.appendChild(span);
+          }
+        }
+
+        colorizeLetters(document.getElementById("contact-brand"));
+        colorizeLetters(document.getElementById("contact-heading"));
+        colorizeLetters(document.getElementById("contact-submit"));
+        colorizeLetters(document.getElementById("contact-foot"));
+        document.querySelectorAll(".contact-label").forEach(colorizeLetters);
+
         var params = new URLSearchParams(window.location.search);
         if (params.get("sent") === "1") {
           var note = document.getElementById("contact-sent");
           var form = document.getElementById("contact-form");
-          if (note) note.hidden = false;
+          if (note) {
+            note.hidden = false;
+            colorizeLetters(note);
+          }
           if (form) form.hidden = true;
         }
       })();

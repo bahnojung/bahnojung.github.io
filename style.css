@@ -1985,7 +1985,7 @@ body.contact-page {
   border: none;
   margin: 0;
   padding: 0.7rem 1.35rem;
-  background: #1a2433;
+  background: #141414;
   color: #ffffff;
   font-family: var(--font-bauhaus);
   font-size: 0.85rem;
@@ -1996,8 +1996,12 @@ body.contact-page {
   -webkit-tap-highlight-color: transparent;
 }
 
+.contact-submit span {
+  color: inherit;
+}
+
 .contact-submit:hover {
-  background: #111820;
+  background: #000000;
 }
 
 .contact-submit:focus-visible {
