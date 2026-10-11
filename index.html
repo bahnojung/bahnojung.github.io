@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011easter3" />
+    <link rel="stylesheet" href="style.css?v=20261011easter4" />
     <script>
       (function () {
         try {
@@ -88,6 +88,16 @@
       >
         <span class="photo-wall-easter-exit-arrow" aria-hidden="true">←</span>
       </button>
+      <div
+        class="photo-wall-lightbox"
+        id="photo-wall-lightbox"
+        hidden
+        role="dialog"
+        aria-modal="true"
+        aria-label="Photo"
+      >
+        <img id="photo-wall-lightbox-img" alt="" />
+      </div>
     </div>
 
     <script>
@@ -259,10 +269,11 @@
             try {
               sessionStorage.setItem("cursed-refresh-clicks", "0");
             } catch (e) {}
+            // 모바일 고스트 클릭으로 바로 닫히는 것 방지
             window.setTimeout(function () {
               btn.classList.remove("is-pressed");
               openPhotoWallEaster();
-            }, 160);
+            }, 220);
             return;
           }
 
@@ -336,17 +347,55 @@
       }
 
       var photoWallOpen = false;
+      var photoWallExitArmed = false;
       var photoWallPrevOverflow = "";
+      var photoWallPrevHtmlOverflow = "";
+      var photoLightboxOpen = false;
+
+      function armPhotoWallExit(delayMs) {
+        photoWallExitArmed = false;
+        var exitBtn = document.getElementById("photo-wall-easter-close");
+        if (exitBtn) exitBtn.disabled = true;
+        window.setTimeout(function () {
+          photoWallExitArmed = true;
+          if (exitBtn) exitBtn.disabled = false;
+        }, delayMs || 500);
+      }
+
+      function openPhotoLightbox(url) {
+        var box = document.getElementById("photo-wall-lightbox");
+        var img = document.getElementById("photo-wall-lightbox-img");
+        if (!box || !img || !url) return;
+        img.src = url;
+        box.hidden = false;
+        photoLightboxOpen = true;
+      }
+
+      function closePhotoLightbox() {
+        var box = document.getElementById("photo-wall-lightbox");
+        var img = document.getElementById("photo-wall-lightbox-img");
+        if (!box) return;
+        box.hidden = true;
+        photoLightboxOpen = false;
+        if (img) img.removeAttribute("src");
+      }
 
       async function openPhotoWallEaster() {
         var root = document.getElementById("photo-wall-easter");
         var grid = document.getElementById("photo-wall-easter-grid");
+        var cursed = document.getElementById("cursed-refresh");
         if (!root || !grid || photoWallOpen) return;
         photoWallOpen = true;
+        closePhotoLightbox();
         photoWallPrevOverflow = document.body.style.overflow;
+        photoWallPrevHtmlOverflow = document.documentElement.style.overflow;
+        document.documentElement.style.overflow = "hidden";
         document.body.style.overflow = "hidden";
+        if (cursed) cursed.hidden = true;
         grid.innerHTML = "";
         root.hidden = false;
+        root.scrollTop = 0;
+        armPhotoWallExit(600);
 
         var photos = [];
         try {
@@ -356,41 +405,59 @@
         }
 
         var frag = document.createDocumentFragment();
-        photos.forEach(function (item, index) {
+        photos.forEach(function (item) {
           var fig = document.createElement("figure");
           var img = document.createElement("img");
-          img.src = imageUrlFromSrc(item.src);
+          var url = imageUrlFromSrc(item.src);
+          img.src = url;
           img.alt = "";
-          img.loading = index < 40 ? "eager" : "lazy";
+          // 모바일 메모리로 탭이 죽는 것 완화 — 전부 lazy
+          img.loading = "lazy";
           img.decoding = "async";
           fig.appendChild(img);
+          fig.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openPhotoLightbox(url);
+          });
           frag.appendChild(fig);
         });
         grid.appendChild(frag);
-
-        var exitBtn = document.getElementById("photo-wall-easter-close");
-        if (exitBtn) {
-          // 격자 아래 여백의 화살표로 스크롤해 두기
-          requestAnimationFrame(function () {
-            exitBtn.scrollIntoView({ block: "nearest" });
-          });
-        }
       }
 
       function closePhotoWallEaster() {
         var root = document.getElementById("photo-wall-easter");
+        var cursed = document.getElementById("cursed-refresh");
         if (!root || !photoWallOpen) return;
+        if (!photoWallExitArmed) return;
+        closePhotoLightbox();
         photoWallOpen = false;
+        photoWallExitArmed = false;
         root.hidden = true;
         document.body.style.overflow = photoWallPrevOverflow || "";
+        document.documentElement.style.overflow = photoWallPrevHtmlOverflow || "";
         var grid = document.getElementById("photo-wall-easter-grid");
         if (grid) grid.innerHTML = "";
+        if (cursed) {
+          cursed.hidden = false;
+        }
       }
 
       (function bindPhotoWallEasterUi() {
         var exitBtn = document.getElementById("photo-wall-easter-close");
         if (exitBtn) {
-          exitBtn.addEventListener("click", closePhotoWallEaster);
+          exitBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!photoWallExitArmed) return;
+            closePhotoWallEaster();
+          });
+        }
+        var box = document.getElementById("photo-wall-lightbox");
+        if (box) {
+          box.addEventListener("click", function () {
+            closePhotoLightbox();
+          });
         }
       })();
 
