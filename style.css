@@ -2016,23 +2016,31 @@ body.contact-page {
   outline-offset: 3px;
 }
 
-.contact-bio {
-  margin: 2.25rem 0 0;
-  font-family: "Crimson Text", "Times New Roman", serif;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  line-height: 1.45;
-  color: #111111;
-}
-
 .contact-foot {
   flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.55rem;
   padding: 1rem 1.5rem 1.35rem;
   font-family: var(--font-bauhaus);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   color: #555555;
   line-height: 1.5;
+}
+
+.contact-foot-sep {
+  opacity: 0.55;
+}
+
+.contact-bio {
+  margin: 0;
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  color: #111111;
 }
 
 @media (max-width: 640px) {
