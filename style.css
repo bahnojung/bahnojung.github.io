@@ -546,7 +546,7 @@ main.main-blank {
 
 .photo-wall-easter-exit:hover .photo-wall-easter-exit-arrow,
 .photo-wall-easter-exit:focus-visible .photo-wall-easter-exit-arrow {
-  transform: translateY(3px);
+  transform: translateX(-3px);
 }
 
 .photo-wall-easter-exit:focus-visible {
