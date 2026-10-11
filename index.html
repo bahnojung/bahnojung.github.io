@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011easter" />
+    <link rel="stylesheet" href="style.css?v=20261011easter2" />
     <script>
       (function () {
         try {
@@ -77,15 +77,17 @@
       aria-modal="true"
       aria-label="All photographs"
     >
+      <div class="photo-wall-easter-frame">
+        <div class="photo-wall-easter-grid" id="photo-wall-easter-grid"></div>
+      </div>
       <button
         type="button"
-        class="photo-wall-easter-close"
+        class="photo-wall-easter-exit"
         id="photo-wall-easter-close"
-        aria-label="닫기"
+        aria-label="나가기"
       >
-        ×
+        <span class="photo-wall-easter-exit-arrow" aria-hidden="true">↓</span>
       </button>
-      <div class="photo-wall-easter-grid" id="photo-wall-easter-grid"></div>
     </div>
 
     <script>
@@ -366,8 +368,13 @@
         });
         grid.appendChild(frag);
 
-        var closeBtn = document.getElementById("photo-wall-easter-close");
-        if (closeBtn) closeBtn.focus();
+        var exitBtn = document.getElementById("photo-wall-easter-close");
+        if (exitBtn) {
+          // 격자 아래 여백의 화살표로 스크롤해 두기
+          requestAnimationFrame(function () {
+            exitBtn.scrollIntoView({ block: "nearest" });
+          });
+        }
       }
 
       function closePhotoWallEaster() {
@@ -381,13 +388,10 @@
       }
 
       (function bindPhotoWallEasterUi() {
-        var closeBtn = document.getElementById("photo-wall-easter-close");
-        if (closeBtn) {
-          closeBtn.addEventListener("click", closePhotoWallEaster);
+        var exitBtn = document.getElementById("photo-wall-easter-close");
+        if (exitBtn) {
+          exitBtn.addEventListener("click", closePhotoWallEaster);
         }
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape") closePhotoWallEaster();
-        });
       })();
 
       if (document.documentElement.classList.contains("home-theme-dark")) {
