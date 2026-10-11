@@ -2016,28 +2016,23 @@ body.contact-page {
   outline-offset: 3px;
 }
 
-.contact-foot {
-  flex: 0 0 auto;
-  padding: 1.5rem 1.5rem 1.6rem;
-  font-family: "Crimson Text", "Times New Roman", serif;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
-  color: #111111;
-  line-height: 1.5;
-}
-
 .contact-bio {
-  margin: 0 0 0.65rem;
+  margin: 2.25rem 0 0;
   font-family: "Crimson Text", "Times New Roman", serif;
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   letter-spacing: 0.02em;
   line-height: 1.45;
+  color: #111111;
 }
 
-.contact-foot #contact-foot {
+.contact-foot {
+  flex: 0 0 auto;
+  padding: 1rem 1.5rem 1.35rem;
   font-family: var(--font-bauhaus);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
+  color: #555555;
+  line-height: 1.5;
 }
 
 @media (max-width: 640px) {
