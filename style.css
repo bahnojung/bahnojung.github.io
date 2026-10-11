@@ -1842,4 +1842,195 @@ body.collection-path-page {
   }
 }
 
+/* ——— CONTACT (참고 레이아웃 + 사이트 글씨체) ——— */
+body.contact-page {
+  min-height: 100dvh;
+  padding-bottom: 0;
+  background: #ffffff;
+  color: #111111;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-top {
+  flex: 0 0 auto;
+  padding: 1.35rem 1.5rem 0.5rem;
+}
+
+.contact-brand {
+  font-family: var(--font-bauhaus);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #111111;
+}
+
+.contact-brand:hover {
+  opacity: 0.65;
+}
+
+.contact-main {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.contact-heading {
+  margin: 0 0 2.4rem;
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 3.4rem);
+  letter-spacing: 0.06em;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.contact-sent {
+  margin: 0 0 1.5rem;
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  text-align: center;
+  color: #333333;
+}
+
+.contact-form {
+  width: 100%;
+  border: 1px solid #111111;
+  background: #ffffff;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.contact-row + .contact-row,
+.contact-row + .contact-field-message {
+  border-top: 1px solid #111111;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0.55rem 0.75rem 0.65rem;
+  min-height: 4.1rem;
+  box-sizing: border-box;
+}
+
+.contact-row .contact-field + .contact-field {
+  border-left: 1px solid #111111;
+}
+
+.contact-field-message {
+  min-height: 12rem;
+  border-top: 1px solid #111111;
+}
+
+.contact-label {
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  color: #222222;
+  margin-bottom: 0.2rem;
+  pointer-events: none;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  margin: 0;
+  padding: 0.15rem 0 0;
+  background: transparent;
+  color: #111111;
+  font-family: var(--font-bauhaus);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.contact-field textarea {
+  flex: 1 1 auto;
+  min-height: 9.5rem;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  outline: none;
+}
+
+.contact-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.85rem 0.75rem 0.85rem;
+  border-top: 1px solid #111111;
+  background: #ffffff;
+}
+
+.contact-submit {
+  border: none;
+  margin: 0;
+  padding: 0.7rem 1.35rem;
+  background: #1a2433;
+  color: #ffffff;
+  font-family: var(--font-bauhaus);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  border-radius: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.contact-submit:hover {
+  background: #111820;
+}
+
+.contact-submit:focus-visible {
+  outline: 2px solid #111111;
+  outline-offset: 3px;
+}
+
+.contact-foot {
+  flex: 0 0 auto;
+  padding: 1rem 1.5rem 1.35rem;
+  font-family: var(--font-bauhaus);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #555555;
+}
+
+@media (max-width: 640px) {
+  .contact-main {
+    padding: 3rem 1rem 2.5rem;
+  }
+
+  .contact-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-row .contact-field + .contact-field {
+    border-left: none;
+    border-top: 1px solid #111111;
+  }
+
+  .contact-heading {
+    margin-bottom: 1.8rem;
+  }
+}
+
 
