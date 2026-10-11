@@ -1,0 +1,308 @@
+/* Contact page only — separate file so phones don't reuse cached style.css */
+
+body.contact-page {
+  margin: 0;
+  min-height: 100dvh;
+  min-height: 100svh;
+  height: 100dvh;
+  height: 100svh;
+  padding: 0;
+  background: #ffffff !important;
+  color: #111111;
+  display: flex;
+  flex-direction: column;
+  color-scheme: light;
+  overflow: hidden;
+  font-family: "NeverMind Bauhaus", system-ui, -apple-system, sans-serif;
+}
+
+.contact-top {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.75rem 0.45rem;
+}
+
+.contact-brand {
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #111111;
+  text-decoration: none;
+}
+
+.contact-mail {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #111111;
+  text-align: right;
+  text-decoration: none;
+}
+
+.contact-brand:hover,
+.contact-mail:hover {
+  opacity: 0.7;
+}
+
+.contact-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  max-width: 560px;
+  margin: 0;
+  margin-left: clamp(1.25rem, 8vw, 7rem);
+  padding: 1.4rem 1.5rem 1.25rem 0;
+  padding-left: clamp(1.1rem, 3vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  border-left: 6px solid transparent;
+  border-image: linear-gradient(
+      #ffd000 0%,
+      #e53935 25%,
+      #1565c0 50%,
+      #00c853 75%,
+      #ff4081 100%
+    )
+    1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+.contact-intro {
+  margin-bottom: 1.35rem;
+}
+
+.contact-heading {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  letter-spacing: 0.08em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.contact-lede {
+  margin: 0;
+  max-width: 22rem;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  color: #333333;
+}
+
+.contact-sent {
+  margin: 0 0 1.25rem;
+  font-size: 1.05rem;
+}
+
+.contact-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  border: none;
+  background: transparent;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 0 0.25rem;
+  border-bottom: 2px solid #111111;
+  box-sizing: border-box;
+}
+
+.contact-label {
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  pointer-events: none;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  margin: 0;
+  padding: 0.1rem 0 0.3rem;
+  background: transparent;
+  color: #111111;
+  font-family: inherit;
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.contact-field textarea {
+  min-height: 4.2rem;
+}
+
+.contact-field:focus-within {
+  border-bottom-color: #1565c0;
+}
+
+.contact-actions {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.45rem 0 0;
+}
+
+.contact-submit {
+  border: 2px solid #111111;
+  margin: 0;
+  padding: 0.75rem 1.6rem;
+  min-width: 8rem;
+  background: #111111;
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: 0 3px 0 #000000;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+.contact-submit,
+.contact-submit span {
+  color: #ffffff !important;
+}
+
+.contact-submit:hover {
+  background: #222222;
+}
+
+.contact-submit:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+.contact-submit:focus-visible {
+  outline: 2px solid #1565c0;
+  outline-offset: 3px;
+}
+
+.contact-foot {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.55rem;
+  padding: 0.65rem 1.75rem 1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #555555;
+  background: #ffffff;
+  z-index: 8;
+}
+
+.contact-foot-sep {
+  opacity: 0.55;
+}
+
+.contact-bio {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: #111111;
+}
+
+@media (max-width: 900px) {
+  .contact-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    padding: 0.65rem 0.9rem 0.15rem;
+  }
+
+  .contact-brand {
+    font-size: 1rem;
+  }
+
+  .contact-mail {
+    text-align: left;
+    font-size: 0.66rem;
+  }
+
+  .contact-main {
+    margin: 0 0.85rem;
+    max-width: none;
+    padding: 0.5rem 0 4.25rem;
+    padding-left: 0.75rem;
+    border-left-width: 4px;
+  }
+
+  .contact-intro {
+    margin-bottom: 0.6rem;
+  }
+
+  .contact-heading {
+    font-size: clamp(1.65rem, 8vw, 2.1rem);
+  }
+
+  .contact-lede {
+    font-size: 0.72rem;
+  }
+
+  .contact-form {
+    gap: 0.5rem;
+  }
+
+  .contact-label {
+    font-size: 0.55rem;
+    margin-bottom: 0.08rem;
+  }
+
+  .contact-field input,
+  .contact-field textarea {
+    font-size: 0.88rem;
+    padding: 0.02rem 0 0.12rem;
+  }
+
+  .contact-field textarea {
+    min-height: 2.6rem;
+  }
+
+  .contact-submit {
+    min-width: 7.25rem;
+    padding: 0.7rem 1.4rem;
+    font-size: 0.9rem;
+    background: #111111 !important;
+    color: #ffffff !important;
+  }
+
+  .contact-submit span {
+    color: #ffffff !important;
+  }
+
+  /* 바닥에 고정 — 스크롤과 무관하게 항상 보임 */
+  .contact-foot {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.55rem 0.9rem calc(0.65rem + env(safe-area-inset-bottom));
+    border-top: 1px solid #e8e8e8;
+    background: #ffffff;
+    font-size: 0.72rem;
+  }
+
+  .contact-bio {
+    font-size: 0.74rem;
+  }
+}
