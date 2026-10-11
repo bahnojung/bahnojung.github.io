@@ -2018,11 +2018,26 @@ body.contact-page {
 
 .contact-foot {
   flex: 0 0 auto;
-  padding: 1rem 1.5rem 1.35rem;
+  padding: 1.5rem 1.5rem 1.6rem;
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: #111111;
+  line-height: 1.5;
+}
+
+.contact-bio {
+  margin: 0 0 0.65rem;
+  font-family: "Crimson Text", "Times New Roman", serif;
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+}
+
+.contact-foot #contact-foot {
   font-family: var(--font-bauhaus);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
-  color: #555555;
 }
 
 @media (max-width: 640px) {
