@@ -1588,7 +1588,8 @@ body.collection-path-page {
   }
 
   body.main-page .collection-nav {
-    bottom: calc(env(safe-area-inset-bottom) + var(--logo-block-height));
+    /* 로고와 같이 아주 살짝 위로 */
+    bottom: calc(env(safe-area-inset-bottom) + var(--logo-block-height) + 1.05rem);
     padding: 0 0.75rem 0.15rem 0.75rem;
     width: calc(100% - 1.5rem);
     min-width: 0;
@@ -1610,7 +1611,7 @@ body.collection-path-page {
   /* 모바일: 메인 페이지 헤더를 컬렉션 페이지와 동일하게 */
   body.main-page .site-header {
     margin-left: 0;
-    bottom: env(safe-area-inset-bottom);
+    bottom: calc(env(safe-area-inset-bottom) + 1.05rem);
   }
 
   body.main-page .site-header .header-inner {
