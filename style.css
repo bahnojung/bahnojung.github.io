@@ -1865,12 +1865,12 @@ body.contact-page {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.5rem 1.75rem 0.75rem;
+  padding: 1.15rem 1.75rem 0.45rem;
 }
 
 .contact-brand {
   font-family: var(--font-bauhaus);
-  font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: none;
@@ -1896,7 +1896,7 @@ body.contact-page {
   max-width: 560px;
   margin: 0;
   margin-left: clamp(1.25rem, 8vw, 7rem);
-  padding: 2.5rem 1.5rem 3rem 0;
+  padding: 1.6rem 1.5rem 1.5rem 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -1913,14 +1913,14 @@ body.contact-page {
 }
 
 .contact-intro {
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.5rem;
 }
 
 .contact-heading {
-  margin: 0 0 0.55rem;
+  margin: 0 0 0.4rem;
   font-family: var(--font-bauhaus);
   font-weight: 600;
-  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
   letter-spacing: 0.08em;
   text-align: left;
   line-height: 0.95;
@@ -1931,9 +1931,9 @@ body.contact-page {
   margin: 0;
   max-width: 22rem;
   font-family: var(--font-bauhaus);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   letter-spacing: 0.02em;
-  line-height: 1.45;
+  line-height: 1.4;
   color: #333333;
 }
 
@@ -1951,14 +1951,14 @@ body.contact-page {
   background: transparent;
   display: flex;
   flex-direction: column;
-  gap: 1.35rem;
+  gap: 0.95rem;
 }
 
 .contact-field {
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: 0 0 0.35rem;
+  padding: 0 0 0.25rem;
   min-height: 0;
   box-sizing: border-box;
   border-bottom: 2px solid #111111;
@@ -1972,13 +1972,13 @@ body.contact-page {
 .contact-label {
   font-family: var(--font-bauhaus);
   font-style: normal;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1.2;
   color: #222222;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
   pointer-events: none;
 }
 
@@ -1989,13 +1989,13 @@ body.contact-page {
   outline: none;
   resize: none;
   margin: 0;
-  padding: 0.15rem 0 0.45rem;
+  padding: 0.1rem 0 0.3rem;
   background: transparent;
   color: #111111;
   font-family: var(--font-bauhaus);
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   letter-spacing: 0.02em;
-  line-height: 1.4;
+  line-height: 1.35;
   border-radius: 0;
   -webkit-appearance: none;
   appearance: none;
@@ -2003,7 +2003,7 @@ body.contact-page {
 
 .contact-field textarea {
   flex: 1 1 auto;
-  min-height: 7rem;
+  min-height: 4.5rem;
 }
 
 .contact-field input:focus,
@@ -2018,34 +2018,39 @@ body.contact-page {
 .contact-actions {
   display: flex;
   justify-content: flex-start;
-  padding: 0.35rem 0 0;
+  padding: 0.5rem 0 0;
   border: none;
   background: transparent;
 }
 
 .contact-submit {
-  border: none;
+  border: 2px solid #111111;
   margin: 0;
-  padding: 0.35rem 0;
-  background: transparent;
-  color: #111111;
+  padding: 0.7rem 1.5rem;
+  background: #111111;
+  color: #ffffff;
   font-family: var(--font-bauhaus);
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   cursor: pointer;
   border-radius: 0;
   -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s ease, background 0.15s ease, color 0.15s ease;
 }
 
 .contact-submit:hover {
-  background: transparent;
-  opacity: 0.75;
+  background: #ffffff;
+}
+
+.contact-submit:active {
+  transform: scale(0.97);
 }
 
 .contact-submit:focus-visible {
-  outline: 2px solid #111111;
-  outline-offset: 4px;
+  outline: 2px solid #1565c0;
+  outline-offset: 3px;
 }
 
 .contact-foot {
@@ -2054,7 +2059,7 @@ body.contact-page {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.45rem 0.55rem;
-  padding: 1rem 1.75rem 1.45rem;
+  padding: 0.65rem 1.75rem 1rem;
   font-family: var(--font-bauhaus);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
@@ -2076,33 +2081,87 @@ body.contact-page {
 }
 
 @media (max-width: 640px) {
+  body.contact-page {
+    min-height: 100dvh;
+    min-height: 100svh;
+  }
+
   .contact-top {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.35rem;
-    padding: 1.2rem 1.1rem 0.5rem;
+    gap: 0.2rem;
+    padding: 0.85rem 1rem 0.25rem;
+  }
+
+  .contact-brand {
+    font-size: 1.05rem;
   }
 
   .contact-mail {
     text-align: left;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
   }
 
   .contact-main {
-    margin-left: 1.1rem;
-    margin-right: 1.1rem;
+    margin-left: 0.9rem;
+    margin-right: 0.9rem;
     max-width: none;
-    padding: 1.75rem 0 2.5rem;
-    padding-left: 1rem;
-    border-left-width: 5px;
+    padding: 0.85rem 0 0.6rem;
+    padding-left: 0.85rem;
+    border-left-width: 4px;
+    /* 푸터가 바로 보이도록 메인 영역 압축 */
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .contact-intro {
-    margin-bottom: 1.8rem;
+    margin-bottom: 0.85rem;
   }
 
   .contact-heading {
-    font-size: clamp(2.3rem, 12vw, 3.2rem);
+    font-size: clamp(1.85rem, 9vw, 2.4rem);
+    margin-bottom: 0.25rem;
+  }
+
+  .contact-lede {
+    font-size: 0.78rem;
+  }
+
+  .contact-form {
+    gap: 0.7rem;
+  }
+
+  .contact-label {
+    font-size: 0.58rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .contact-field input,
+  .contact-field textarea {
+    font-size: 0.9rem;
+    padding: 0.05rem 0 0.2rem;
+  }
+
+  .contact-field textarea {
+    min-height: 3.4rem;
+  }
+
+  .contact-actions {
+    padding-top: 0.25rem;
+  }
+
+  .contact-submit {
+    padding: 0.58rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .contact-foot {
+    padding: 0.35rem 1rem calc(0.55rem + env(safe-area-inset-bottom));
+    font-size: 0.68rem;
+  }
+
+  .contact-bio {
+    font-size: 0.7rem;
   }
 }
 
