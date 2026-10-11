@@ -166,13 +166,6 @@ body.main-page.theme-dark .site-header {
   background-color: #141414;
 }
 
-html.home-theme-dark body.main-page .site-title,
-html.home-theme-dark body.main-page .site-title-link,
-body.main-page.theme-dark .site-title,
-body.main-page.theme-dark .site-title-link {
-  color: #ffffff;
-}
-
 html.home-theme-dark body.main-page .music-toggle,
 body.main-page.theme-dark .music-toggle {
   color: #ffffff;
@@ -494,33 +487,31 @@ main.main-blank {
   background: #ffffff;
 }
 
-.photo-wall-easter-grid {
-  display: grid;
-  grid-template-columns: repeat(20, minmax(0, 1fr));
-  gap: 0.2rem;
+.photo-wall-easter-mosaic {
+  display: block;
   width: 100%;
   margin: 0;
   padding: 0;
+  border: none;
   background: #ffffff;
-}
-
-.photo-wall-easter-grid figure {
-  margin: 0;
-  padding: 0;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: #f0f0f0;
   cursor: pointer;
-  content-visibility: auto;
-  contain-intrinsic-size: 80px 80px;
   -webkit-tap-highlight-color: transparent;
 }
 
-.photo-wall-easter-grid img {
+.photo-wall-easter-mosaic img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  vertical-align: top;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+body.photo-wall-open .collection-nav,
+body.photo-wall-open .site-header,
+body.photo-wall-open .music-toggle {
+  visibility: hidden;
   pointer-events: none;
 }
 
@@ -601,21 +592,11 @@ main.main-blank {
   .photo-wall-easter-frame {
     padding: 0.9rem 0.9rem 0;
   }
-
-  .photo-wall-easter-grid {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 0.15rem;
-  }
 }
 
 @media (max-width: 640px) {
   .photo-wall-easter-frame {
     padding: 0.65rem 0.65rem 0;
-  }
-
-  .photo-wall-easter-grid {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-    gap: 0.12rem;
   }
 
   .photo-wall-easter-exit {

@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011contact" />
+    <link rel="stylesheet" href="style.css?v=20261011wallfix" />
     <script>
       (function () {
         try {
@@ -47,7 +47,7 @@
       <div class="header-inner">
         <div>
           <h1 class="site-title">
-            <a href="contact.html" class="site-title-link">Bahno Jung</a>
+            <a href="contact.html" class="site-title-link" id="site-title-link">Bahno Jung</a>
           </h1>
         </div>
       </div>
@@ -78,7 +78,20 @@
       aria-label="All photographs"
     >
       <div class="photo-wall-easter-frame">
-        <div class="photo-wall-easter-grid" id="photo-wall-easter-grid"></div>
+        <button
+          type="button"
+          class="photo-wall-easter-mosaic"
+          id="photo-wall-easter-mosaic"
+          aria-label="Photo wall"
+        >
+          <img
+            id="photo-wall-easter-mosaic-img"
+            alt="All photographs"
+            width="3600"
+            height="3600"
+            decoding="async"
+          />
+        </button>
       </div>
       <button
         type="button"
@@ -104,6 +117,7 @@
       const MONDRIAN_COLORS = ["#FFD000", "#E53935", "#1565C0", "#00C853", "#FF4081"];
 
       function colorizeLetters(element) {
+        if (!element) return;
         const text = element.textContent || "";
         element.textContent = "";
         let prevColor = null;
@@ -290,19 +304,8 @@
         });
       }
 
-      function shuffleInPlace(arr) {
-        for (var i = arr.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var t = arr[i];
-          arr[i] = arr[j];
-          arr[j] = t;
-        }
-        return arr;
-      }
-
       function imageUrlFromSrc(src) {
         if (!src) return "";
-        // src like collections/Leo-do/1.jpg
         var m = String(src).match(/^collections\/(.+)\/([^/]+)$/);
         if (m) {
           return (
@@ -315,42 +318,12 @@
         return encodeURI(src);
       }
 
-      async function collectAllPhotoSrcs() {
-        var res = await fetch("collections.json", { cache: "no-store" });
-        if (!res.ok) return [];
-        var collections = await res.json();
-        if (!Array.isArray(collections)) return [];
-        var lists = await Promise.all(
-          collections.map(async function (c) {
-            try {
-              var r = await fetch(
-                "collections/" + encodeURIComponent(c.id) + "/images.json",
-                { cache: "no-store" }
-              );
-              if (!r.ok) return [];
-              var data = await r.json();
-              var images = Array.isArray(data) ? data : data.images;
-              if (!Array.isArray(images)) return [];
-              return images
-                .filter(function (item) {
-                  return item && item.src;
-                })
-                .map(function (item) {
-                  return { src: item.src, collectionId: c.id };
-                });
-            } catch (e) {
-              return [];
-            }
-          })
-        );
-        return shuffleInPlace(lists.flat());
-      }
-
       var photoWallOpen = false;
       var photoWallExitArmed = false;
       var photoWallPrevOverflow = "";
       var photoWallPrevHtmlOverflow = "";
       var photoLightboxOpen = false;
+      var photoWallOrder = null; // { cols, rows, images: string[] }
 
       function armPhotoWallExit(delayMs) {
         photoWallExitArmed = false;
@@ -359,7 +332,7 @@
         window.setTimeout(function () {
           photoWallExitArmed = true;
           if (exitBtn) exitBtn.disabled = false;
-        }, delayMs || 500);
+        }, delayMs || 700);
       }
 
       function openPhotoLightbox(url) {
@@ -380,67 +353,69 @@
         if (img) img.removeAttribute("src");
       }
 
+      async function loadPhotoWallOrder() {
+        if (photoWallOrder) return photoWallOrder;
+        var res = await fetch("easter-wall/order.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("order");
+        photoWallOrder = await res.json();
+        return photoWallOrder;
+      }
+
+      function mosaicIndexFromEvent(e, imgEl, cols, count) {
+        var rect = imgEl.getBoundingClientRect();
+        if (rect.width < 2 || rect.height < 2) return -1;
+        var x = (e.clientX - rect.left) / rect.width;
+        var y = (e.clientY - rect.top) / rect.height;
+        if (x < 0 || y < 0 || x >= 1 || y >= 1) return -1;
+        var rows = Math.ceil(count / cols);
+        var col = Math.min(cols - 1, Math.floor(x * cols));
+        var row = Math.min(rows - 1, Math.floor(y * rows));
+        var idx = row * cols + col;
+        return idx < count ? idx : -1;
+      }
+
       async function openPhotoWallEaster() {
         var root = document.getElementById("photo-wall-easter");
-        var grid = document.getElementById("photo-wall-easter-grid");
+        var mosaicBtn = document.getElementById("photo-wall-easter-mosaic");
+        var mosaicImg = document.getElementById("photo-wall-easter-mosaic-img");
         var cursed = document.getElementById("cursed-refresh");
-        if (!root || !grid || photoWallOpen) return;
+        if (!root || !mosaicBtn || !mosaicImg || photoWallOpen) return;
         photoWallOpen = true;
         closePhotoLightbox();
         photoWallPrevOverflow = document.body.style.overflow;
         photoWallPrevHtmlOverflow = document.documentElement.style.overflow;
         document.documentElement.style.overflow = "hidden";
         document.body.style.overflow = "hidden";
+        document.body.classList.add("photo-wall-open");
         if (cursed) cursed.hidden = true;
-        grid.innerHTML = "";
         root.hidden = false;
         root.scrollTop = 0;
-        armPhotoWallExit(600);
+        armPhotoWallExit(800);
 
-        var photos = [];
         try {
-          photos = await collectAllPhotoSrcs();
+          await loadPhotoWallOrder();
         } catch (e) {
-          photos = [];
+          photoWallOrder = { cols: 20, rows: 20, images: [] };
         }
-
-        var frag = document.createDocumentFragment();
-        photos.forEach(function (item) {
-          var fig = document.createElement("figure");
-          var img = document.createElement("img");
-          var url = imageUrlFromSrc(item.src);
-          img.src = url;
-          img.alt = "";
-          // 모바일 메모리로 탭이 죽는 것 완화 — 전부 lazy
-          img.loading = "lazy";
-          img.decoding = "async";
-          fig.appendChild(img);
-          fig.addEventListener("click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            openPhotoLightbox(url);
-          });
-          frag.appendChild(fig);
-        });
-        grid.appendChild(frag);
+        // 한 장만 로드 — 모바일에서 400장 디코드로 탭이 죽는 문제 방지
+        mosaicImg.src = "easter-wall/wall.jpg";
       }
 
       function closePhotoWallEaster() {
         var root = document.getElementById("photo-wall-easter");
         var cursed = document.getElementById("cursed-refresh");
+        var mosaicImg = document.getElementById("photo-wall-easter-mosaic-img");
         if (!root || !photoWallOpen) return;
         if (!photoWallExitArmed) return;
         closePhotoLightbox();
         photoWallOpen = false;
         photoWallExitArmed = false;
         root.hidden = true;
+        document.body.classList.remove("photo-wall-open");
         document.body.style.overflow = photoWallPrevOverflow || "";
         document.documentElement.style.overflow = photoWallPrevHtmlOverflow || "";
-        var grid = document.getElementById("photo-wall-easter-grid");
-        if (grid) grid.innerHTML = "";
-        if (cursed) {
-          cursed.hidden = false;
-        }
+        if (mosaicImg) mosaicImg.removeAttribute("src");
+        if (cursed) cursed.hidden = false;
       }
 
       (function bindPhotoWallEasterUi() {
@@ -451,6 +426,23 @@
             e.stopPropagation();
             if (!photoWallExitArmed) return;
             closePhotoWallEaster();
+          });
+        }
+        var mosaicBtn = document.getElementById("photo-wall-easter-mosaic");
+        var mosaicImg = document.getElementById("photo-wall-easter-mosaic-img");
+        if (mosaicBtn && mosaicImg) {
+          mosaicBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!photoWallOrder || !photoWallOrder.images) return;
+            var idx = mosaicIndexFromEvent(
+              e,
+              mosaicImg,
+              Number(photoWallOrder.cols) || 20,
+              photoWallOrder.images.length
+            );
+            if (idx < 0) return;
+            openPhotoLightbox(imageUrlFromSrc(photoWallOrder.images[idx]));
           });
         }
         var box = document.getElementById("photo-wall-lightbox");
@@ -464,6 +456,9 @@
       if (document.documentElement.classList.contains("home-theme-dark")) {
         document.body.classList.add("theme-dark");
       }
+
+      // 홈 로고도 컬렉션 메뉴와 같이 알록달록
+      colorizeLetters(document.getElementById("site-title-link"));
 
       loadSidebar().then(function () {
         requestAnimationFrame(placeCursedRefresh);
