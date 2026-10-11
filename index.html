@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011grid8" />
+    <link rel="stylesheet" href="style.css?v=20261011easter" />
     <script>
       (function () {
         try {
@@ -68,6 +68,25 @@
       <span class="cursed-refresh-rim" aria-hidden="true"></span>
       <span class="cursed-refresh-face" aria-hidden="true"></span>
     </button>
+
+    <div
+      class="photo-wall-easter"
+      id="photo-wall-easter"
+      hidden
+      role="dialog"
+      aria-modal="true"
+      aria-label="All photographs"
+    >
+      <button
+        type="button"
+        class="photo-wall-easter-close"
+        id="photo-wall-easter-close"
+        aria-label="닫기"
+      >
+        ×
+      </button>
+      <div class="photo-wall-easter-grid" id="photo-wall-easter-grid"></div>
+    </div>
 
     <script>
       const MONDRIAN_COLORS = ["#FFD000", "#E53935", "#1565C0", "#00C853", "#FF4081"];
@@ -226,6 +245,25 @@
 
         btn.addEventListener("click", function () {
           btn.classList.add("is-pressed");
+          var clicks = 0;
+          try {
+            clicks = Number(sessionStorage.getItem("cursed-refresh-clicks") || "0") + 1;
+            sessionStorage.setItem("cursed-refresh-clicks", String(clicks));
+          } catch (e) {
+            clicks = 1;
+          }
+
+          if (clicks >= 5) {
+            try {
+              sessionStorage.setItem("cursed-refresh-clicks", "0");
+            } catch (e) {}
+            window.setTimeout(function () {
+              btn.classList.remove("is-pressed");
+              openPhotoWallEaster();
+            }, 160);
+            return;
+          }
+
           try {
             var next =
               sessionStorage.getItem("bahno-home-theme") === "dark"
@@ -238,6 +276,119 @@
           }, 160);
         });
       }
+
+      function shuffleInPlace(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = arr[i];
+          arr[i] = arr[j];
+          arr[j] = t;
+        }
+        return arr;
+      }
+
+      function imageUrlFromSrc(src) {
+        if (!src) return "";
+        // src like collections/Leo-do/1.jpg
+        var m = String(src).match(/^collections\/(.+)\/([^/]+)$/);
+        if (m) {
+          return (
+            "collections/" +
+            encodeURIComponent(m[1]) +
+            "/" +
+            encodeURIComponent(m[2])
+          );
+        }
+        return encodeURI(src);
+      }
+
+      async function collectAllPhotoSrcs() {
+        var res = await fetch("collections.json", { cache: "no-store" });
+        if (!res.ok) return [];
+        var collections = await res.json();
+        if (!Array.isArray(collections)) return [];
+        var lists = await Promise.all(
+          collections.map(async function (c) {
+            try {
+              var r = await fetch(
+                "collections/" + encodeURIComponent(c.id) + "/images.json",
+                { cache: "no-store" }
+              );
+              if (!r.ok) return [];
+              var data = await r.json();
+              var images = Array.isArray(data) ? data : data.images;
+              if (!Array.isArray(images)) return [];
+              return images
+                .filter(function (item) {
+                  return item && item.src;
+                })
+                .map(function (item) {
+                  return { src: item.src, collectionId: c.id };
+                });
+            } catch (e) {
+              return [];
+            }
+          })
+        );
+        return shuffleInPlace(lists.flat());
+      }
+
+      var photoWallOpen = false;
+      var photoWallPrevOverflow = "";
+
+      async function openPhotoWallEaster() {
+        var root = document.getElementById("photo-wall-easter");
+        var grid = document.getElementById("photo-wall-easter-grid");
+        if (!root || !grid || photoWallOpen) return;
+        photoWallOpen = true;
+        photoWallPrevOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        grid.innerHTML = "";
+        root.hidden = false;
+
+        var photos = [];
+        try {
+          photos = await collectAllPhotoSrcs();
+        } catch (e) {
+          photos = [];
+        }
+
+        var frag = document.createDocumentFragment();
+        photos.forEach(function (item, index) {
+          var fig = document.createElement("figure");
+          var img = document.createElement("img");
+          img.src = imageUrlFromSrc(item.src);
+          img.alt = "";
+          img.loading = index < 40 ? "eager" : "lazy";
+          img.decoding = "async";
+          fig.appendChild(img);
+          frag.appendChild(fig);
+        });
+        grid.appendChild(frag);
+
+        var closeBtn = document.getElementById("photo-wall-easter-close");
+        if (closeBtn) closeBtn.focus();
+      }
+
+      function closePhotoWallEaster() {
+        var root = document.getElementById("photo-wall-easter");
+        if (!root || !photoWallOpen) return;
+        photoWallOpen = false;
+        root.hidden = true;
+        document.body.style.overflow = photoWallPrevOverflow || "";
+        var grid = document.getElementById("photo-wall-easter-grid");
+        if (grid) grid.innerHTML = "";
+      }
+
+      (function bindPhotoWallEasterUi() {
+        var closeBtn = document.getElementById("photo-wall-easter-close");
+        if (closeBtn) {
+          closeBtn.addEventListener("click", closePhotoWallEaster);
+        }
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closePhotoWallEaster();
+        });
+      })();
 
       if (document.documentElement.classList.contains("home-theme-dark")) {
         document.body.classList.add("theme-dark");
