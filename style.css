@@ -477,12 +477,12 @@ main.main-blank {
   padding: 0;
   border: none;
   background: #ffffff;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  /* 모바일에서 큰 모자이크 가로·세로 스크롤 */
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
 }
 
 .photo-wall-easter[hidden] {
@@ -492,25 +492,30 @@ main.main-blank {
 .photo-wall-easter-frame {
   flex: 0 0 auto;
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   padding: 1.25rem 1.25rem 0;
   background: #ffffff;
+  overflow-x: hidden;
 }
 
 .photo-wall-easter-mosaic {
   display: block;
   width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   border: none;
   background: #ffffff;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .photo-wall-easter-mosaic img {
   display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
   vertical-align: top;
   pointer-events: none;
@@ -603,23 +608,11 @@ body.photo-wall-open .music-toggle {
     padding: 0.9rem 0.9rem 0;
   }
 
-  /* 칸당 ~64px — 탭하기 쉬운 크기, 화면보다 넓으면 가로 스크롤 */
-  .photo-wall-easter-mosaic {
-    width: max-content;
-    max-width: none;
-  }
-
-  .photo-wall-easter-mosaic img {
-    width: 1280px; /* 20열 × 64px */
-    max-width: none;
-  }
-
   .photo-wall-easter-exit {
     position: sticky;
     bottom: 0;
     left: 0;
-    width: 100vw;
-    max-width: 100vw;
+    width: 100%;
     box-sizing: border-box;
     z-index: 2;
   }
@@ -628,11 +621,6 @@ body.photo-wall-open .music-toggle {
 @media (max-width: 640px) {
   .photo-wall-easter-frame {
     padding: 0.65rem 0.65rem 0;
-  }
-
-  .photo-wall-easter-mosaic img {
-    width: 1440px; /* 20열 × 72px — 휴대폰 탭 타깃 */
-    max-width: none;
   }
 
   .photo-wall-easter-exit {
