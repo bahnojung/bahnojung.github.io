@@ -166,6 +166,13 @@ body.main-page.theme-dark .site-header {
   background-color: #141414;
 }
 
+html.home-theme-dark body.main-page .site-title,
+html.home-theme-dark body.main-page .site-title-link,
+body.main-page.theme-dark .site-title,
+body.main-page.theme-dark .site-title-link {
+  color: #ffffff;
+}
+
 html.home-theme-dark body.main-page .music-toggle,
 body.main-page.theme-dark .music-toggle {
   color: #ffffff;
@@ -1827,10 +1834,11 @@ body.collection-path-page {
 body.contact-page {
   min-height: 100dvh;
   padding-bottom: 0;
-  background: #ffffff;
+  background: #ffffff !important;
   color: #111111;
   display: flex;
   flex-direction: column;
+  color-scheme: light;
 }
 
 .contact-top {

@@ -3,25 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Contact — Bahno Jung</title>
-    <meta
-      name="description"
-      content="Contact Bahno Jung."
-    />
+    <meta name="description" content="Contact Bahno Jung." />
     <link rel="icon" href="data:," />
     <link rel="shortcut icon" href="data:," />
     <link rel="apple-touch-icon" href="data:," />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Contact — Bahno Jung" />
     <meta property="og:description" content="Contact Bahno Jung." />
-    <meta property="og:image" content="https://bahnojung.github.io/og-bahnojung-v2.png?v=20260331b" />
+    <meta
+      property="og:image"
+      content="https://bahnojung.github.io/og-bahnojung-v2.png?v=20260331b"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css?v=20261011contact2" />
+    <link rel="stylesheet" href="style.css?v=20261011contact3" />
   </head>
   <body class="contact-page">
     <header class="contact-top">
@@ -47,16 +49,32 @@
           name="_next"
           value="https://bahnojung.github.io/contact.html?sent=1"
         />
-        <input type="text" name="_honey" style="display: none" tabindex="-1" autocomplete="off" />
+        <input
+          type="text"
+          name="_honey"
+          style="display: none"
+          tabindex="-1"
+          autocomplete="off"
+        />
 
         <div class="contact-row">
           <label class="contact-field">
             <span class="contact-label">First name</span>
-            <input type="text" name="first_name" required autocomplete="given-name" />
+            <input
+              type="text"
+              name="first_name"
+              required
+              autocomplete="given-name"
+            />
           </label>
           <label class="contact-field">
             <span class="contact-label">Last name</span>
-            <input type="text" name="last_name" required autocomplete="family-name" />
+            <input
+              type="text"
+              name="last_name"
+              required
+              autocomplete="family-name"
+            />
           </label>
         </div>
 
@@ -77,7 +95,9 @@
         </label>
 
         <div class="contact-actions">
-          <button type="submit" class="contact-submit" id="contact-submit">Send</button>
+          <button type="submit" class="contact-submit" id="contact-submit">
+            Send
+          </button>
         </div>
       </form>
     </main>
@@ -88,38 +108,55 @@
 
     <script>
       (function () {
-        var MONDRIAN_COLORS = ["#FFD000", "#E53935", "#1565C0", "#00C853", "#FF4081"];
+        var COLORS = ["#FFD000", "#E53935", "#1565C0", "#00C853", "#FF4081"];
 
         function colorizeLetters(element) {
           if (!element) return;
           var text = element.textContent || "";
+          // 이미 span으로 칠해져 있으면 텍스트만 다시 모음
+          if (element.querySelector("span")) {
+            text = Array.prototype.map
+              .call(element.childNodes, function (n) {
+                return n.textContent || "";
+              })
+              .join("");
+          }
           element.textContent = "";
-          var prevColor = null;
+          var prev = null;
           for (var i = 0; i < text.length; i++) {
             var ch = text.charAt(i);
             if (ch === " ") {
               element.appendChild(document.createTextNode(" "));
               continue;
             }
-            var choices = prevColor
-              ? MONDRIAN_COLORS.filter(function (c) {
-                  return c !== prevColor;
+            var pool = prev
+              ? COLORS.filter(function (c) {
+                  return c !== prev;
                 })
-              : MONDRIAN_COLORS;
-            var color = choices[Math.floor(Math.random() * choices.length)];
-            prevColor = color;
+              : COLORS;
+            var color = pool[Math.floor(Math.random() * pool.length)];
+            prev = color;
             var span = document.createElement("span");
             span.textContent = ch;
-            span.style.color = color;
+            span.setAttribute("style", "color:" + color + " !important");
             element.appendChild(span);
           }
         }
 
-        colorizeLetters(document.getElementById("contact-brand"));
-        colorizeLetters(document.getElementById("contact-heading"));
-        colorizeLetters(document.getElementById("contact-submit"));
-        colorizeLetters(document.getElementById("contact-foot"));
-        document.querySelectorAll(".contact-label").forEach(colorizeLetters);
+        function paintAll() {
+          colorizeLetters(document.getElementById("contact-brand"));
+          colorizeLetters(document.getElementById("contact-heading"));
+          colorizeLetters(document.getElementById("contact-submit"));
+          colorizeLetters(document.getElementById("contact-foot"));
+          var labels = document.querySelectorAll(".contact-label");
+          for (var i = 0; i < labels.length; i++) {
+            colorizeLetters(labels[i]);
+          }
+        }
+
+        paintAll();
+        // 일부 모바일 브라우저 페인트 타이밍 보정
+        setTimeout(paintAll, 0);
 
         var params = new URLSearchParams(window.location.search);
         if (params.get("sent") === "1") {
