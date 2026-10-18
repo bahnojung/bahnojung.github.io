@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://bahnojung.github.io/</loc>
-    <lastmod>2026-10-11</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -43,37 +43,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bahnojung.github.io/collection.html?collection=Hanseo%27s%20Red%20adidas%20pants</loc>
-    <lastmod>2026-08-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://bahnojung.github.io/collection.html?collection=AMIS%20DU%20QUARTIER%20-%20SEOUL</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bahnojung.github.io/collection.html?collection=Postarchivefaction%20-%20New%20Classic</loc>
-    <lastmod>2026-10-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bahnojung.github.io/collection.html?collection=Along%20the%20Forest%20Path</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://bahnojung.github.io/collection.html?collection=Sunflowers%20of%20Seoul</loc>
-    <lastmod>2026-08-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bahnojung.github.io/collection.html?collection=My%20Lens%20Mentor</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

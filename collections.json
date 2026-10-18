@@ -27,7 +27,8 @@
   {
     "id": "Hanseo's Red adidas pants",
     "name": "Hanseo's Red adidas pants",
-    "path": "collection.html?collection=Hanseo's%20Red%20adidas%20pants"
+    "path": "collection.html?collection=Hanseo's%20Red%20adidas%20pants",
+    "hidden": true
   },
   {
     "id": "AMIS DU QUARTIER - SEOUL",
@@ -37,12 +38,14 @@
   {
     "id": "Postarchivefaction - New Classic",
     "name": "Postarchivefaction - New Classic",
-    "path": "collection.html?collection=Postarchivefaction%20-%20New%20Classic"
+    "path": "collection.html?collection=Postarchivefaction%20-%20New%20Classic",
+    "hidden": true
   },
   {
     "id": "Along the Forest Path",
     "name": "Along the Forest Path",
-    "path": "collection.html?collection=Along%20the%20Forest%20Path"
+    "path": "collection.html?collection=Along%20the%20Forest%20Path",
+    "hidden": true
   },
   {
     "id": "Sunflowers of Seoul",
@@ -52,7 +55,8 @@
   {
     "id": "My Lens Mentor",
     "name": "My Lens Mentor",
-    "path": "collection.html?collection=My%20Lens%20Mentor"
+    "path": "collection.html?collection=My%20Lens%20Mentor",
+    "hidden": true
   },
   {
     "id": "Ant",

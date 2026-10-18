@@ -220,7 +220,7 @@ async function generateSitemap(collections) {
   }
 
   for (const c of collections || []) {
-    if (!c || !c.id) continue;
+    if (!c || !c.id || c.hidden) continue;
     urls.push({
       loc: collectionLoc(c.id),
       lastmod: await getCollectionLastmod(c.id),
