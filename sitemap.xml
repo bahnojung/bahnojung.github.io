@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://bahnojung.github.io/collection.html?collection=My%20Lens%20Mentor</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://bahnojung.github.io/collection.html?collection=Ant</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
