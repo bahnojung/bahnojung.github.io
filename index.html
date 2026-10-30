@@ -160,7 +160,9 @@
           collections.forEach((collection, index) => {
             if (collection && collection.hidden) return;
             const link = document.createElement("a");
-            link.href = "collection.html?collection=" + encodeURIComponent(collection.id);
+            link.href =
+              collection.path ||
+              "collection.html?collection=" + encodeURIComponent(collection.id);
             link.textContent = displayName(collection.id);
             link.className = "sidebar-link";
             if (collection.id === currentId) link.classList.add("active");
