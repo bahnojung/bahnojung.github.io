@@ -1,0 +1,9 @@
+{
+  "layout": "stack",
+  "sort": "asc",
+  "stackSize": "large",
+  "order": [
+    "04",
+    "013"
+  ]
+}
