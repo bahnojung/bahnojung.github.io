@@ -2,16 +2,10 @@
   "layout": "stack",
   "sort": "asc",
   "stackSize": "large",
+  "order": ["1", "2", "3", "4", "5", "6"],
   "paragraphs": [
     "WARM WARM DAY …",
-    "with JI YONG and SUN YOU /"
-  ],
-  "order": [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6"
+    "with JI YONG and SUN YOU, 2025",
+    "An unusually warm winter."
   ]
 }
