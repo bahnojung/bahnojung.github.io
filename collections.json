@@ -15,14 +15,14 @@
     "path": "collection.html?collection=Mars"
   },
   {
+    "id": "home sweet home",
+    "name": "home sweet home",
+    "path": "collection.html?collection=home%20sweet%20home"
+  },
+  {
     "id": "Seong-woo's Blue Vacation",
     "name": "Seong-woo's Blue Vacation",
     "path": "collection.html?collection=Seong-woo's%20Blue%20Vacation"
-  },
-  {
-    "id": "Colors of the Grow-rings",
-    "name": "Colors of the Grow-rings",
-    "path": "collection.html?collection=Colors%20of%20the%20Grow-rings"
   },
   {
     "id": "Napping… Under the Tree, or Above",
@@ -34,11 +34,6 @@
     "name": "Hanseo's Red adidas pants",
     "path": "collection.html?collection=Hanseo's%20Red%20adidas%20pants",
     "hidden": true
-  },
-  {
-    "id": "home sweet home",
-    "name": "home sweet home",
-    "path": "collection.html?collection=home%20sweet%20home"
   },
   {
     "id": "038 x sogumm - seoul trip",
@@ -66,6 +61,11 @@
     "id": "Sunflowers of Seoul",
     "name": "Sunflowers of Seoul",
     "path": "collection.html?collection=Sunflowers%20of%20Seoul"
+  },
+  {
+    "id": "Colors of the Grow-rings",
+    "name": "Colors of the Grow-rings",
+    "path": "collection.html?collection=Colors%20of%20the%20Grow-rings"
   },
   {
     "id": "My Lens Mentor",
