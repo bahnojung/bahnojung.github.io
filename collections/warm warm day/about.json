@@ -2,7 +2,15 @@
   "layout": "stack",
   "sort": "asc",
   "stackSize": "large",
-  "order": ["1", "2", "3", "4", "5", "6"],
+  "order": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "07"
+  ],
   "paragraphs": [
     "WARM WARM DAY …",
     "with JI YONG and SUN YOU,",
