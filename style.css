@@ -830,8 +830,8 @@ body.photo-wall-open .music-toggle {
    모바일: 숫자 순 고정 2열 (배치 흔들림 방지) */
 .gallery.gallery-layout-grid {
   --gallery-row-height: auto;
-  --grid-gap: 0.2rem;
-  --grid-cols: 5;
+  --grid-gap: 0.35rem;
+  --grid-cols: 2;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto 2rem;
@@ -840,7 +840,7 @@ body.photo-wall-open .music-toggle {
   box-sizing: border-box;
 }
 
-/* 데스크톱 — 전 버전 메이슨리 */
+/* 데스크톱 — 2열 (이미지 크게) */
 @media (min-width: 641px) {
   .gallery.gallery-layout-grid {
     display: block;
@@ -861,19 +861,6 @@ body.photo-wall-open .music-toggle {
     break-inside: avoid;
     -webkit-column-break-inside: avoid;
     page-break-inside: avoid;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 1100px) {
-  .gallery.gallery-layout-grid {
-    --grid-cols: 4;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 900px) {
-  .gallery.gallery-layout-grid {
-    --grid-cols: 3;
-    --grid-gap: 0.15rem;
   }
 }
 
