@@ -351,7 +351,8 @@
               const style = document.createElement("style");
               style.id = "grid-layout-fallback";
               style.textContent =
-                "@media (max-width:640px){.gallery.gallery-layout-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row!important;gap:.15rem!important;column-count:unset!important}.gallery.gallery-layout-grid .gallery-item{width:100%!important;margin:0!important;break-inside:auto!important}}";
+                "@media (max-width:640px){.gallery.gallery-layout-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-auto-flow:row!important;gap:.35rem!important;column-count:unset!important}.gallery.gallery-layout-grid .gallery-item{width:100%!important;margin:0!important;break-inside:auto!important}}" +
+                "@media (min-width:641px){.gallery.gallery-layout-grid{--grid-cols:2!important;column-count:2!important}}";
               document.head.appendChild(style);
             }
           }

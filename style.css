@@ -826,12 +826,12 @@ body.photo-wall-open .music-toggle {
 }
 
 /* 한 팔레트 (about.layout = grid)
-   데스크톱: 이전 오밀조밀 메이슨리
-   모바일: 숫자 순 고정 2열 (배치 흔들림 방지) */
+   데스크톱/맥북: 2열
+   모바일: 1열 (사진 크게) */
 .gallery.gallery-layout-grid {
   --gallery-row-height: auto;
   --grid-gap: 0.25rem;
-  --grid-cols: 3;
+  --grid-cols: 2;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto 2rem;
@@ -840,7 +840,7 @@ body.photo-wall-open .music-toggle {
   box-sizing: border-box;
 }
 
-/* 데스크톱 — 3열 */
+/* 데스크톱 — 2열 */
 @media (min-width: 641px) {
   .gallery.gallery-layout-grid {
     display: block;
@@ -864,12 +864,12 @@ body.photo-wall-open .music-toggle {
   }
 }
 
-/* 모바일 — 좌→우 숫자 순 고정 */
+/* 모바일 — 1열 */
 @media (max-width: 640px) {
   .gallery.gallery-layout-grid {
-    --grid-gap: 0.15rem;
+    --grid-gap: 0.35rem;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     grid-auto-flow: row;
     gap: var(--grid-gap);
     align-items: start;
