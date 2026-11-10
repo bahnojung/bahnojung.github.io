@@ -826,65 +826,58 @@ body.photo-wall-open .music-toggle {
 }
 
 /* 한 팔레트 (about.layout = grid)
-   데스크톱/맥북: 2열
-   모바일: 1열 (사진 크게) */
+   기본/휴대폰: 1열 (사진 크게)
+   맥북/데스크톱(901px+): 2열 */
 .gallery.gallery-layout-grid {
   --gallery-row-height: auto;
-  --grid-gap: 0.25rem;
-  --grid-cols: 2;
+  --grid-gap: 0.35rem;
+  --grid-cols: 1;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto 2rem;
   padding: 0.2rem;
   background: #f3f1ec;
   box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-auto-flow: row !important;
+  gap: var(--grid-gap) !important;
+  column-count: unset !important;
+  align-items: start;
 }
 
-/* 데스크톱 — 2열 */
-@media (min-width: 641px) {
+.gallery.gallery-layout-grid .gallery-item {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+  flex: unset !important;
+  break-inside: auto;
+}
+
+/* 맥북/데스크톱 — 2열 메이슨리 */
+@media (min-width: 901px) {
   .gallery.gallery-layout-grid {
-    display: block;
-    column-count: var(--grid-cols);
-    column-gap: var(--grid-gap);
+    --grid-gap: 0.25rem;
+    --grid-cols: 2;
+    display: block !important;
+    grid-template-columns: unset !important;
+    column-count: 2 !important;
+    column-gap: var(--grid-gap) !important;
+    gap: unset !important;
   }
 
   .gallery.gallery-layout-grid .gallery-item {
-    display: inline-block;
-    width: 100%;
-    height: auto;
-    margin: 0 0 var(--grid-gap);
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-    overflow: visible;
-    flex: unset;
+    display: inline-block !important;
+    width: 100% !important;
+    margin: 0 0 var(--grid-gap) !important;
     break-inside: avoid;
     -webkit-column-break-inside: avoid;
     page-break-inside: avoid;
-  }
-}
-
-/* 모바일 — 1열 */
-@media (max-width: 640px) {
-  .gallery.gallery-layout-grid {
-    --grid-gap: 0.35rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-auto-flow: row;
-    gap: var(--grid-gap);
-    align-items: start;
-  }
-
-  .gallery.gallery-layout-grid .gallery-item {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-    overflow: visible;
-    flex: unset;
   }
 }
 

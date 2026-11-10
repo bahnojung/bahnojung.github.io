@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261108leo3col" />
+    <link rel="stylesheet" href="style.css?v=20261110leo1col" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -351,8 +351,8 @@
               const style = document.createElement("style");
               style.id = "grid-layout-fallback";
               style.textContent =
-                "@media (max-width:640px){.gallery.gallery-layout-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-auto-flow:row!important;gap:.35rem!important;column-count:unset!important}.gallery.gallery-layout-grid .gallery-item{width:100%!important;margin:0!important;break-inside:auto!important}}" +
-                "@media (min-width:641px){.gallery.gallery-layout-grid{--grid-cols:2!important;column-count:2!important}}";
+                ".gallery.gallery-layout-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-auto-flow:row!important;gap:.35rem!important;column-count:unset!important}.gallery.gallery-layout-grid .gallery-item{width:100%!important;margin:0!important;break-inside:auto!important}" +
+                "@media (min-width:901px){.gallery.gallery-layout-grid{display:block!important;grid-template-columns:unset!important;column-count:2!important;column-gap:.25rem!important}.gallery.gallery-layout-grid .gallery-item{display:inline-block!important;margin:0 0 .25rem!important;break-inside:avoid}}";
               document.head.appendChild(style);
             }
           }
