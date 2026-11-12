@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book1" />
+    <link rel="stylesheet" href="style.css?v=20261112book2" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -365,7 +365,101 @@
         warmSpread(spreadsEls[0]);
         warmSpread(spreadsEls[1]);
 
+        mountBookScrubber(spreadsEls);
         updateBackToMainVisibility();
+      }
+
+      function mountBookScrubber(spreadsEls) {
+        if (!spreadsEls || !spreadsEls.length) return;
+        document.querySelectorAll(".book-scrub").forEach((el) => el.remove());
+
+        const scrub = document.createElement("aside");
+        scrub.className = "book-scrub";
+        scrub.setAttribute("aria-label", "페이지 빠른 스크롤");
+        const track = document.createElement("div");
+        track.className = "book-scrub-track";
+        const thumb = document.createElement("div");
+        thumb.className = "book-scrub-thumb";
+        track.appendChild(thumb);
+        scrub.appendChild(track);
+        document.body.appendChild(scrub);
+
+        const total = spreadsEls.length;
+        let dragging = false;
+        let scrubEndTimer = null;
+
+        const pageHeight = () =>
+          Math.max(1, spreadsEls[0].offsetHeight || window.innerHeight);
+
+        const maxScroll = () =>
+          Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+        const syncThumb = () => {
+          const max = maxScroll();
+          const ratio = max > 0 ? window.scrollY / max : 0;
+          const trackH = track.clientHeight;
+          const thumbH = thumb.offsetHeight || 28;
+          const y = Math.max(0, Math.min(1, ratio)) * Math.max(0, trackH - thumbH);
+          thumb.style.top = `${y}px`;
+        };
+
+        const jumpFromClientY = (clientY) => {
+          const rect = track.getBoundingClientRect();
+          const thumbH = thumb.offsetHeight || 28;
+          const usable = Math.max(1, rect.height - thumbH);
+          const ratio = Math.max(0, Math.min(1, (clientY - rect.top - thumbH / 2) / usable));
+          const index = Math.round(ratio * (total - 1));
+          const target = spreadsEls[Math.max(0, Math.min(total - 1, index))];
+          if (!target) return;
+          document.documentElement.classList.add("is-book-scrubbing");
+          const top = Math.round(index * pageHeight());
+          window.scrollTo({ top, left: 0, behavior: "auto" });
+          syncThumb();
+          if (!dragging) {
+            clearTimeout(scrubEndTimer);
+            scrubEndTimer = setTimeout(() => {
+              document.documentElement.classList.remove("is-book-scrubbing");
+              const nearest = Math.round(window.scrollY / pageHeight());
+              const snapEl = spreadsEls[Math.max(0, Math.min(total - 1, nearest))];
+              if (snapEl) snapEl.scrollIntoView({ block: "start", behavior: "auto" });
+              syncThumb();
+            }, 80);
+          }
+        };
+
+        const onPointerMove = (event) => {
+          if (!dragging) return;
+          jumpFromClientY(event.clientY);
+        };
+
+        const endDrag = () => {
+          if (!dragging) return;
+          dragging = false;
+          scrub.classList.remove("is-active");
+          document.documentElement.classList.remove("is-book-scrubbing");
+          const nearest = Math.round(window.scrollY / pageHeight());
+          const snapEl = spreadsEls[Math.max(0, Math.min(total - 1, nearest))];
+          if (snapEl) snapEl.scrollIntoView({ block: "start", behavior: "auto" });
+          syncThumb();
+          window.removeEventListener("pointermove", onPointerMove);
+          window.removeEventListener("pointerup", endDrag);
+          window.removeEventListener("pointercancel", endDrag);
+        };
+
+        track.addEventListener("pointerdown", (event) => {
+          event.preventDefault();
+          dragging = true;
+          scrub.classList.add("is-active");
+          document.documentElement.classList.add("is-book-scrubbing");
+          jumpFromClientY(event.clientY);
+          window.addEventListener("pointermove", onPointerMove);
+          window.addEventListener("pointerup", endDrag);
+          window.addEventListener("pointercancel", endDrag);
+        });
+
+        window.addEventListener("scroll", syncThumb, { passive: true });
+        window.addEventListener("resize", syncThumb);
+        syncThumb();
       }
 
       function bookPathStem(src) {

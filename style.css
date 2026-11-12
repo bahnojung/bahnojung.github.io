@@ -1203,6 +1203,30 @@ body.collection-path-page {
 html.book-scroll {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+}
+
+html.book-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+html.book-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html.book-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 999px;
+}
+
+html.book-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+html.book-scroll.is-book-scrubbing {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
 }
 
 body.collection-book-page {
@@ -1311,12 +1335,6 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
   filter: none !important;
 }
 
-.gallery.gallery-layout-book .book-spread.is-cover .book-photo {
-  border: 1.5px solid #111;
-  background: #ffffff;
-  box-sizing: border-box;
-}
-
 .gallery.gallery-layout-book .book-cover-title {
   position: absolute;
   right: 4.2%;
@@ -1391,6 +1409,56 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
   letter-spacing: 0.35em;
   color: #bbb;
   pointer-events: none;
+}
+
+/* 빠른 페이지 이동용 오른쪽 미니 스크러버 */
+.book-scrub {
+  position: fixed;
+  top: 12%;
+  right: 0.45rem;
+  bottom: 12%;
+  width: 10px;
+  z-index: 40;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.book-scrub-track {
+  position: relative;
+  width: 3px;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: width 0.15s ease, background 0.15s ease;
+}
+
+.book-scrub:hover .book-scrub-track,
+.book-scrub.is-active .book-scrub-track {
+  width: 5px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.book-scrub-thumb {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 9px;
+  height: 28px;
+  margin-left: -4.5px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.42);
+  pointer-events: none;
+  transform: translateY(0);
+  will-change: top;
+}
+
+.book-scrub:hover .book-scrub-thumb,
+.book-scrub.is-active .book-scrub-thumb {
+  background: rgba(0, 0, 0, 0.58);
 }
 
 @media (max-width: 900px) {
