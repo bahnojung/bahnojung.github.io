@@ -1340,8 +1340,7 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
   right: 4.2%;
   top: 50%;
   transform: translateY(-50%);
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+  writing-mode: horizontal-tb;
   font-family: var(--font-bauhaus), "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: clamp(0.72rem, 1.15vw, 0.95rem);
   letter-spacing: 0.28em;
