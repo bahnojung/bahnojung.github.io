@@ -1203,25 +1203,24 @@ body.collection-path-page {
 html.book-scroll {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+  /* 커스텀 스크러버만 쓰고 네이티브 스크롤바는 숨김 */
+  scrollbar-width: none;
 }
 
 html.book-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
-html.book-scroll::-webkit-scrollbar-track {
-  background: transparent;
+body.collection-book-page {
+  scrollbar-width: none;
 }
 
-html.book-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.28);
-  border-radius: 999px;
-}
-
-html.book-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.45);
+body.collection-book-page::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 html.book-scroll.is-book-scrubbing {

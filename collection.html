@@ -28,9 +28,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book9" />
+    <link rel="stylesheet" href="style.css?v=20261112book10" />
     <!-- Leo-do book: CDN 캐시 무시용 강제 스타일 -->
     <style id="leo-book-force">
+      html.book-scroll,
+      body.collection-book-page {
+        scrollbar-width: none !important;
+      }
+      html.book-scroll::-webkit-scrollbar,
+      body.collection-book-page::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
+      }
       .gallery.gallery-layout-book .book-cover-title {
         writing-mode: horizontal-tb !important;
         text-orientation: mixed !important;
