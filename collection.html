@@ -28,9 +28,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book11" />
+    <link rel="stylesheet" href="style.css?v=20261112book12" />
     <!-- Leo-do book: CDN 캐시 무시용 강제 스타일 -->
     <style id="leo-book-force">
+      @media (max-width: 900px) {
+        .book-scrub { display: none !important; }
+        html.book-scroll { scroll-snap-type: none !important; }
+      }
       html.book-scroll,
       body.collection-book-page {
         scrollbar-width: none !important;
@@ -40,6 +44,33 @@
         width: 0 !important;
         height: 0 !important;
         display: none !important;
+      }
+      /* 휴대폰: 예전처럼 한 장씩 세로 나열 */
+      .gallery.gallery-layout-leo-mobile {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 0.35rem !important;
+        column-count: unset !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto 1.5rem !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+      }
+      .gallery.gallery-layout-leo-mobile .gallery-item {
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        flex: 0 0 auto !important;
+        display: block !important;
+      }
+      .gallery.gallery-layout-leo-mobile .gallery-item img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        display: block !important;
       }
       .gallery.gallery-layout-book .book-cover-title {
         writing-mode: horizontal-tb !important;
@@ -650,23 +681,36 @@
             console.log("첫 번째 이미지 경로:", imageList[0].src);
           }
 
-          // 책 스크롤은 데스크톱만 — 휴대폰은 예전 그리드가 더 낫다
+          // 책 스크롤은 맥/데스크톱만 — 폰·터치 태블릿은 예전 세로 나열
           const bookPreferred =
             (about && String(about.layout).toLowerCase() === "book") ||
             collectionId === "Leo-do";
-          const bookDesktopMq = window.matchMedia("(min-width: 901px)");
-          const bookLayout = bookPreferred && bookDesktopMq.matches;
+          const viewportW = Math.min(
+            window.innerWidth || 9999,
+            document.documentElement.clientWidth || 9999,
+            (window.visualViewport && window.visualViewport.width) || 9999
+          );
+          const touchLike = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+          const bookLayout = bookPreferred && viewportW >= 901 && !(touchLike && viewportW < 1280);
 
           if (bookLayout) {
             await renderBookGallery(galleryEl, about, collectionId);
-            // 좁혀지면 예전 그리드로 다시 로드
-            const onBookMq = (e) => {
-              if (!e.matches) window.location.reload();
+            const onResizeBook = () => {
+              const w = Math.min(
+                window.innerWidth || 9999,
+                document.documentElement.clientWidth || 9999,
+                (window.visualViewport && window.visualViewport.width) || 9999
+              );
+              if (w < 901) window.location.reload();
             };
-            if (bookDesktopMq.addEventListener) bookDesktopMq.addEventListener("change", onBookMq);
-            else if (bookDesktopMq.addListener) bookDesktopMq.addListener(onBookMq);
+            window.addEventListener("resize", onResizeBook, { passive: true });
             return;
           }
+
+          // 책 모드 잔여 클래스/스크러버 제거
+          document.documentElement.classList.remove("book-scroll", "is-book-scrubbing");
+          document.body.classList.remove("collection-book-page");
+          document.querySelectorAll(".book-scrub").forEach((el) => el.remove());
 
           if (about && !introAfterFirst) appendCollectionIntro(about);
 
@@ -678,18 +722,22 @@
             ((about && String(about.layout).toLowerCase() === "stack") ||
               collectionId === "Sunflowers of Seoul" ||
               collectionId === "Mars") &&
-            !pathLayout;
+            !pathLayout &&
+            !bookPreferred;
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
             collectionId === "Colors of the Grow-rings";
+          // Leo-do 모바일: 책 대신 한 장씩 세로 나열
+          const leoMobileList = bookPreferred && !bookLayout;
           const gridLayout =
-            (about && String(about.layout).toLowerCase() === "grid") || bookPreferred;
+            ((about && String(about.layout).toLowerCase() === "grid") || bookPreferred) &&
+            !leoMobileList;
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
           if (pathLayout) {
             galleryEl.classList.add("gallery-layout-path");
             document.body.classList.add("collection-path-page");
           }
-          if (stackLayout && !gridLayout) {
+          if (stackLayout && !gridLayout && !leoMobileList) {
             galleryEl.classList.add("gallery-layout-stack");
             const stackLarge =
               collectionId === "Mars" ||
@@ -708,6 +756,10 @@
             }
           }
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
+          if (leoMobileList) {
+            galleryEl.classList.add("gallery-layout-leo-mobile");
+            console.log("Leo-do mobile: vertical list (pre-book)");
+          }
           if (gridLayout) {
             galleryEl.classList.add("gallery-layout-grid");
             if (!document.getElementById("grid-layout-fallback")) {
