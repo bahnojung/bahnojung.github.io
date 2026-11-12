@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book10" />
+    <link rel="stylesheet" href="style.css?v=20261112book11" />
     <!-- Leo-do book: CDN 캐시 무시용 강제 스타일 -->
     <style id="leo-book-force">
       html.book-scroll,
@@ -650,12 +650,21 @@
             console.log("첫 번째 이미지 경로:", imageList[0].src);
           }
 
-          const bookLayout =
+          // 책 스크롤은 데스크톱만 — 휴대폰은 예전 그리드가 더 낫다
+          const bookPreferred =
             (about && String(about.layout).toLowerCase() === "book") ||
             collectionId === "Leo-do";
+          const bookDesktopMq = window.matchMedia("(min-width: 901px)");
+          const bookLayout = bookPreferred && bookDesktopMq.matches;
 
           if (bookLayout) {
             await renderBookGallery(galleryEl, about, collectionId);
+            // 좁혀지면 예전 그리드로 다시 로드
+            const onBookMq = (e) => {
+              if (!e.matches) window.location.reload();
+            };
+            if (bookDesktopMq.addEventListener) bookDesktopMq.addEventListener("change", onBookMq);
+            else if (bookDesktopMq.addListener) bookDesktopMq.addListener(onBookMq);
             return;
           }
 
@@ -673,7 +682,8 @@
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
             collectionId === "Colors of the Grow-rings";
-          const gridLayout = about && String(about.layout).toLowerCase() === "grid";
+          const gridLayout =
+            (about && String(about.layout).toLowerCase() === "grid") || bookPreferred;
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
           if (pathLayout) {
             galleryEl.classList.add("gallery-layout-path");

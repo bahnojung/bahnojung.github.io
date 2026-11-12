@@ -1492,36 +1492,9 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
 }
 
 @media (max-width: 900px) {
-  .gallery.gallery-layout-book {
-    display: block !important;
-    flex-direction: unset !important;
-    gap: 0 !important;
-    row-gap: 0 !important;
-    column-gap: 0 !important;
-  }
-
-  .gallery.gallery-layout-book .book-spread {
-    height: 100vh;
-    height: 100dvh;
-    padding: 0;
-  }
-
-  .gallery.gallery-layout-book .book-photo.gallery-item {
-    width: var(--book-w, 0%) !important;
-    height: var(--book-h, 0%) !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  .gallery.gallery-layout-book .book-intro-copy {
-    left: 4%;
-    top: 52%;
-    width: 42%;
-  }
-
-  .gallery.gallery-layout-book .book-intro-copy p {
-    font-size: clamp(0.62rem, 2.4vw, 0.78rem);
-    line-height: 1.35;
+  /* 모바일은 책 레이아웃/스크러버 미사용 (그리드 유지) */
+  .book-scrub {
+    display: none !important;
   }
 }
 
