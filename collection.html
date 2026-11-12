@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book5" />
+    <link rel="stylesheet" href="style.css?v=20261112book6" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -270,6 +270,11 @@
             const title = document.createElement("p");
             title.className = "book-cover-title";
             title.textContent = "LEO - DO";
+            // 캐시된 옛 CSS의 vertical-rl을 덮어쓰기
+            title.style.writingMode = "horizontal-tb";
+            title.style.textOrientation = "mixed";
+            title.style.transform = "translateY(-50%)";
+            title.style.whiteSpace = "nowrap";
             stage.appendChild(title);
             const credit = document.createElement("p");
             credit.className = "book-cover-credit";
@@ -373,9 +378,21 @@
         if (!spreadsEls || !spreadsEls.length) return;
         document.querySelectorAll(".book-scrub").forEach((el) => el.remove());
 
+        // 캐시된 CSS여도 스크러버가 보이게 크리티컬 스타일 주입
+        if (!document.getElementById("book-scrub-critical")) {
+          const critical = document.createElement("style");
+          critical.id = "book-scrub-critical";
+          critical.textContent =
+            ".book-scrub{position:fixed!important;top:11%!important;right:.7rem!important;bottom:11%!important;width:22px!important;z-index:9999!important;display:flex!important;align-items:stretch;justify-content:center;pointer-events:auto!important;opacity:1!important;visibility:visible!important;cursor:pointer;touch-action:none}" +
+            ".book-scrub-track{position:relative;width:6px!important;height:100%!important;border-radius:999px!important;background:linear-gradient(to bottom,#ff5a00 0%,#ff9a00 45%,#ffd84a 100%) 0 0/100% var(--scrub-progress,8%) no-repeat,#ddd9d2!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.65),0 2px 6px rgba(0,0,0,.12)!important}" +
+            ".book-scrub-thumb{position:absolute!important;left:50%!important;width:14px!important;height:14px!important;margin-left:-7px!important;border-radius:50%!important;background:radial-gradient(circle at 30% 28%,#fff 0%,#f7f7f5 52%,#ebeae6 100%)!important;border:1.5px solid rgba(255,120,0,.55)!important;box-shadow:0 2px 5px rgba(0,0,0,.22)!important;pointer-events:none}";
+          document.head.appendChild(critical);
+        }
+
         const scrub = document.createElement("aside");
         scrub.className = "book-scrub";
         scrub.setAttribute("aria-label", "페이지 빠른 스크롤");
+        scrub.style.setProperty("--scrub-progress", "8%");
         const track = document.createElement("div");
         track.className = "book-scrub-track";
         const thumb = document.createElement("div");

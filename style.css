@@ -1337,13 +1337,15 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
 
 .gallery.gallery-layout-book .book-cover-title {
   position: absolute;
-  right: 4.2%;
+  right: 3.5%;
   top: 50%;
   transform: translateY(-50%);
-  writing-mode: horizontal-tb;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  rotate: none !important;
   font-family: var(--font-bauhaus), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: clamp(0.72rem, 1.15vw, 0.95rem);
-  letter-spacing: 0.28em;
+  font-size: clamp(0.78rem, 1.2vw, 1rem);
+  letter-spacing: 0.22em;
   color: #222;
   margin: 0;
   pointer-events: none;
@@ -1412,76 +1414,76 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
 
 /* 빠른 페이지 이동용 오른쪽 얇은 그라데이션 스크러버 */
 .book-scrub {
-  --scrub-progress: 0%;
-  position: fixed;
-  top: 12%;
-  right: 0.55rem;
-  bottom: 12%;
-  width: 16px;
-  z-index: 40;
-  display: flex;
+  --scrub-progress: 8%;
+  position: fixed !important;
+  top: 11% !important;
+  right: 0.7rem !important;
+  bottom: 11% !important;
+  width: 22px !important;
+  z-index: 9999 !important;
+  display: flex !important;
   align-items: stretch;
   justify-content: center;
-  pointer-events: auto;
+  pointer-events: auto !important;
   cursor: pointer;
   touch-action: none;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .book-scrub-track {
   position: relative;
-  width: 4px;
-  height: 100%;
-  border-radius: 999px;
+  width: 6px !important;
+  height: 100% !important;
+  border-radius: 999px !important;
   box-sizing: border-box;
   background:
     linear-gradient(
       to bottom,
-      #ff6a00 0%,
-      #ffb000 55%,
-      #ffe566 100%
+      #ff5a00 0%,
+      #ff9a00 45%,
+      #ffd84a 100%
     )
       0 0 / 100% var(--scrub-progress) no-repeat,
-    #eceae6;
+    #ddd9d2 !important;
   box-shadow:
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.55),
-    inset 0 1px 2px rgba(0, 0, 0, 0.08),
-    0 1px 3px rgba(0, 0, 0, 0.06);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.65),
+    inset 0 1px 2px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.12) !important;
   pointer-events: auto;
   cursor: pointer;
 }
 
 .book-scrub:hover .book-scrub-track,
 .book-scrub.is-active .book-scrub-track {
-  width: 5px;
+  width: 7px !important;
 }
 
 .book-scrub-thumb {
-  position: absolute;
-  left: 50%;
+  position: absolute !important;
+  left: 50% !important;
   top: 0;
-  width: 11px;
-  height: 11px;
-  margin-left: -5.5px;
-  border-radius: 50%;
+  width: 14px !important;
+  height: 14px !important;
+  margin-left: -7px !important;
+  border-radius: 50% !important;
   box-sizing: border-box;
   background:
-    radial-gradient(circle at 32% 28%, #ffffff 0%, #f4f4f2 55%, #e4e4e0 100%);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+    radial-gradient(circle at 30% 28%, #ffffff 0%, #f7f7f5 52%, #ebeae6 100%) !important;
+  border: 1.5px solid rgba(255, 120, 0, 0.55) !important;
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.18),
-    0 0 0 0.5px rgba(255, 255, 255, 0.9);
+    0 2px 5px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.95) !important;
   pointer-events: none;
   will-change: top;
 }
 
 .book-scrub:hover .book-scrub-thumb,
 .book-scrub.is-active .book-scrub-thumb {
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.2),
-    0 0 0 0.5px rgba(255, 255, 255, 0.95);
+  width: 15px !important;
+  height: 15px !important;
+  margin-left: -7.5px !important;
+  border-color: rgba(255, 100, 0, 0.75) !important;
 }
 
 @media (max-width: 900px) {
