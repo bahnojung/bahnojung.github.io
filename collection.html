@@ -28,22 +28,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book13" />
+    <link rel="stylesheet" href="style.css?v=20261112book14" />
     <!-- Leo-do book: CDN 캐시 무시용 강제 스타일 -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
-        .book-scrub { display: none !important; }
         html.book-scroll { scroll-snap-type: none !important; }
-      }
-      html.book-scroll,
-      body.collection-book-page {
-        scrollbar-width: none !important;
-      }
-      html.book-scroll::-webkit-scrollbar,
-      body.collection-book-page::-webkit-scrollbar {
-        width: 0 !important;
-        height: 0 !important;
-        display: none !important;
       }
       /* 휴대폰: 예전처럼 한 장씩 세로 나열 */
       .gallery.gallery-layout-leo-mobile {
@@ -87,50 +76,6 @@
         letter-spacing: 0.22em !important;
         color: #222 !important;
         z-index: 5 !important;
-      }
-      .book-scrub {
-        position: fixed !important;
-        top: 10% !important;
-        right: 1.1rem !important;
-        bottom: 10% !important;
-        width: 28px !important;
-        z-index: 9999 !important;
-        display: flex !important;
-        align-items: stretch !important;
-        justify-content: center !important;
-        pointer-events: auto !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        cursor: pointer !important;
-        touch-action: none !important;
-      }
-      .book-scrub-track {
-        position: relative !important;
-        width: 8px !important;
-        height: 100% !important;
-        border-radius: 999px !important;
-        background:
-          linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent var(--scrub-progress, 12%),
-            #e4e2de var(--scrub-progress, 12%),
-            #e4e2de 100%
-          ),
-          linear-gradient(to bottom, #6a6a6a, #8a8a8a 45%, #a8a8a8) !important;
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65), 0 1px 4px rgba(0, 0, 0, 0.1) !important;
-      }
-      .book-scrub-thumb {
-        position: absolute !important;
-        left: 50% !important;
-        width: 18px !important;
-        height: 18px !important;
-        margin-left: -9px !important;
-        border-radius: 50% !important;
-        background: radial-gradient(circle at 30% 28%, #fff 0%, #f5f5f3 52%, #e8e8e4 100%) !important;
-        border: 1.5px solid #9a9a9a !important;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18), 0 0 0 1.5px #fff !important;
-        pointer-events: none !important;
       }
     </style>
     <script>
@@ -479,118 +424,7 @@
         warmSpread(spreadsEls[0]);
         warmSpread(spreadsEls[1]);
 
-        mountBookScrubber(spreadsEls);
         updateBackToMainVisibility();
-      }
-
-      function mountBookScrubber(spreadsEls) {
-        if (!spreadsEls || !spreadsEls.length) return;
-        document.querySelectorAll(".book-scrub").forEach((el) => el.remove());
-
-        // 캐시된 CSS여도 스크러버가 보이게 크리티컬 스타일 주입
-        if (!document.getElementById("book-scrub-critical")) {
-          const critical = document.createElement("style");
-          critical.id = "book-scrub-critical";
-          critical.textContent =
-            ".book-scrub{position:fixed!important;top:10%!important;right:1.1rem!important;bottom:10%!important;width:28px!important;z-index:9999!important;display:flex!important;align-items:stretch;justify-content:center;pointer-events:auto!important;opacity:1!important;visibility:visible!important;cursor:pointer;touch-action:none}" +
-            ".book-scrub-track{position:relative;width:8px!important;height:100%!important;border-radius:999px!important;background:linear-gradient(to bottom,transparent 0,transparent var(--scrub-progress,12%),#e4e2de var(--scrub-progress,12%),#e4e2de 100%),linear-gradient(to bottom,#6a6a6a,#8a8a8a 45%,#a8a8a8)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.65),0 1px 4px rgba(0,0,0,.1)!important}" +
-            ".book-scrub-thumb{position:absolute!important;left:50%!important;width:18px!important;height:18px!important;margin-left:-9px!important;border-radius:50%!important;background:radial-gradient(circle at 30% 28%,#fff 0%,#f5f5f3 52%,#e8e8e4 100%)!important;border:1.5px solid #9a9a9a!important;box-shadow:0 2px 5px rgba(0,0,0,.18),0 0 0 1.5px #fff!important;pointer-events:none}" +
-            ".book-cover-title{writing-mode:horizontal-tb!important;text-orientation:mixed!important;left:auto!important;right:3.8%!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;white-space:nowrap!important;text-align:right!important}";
-          document.head.appendChild(critical);
-        }
-
-        const scrub = document.createElement("aside");
-        scrub.className = "book-scrub";
-        scrub.setAttribute("aria-label", "페이지 빠른 스크롤");
-        scrub.style.setProperty("--scrub-progress", "12%");
-        const track = document.createElement("div");
-        track.className = "book-scrub-track";
-        const thumb = document.createElement("div");
-        thumb.className = "book-scrub-thumb";
-        track.appendChild(thumb);
-        scrub.appendChild(track);
-        document.body.appendChild(scrub);
-
-        const total = spreadsEls.length;
-        let dragging = false;
-        let scrubEndTimer = null;
-
-        const pageHeight = () =>
-          Math.max(1, spreadsEls[0].offsetHeight || window.innerHeight);
-
-        const maxScroll = () =>
-          Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-
-        const syncThumb = () => {
-          const max = maxScroll();
-          const ratio = Math.max(0, Math.min(1, max > 0 ? window.scrollY / max : 0));
-          const trackH = track.clientHeight;
-          const thumbH = thumb.offsetHeight || 16;
-          const y = ratio * Math.max(0, trackH - thumbH);
-          thumb.style.top = `${y}px`;
-          // 손잡이 중심까지 채움 (맨 위에서도 최소 보이게)
-          const fill = Math.max(10, ((y + thumbH / 2) / Math.max(1, trackH)) * 100);
-          scrub.style.setProperty("--scrub-progress", `${fill}%`);
-        };
-
-        const jumpFromClientY = (clientY) => {
-          const rect = scrub.getBoundingClientRect();
-          const thumbH = thumb.offsetHeight || 16;
-          const usable = Math.max(1, rect.height - thumbH);
-          const ratio = Math.max(0, Math.min(1, (clientY - rect.top - thumbH / 2) / usable));
-          const index = Math.round(ratio * (total - 1));
-          if (!spreadsEls[Math.max(0, Math.min(total - 1, index))]) return;
-          document.documentElement.classList.add("is-book-scrubbing");
-          const top = Math.round(index * pageHeight());
-          window.scrollTo({ top, left: 0, behavior: "auto" });
-          syncThumb();
-          if (!dragging) {
-            clearTimeout(scrubEndTimer);
-            scrubEndTimer = setTimeout(() => {
-              document.documentElement.classList.remove("is-book-scrubbing");
-              const nearest = Math.round(window.scrollY / pageHeight());
-              const snapEl = spreadsEls[Math.max(0, Math.min(total - 1, nearest))];
-              if (snapEl) snapEl.scrollIntoView({ block: "start", behavior: "auto" });
-              syncThumb();
-            }, 80);
-          }
-        };
-
-        const onPointerMove = (event) => {
-          if (!dragging) return;
-          jumpFromClientY(event.clientY);
-        };
-
-        const endDrag = () => {
-          if (!dragging) return;
-          dragging = false;
-          scrub.classList.remove("is-active");
-          document.documentElement.classList.remove("is-book-scrubbing");
-          const nearest = Math.round(window.scrollY / pageHeight());
-          const snapEl = spreadsEls[Math.max(0, Math.min(total - 1, nearest))];
-          if (snapEl) snapEl.scrollIntoView({ block: "start", behavior: "auto" });
-          syncThumb();
-          window.removeEventListener("pointermove", onPointerMove);
-          window.removeEventListener("pointerup", endDrag);
-          window.removeEventListener("pointercancel", endDrag);
-        };
-
-        const startDrag = (event) => {
-          event.preventDefault();
-          dragging = true;
-          scrub.classList.add("is-active");
-          document.documentElement.classList.add("is-book-scrubbing");
-          jumpFromClientY(event.clientY);
-          window.addEventListener("pointermove", onPointerMove);
-          window.addEventListener("pointerup", endDrag);
-          window.addEventListener("pointercancel", endDrag);
-        };
-
-        scrub.addEventListener("pointerdown", startDrag);
-
-        window.addEventListener("scroll", syncThumb, { passive: true });
-        window.addEventListener("resize", syncThumb);
-        syncThumb();
       }
 
       function bookPathStem(src) {
@@ -708,7 +542,7 @@
           }
 
           // 책 모드 잔여 클래스/스크러버 제거
-          document.documentElement.classList.remove("book-scroll", "is-book-scrubbing");
+          document.documentElement.classList.remove("book-scroll");
           document.body.classList.remove("collection-book-page");
           document.querySelectorAll(".book-scrub").forEach((el) => el.remove());
 

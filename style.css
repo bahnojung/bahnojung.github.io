@@ -1203,32 +1203,12 @@ body.collection-path-page {
 html.book-scroll {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  /* 커스텀 스크러버만 쓰고 네이티브 스크롤바는 숨김 */
-  scrollbar-width: none;
-}
-
-html.book-scroll::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
-html.book-scroll.is-book-scrubbing {
-  scroll-snap-type: none;
-  scroll-behavior: auto;
 }
 
 body.collection-book-page {
   padding-bottom: 0;
   background: #ffffff;
   overflow-x: hidden;
-  scrollbar-width: none;
-}
-
-body.collection-book-page::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
 }
 
 body.collection-book-page main.main-full {
@@ -1409,93 +1389,6 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
   letter-spacing: 0.35em;
   color: #bbb;
   pointer-events: none;
-}
-
-/* 빠른 페이지 이동용 오른쪽 얇은 그라데이션 스크러버 */
-.book-scrub {
-  --scrub-progress: 100%;
-  position: fixed !important;
-  top: 10% !important;
-  right: 1.1rem !important;
-  bottom: 10% !important;
-  width: 28px !important;
-  z-index: 9999 !important;
-  display: flex !important;
-  align-items: stretch;
-  justify-content: center;
-  pointer-events: auto !important;
-  cursor: pointer;
-  touch-action: none;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.book-scrub-track {
-  position: relative;
-  width: 8px !important;
-  height: 100% !important;
-  border-radius: 999px !important;
-  box-sizing: border-box;
-  /* 트랙 전체 그라데이션(항상 보이게) + 아래는 손잡이 이후 회색 마스크 */
-  background:
-    linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent var(--scrub-progress),
-      #e4e2de var(--scrub-progress),
-      #e4e2de 100%
-    ),
-    linear-gradient(
-      to bottom,
-      #6a6a6a 0%,
-      #8a8a8a 45%,
-      #a8a8a8 100%
-    ) !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.65),
-    inset 0 1px 2px rgba(0, 0, 0, 0.1),
-    0 1px 4px rgba(0, 0, 0, 0.1) !important;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.book-scrub:hover .book-scrub-track,
-.book-scrub.is-active .book-scrub-track {
-  width: 8px !important;
-}
-
-.book-scrub-thumb {
-  position: absolute !important;
-  left: 50% !important;
-  top: 0;
-  width: 18px !important;
-  height: 18px !important;
-  margin-left: -9px !important;
-  border-radius: 50% !important;
-  box-sizing: border-box;
-  background:
-    radial-gradient(circle at 30% 28%, #ffffff 0%, #f5f5f3 52%, #e8e8e4 100%) !important;
-  border: 1.5px solid #9a9a9a !important;
-  box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.18),
-    0 0 0 1.5px #ffffff !important;
-  pointer-events: none;
-  will-change: top;
-}
-
-.book-scrub:hover .book-scrub-thumb,
-.book-scrub.is-active .book-scrub-thumb {
-  width: 18px !important;
-  height: 18px !important;
-  margin-left: -9px !important;
-  border-color: #777777 !important;
-}
-
-@media (max-width: 900px) {
-  /* 모바일은 책 레이아웃/스크러버 미사용 (그리드 유지) */
-  .book-scrub {
-    display: none !important;
-  }
 }
 
 /* 컬렉션 작업소개: 제목 아래 전체 표시 (잘림 없음) */
