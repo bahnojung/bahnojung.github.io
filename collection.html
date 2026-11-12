@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book12" />
+    <link rel="stylesheet" href="style.css?v=20261112book13" />
     <!-- Leo-do book: CDN 캐시 무시용 강제 스타일 -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -76,15 +76,15 @@
         writing-mode: horizontal-tb !important;
         text-orientation: mixed !important;
         position: absolute !important;
-        left: 50% !important;
-        right: auto !important;
-        top: auto !important;
-        bottom: 4.5% !important;
-        transform: translateX(-50%) !important;
+        left: auto !important;
+        right: 3.8% !important;
+        top: 50% !important;
+        bottom: auto !important;
+        transform: translateY(-50%) !important;
         white-space: nowrap !important;
-        text-align: center !important;
-        font-size: clamp(0.85rem, 1.35vw, 1.15rem) !important;
-        letter-spacing: 0.28em !important;
+        text-align: right !important;
+        font-size: clamp(0.78rem, 1.15vw, 0.95rem) !important;
+        letter-spacing: 0.22em !important;
         color: #222 !important;
         z-index: 5 !important;
       }
@@ -374,16 +374,16 @@
             const title = document.createElement("p");
             title.className = "book-cover-title";
             title.textContent = "LEO - DO";
-            // 캐시된 옛 CSS의 vertical-rl을 덮어쓰기 — 하단 가로 배치
+            // 가로 유지 + 오른쪽 여백
             title.style.writingMode = "horizontal-tb";
             title.style.textOrientation = "mixed";
-            title.style.left = "50%";
-            title.style.right = "auto";
-            title.style.top = "auto";
-            title.style.bottom = "4.5%";
-            title.style.transform = "translateX(-50%)";
+            title.style.left = "auto";
+            title.style.right = "3.8%";
+            title.style.top = "50%";
+            title.style.bottom = "auto";
+            title.style.transform = "translateY(-50%)";
             title.style.whiteSpace = "nowrap";
-            title.style.textAlign = "center";
+            title.style.textAlign = "right";
             stage.appendChild(title);
             const credit = document.createElement("p");
             credit.className = "book-cover-credit";
@@ -495,7 +495,7 @@
             ".book-scrub{position:fixed!important;top:10%!important;right:1.1rem!important;bottom:10%!important;width:28px!important;z-index:9999!important;display:flex!important;align-items:stretch;justify-content:center;pointer-events:auto!important;opacity:1!important;visibility:visible!important;cursor:pointer;touch-action:none}" +
             ".book-scrub-track{position:relative;width:8px!important;height:100%!important;border-radius:999px!important;background:linear-gradient(to bottom,transparent 0,transparent var(--scrub-progress,12%),#e4e2de var(--scrub-progress,12%),#e4e2de 100%),linear-gradient(to bottom,#6a6a6a,#8a8a8a 45%,#a8a8a8)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.65),0 1px 4px rgba(0,0,0,.1)!important}" +
             ".book-scrub-thumb{position:absolute!important;left:50%!important;width:18px!important;height:18px!important;margin-left:-9px!important;border-radius:50%!important;background:radial-gradient(circle at 30% 28%,#fff 0%,#f5f5f3 52%,#e8e8e4 100%)!important;border:1.5px solid #9a9a9a!important;box-shadow:0 2px 5px rgba(0,0,0,.18),0 0 0 1.5px #fff!important;pointer-events:none}" +
-            ".book-cover-title{writing-mode:horizontal-tb!important;text-orientation:mixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:4.5%!important;transform:translateX(-50%)!important;white-space:nowrap!important;text-align:center!important}";
+            ".book-cover-title{writing-mode:horizontal-tb!important;text-orientation:mixed!important;left:auto!important;right:3.8%!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;white-space:nowrap!important;text-align:right!important}";
           document.head.appendChild(critical);
         }
 

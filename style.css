@@ -1333,23 +1333,23 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
 
 .gallery.gallery-layout-book .book-cover-title {
   position: absolute;
-  left: 50%;
-  right: auto;
-  top: auto;
-  bottom: 4.5%;
-  transform: translateX(-50%);
+  left: auto;
+  right: 3.8%;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
   writing-mode: horizontal-tb !important;
   text-orientation: mixed !important;
   rotate: none !important;
   font-family: var(--font-bauhaus), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: clamp(0.85rem, 1.35vw, 1.15rem);
-  letter-spacing: 0.28em;
+  font-size: clamp(0.78rem, 1.15vw, 0.95rem);
+  letter-spacing: 0.22em;
   color: #222;
   margin: 0;
   pointer-events: none;
   z-index: 3;
   white-space: nowrap;
-  text-align: center;
+  text-align: right;
 }
 
 .gallery.gallery-layout-book .book-cover-credit {
