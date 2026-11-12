@@ -1213,16 +1213,6 @@ html.book-scroll::-webkit-scrollbar {
   display: none;
 }
 
-body.collection-book-page {
-  scrollbar-width: none;
-}
-
-body.collection-book-page::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
 html.book-scroll.is-book-scrubbing {
   scroll-snap-type: none;
   scroll-behavior: auto;
@@ -1232,6 +1222,13 @@ body.collection-book-page {
   padding-bottom: 0;
   background: #ffffff;
   overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+body.collection-book-page::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 body.collection-book-page main.main-full {
