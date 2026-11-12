@@ -1199,6 +1199,234 @@ body.collection-path-page {
   box-sizing: border-box;
 }
 
+/* Leo-do book: one Keynote/InDesign spread per viewport, scroll-snap */
+html.book-scroll {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+body.collection-book-page {
+  padding-bottom: 0;
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+body.collection-book-page main.main-full {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  align-items: stretch;
+}
+
+body.collection-book-page .collection-title,
+body.collection-book-page .collection-about:not(.book-intro-about) {
+  display: none !important;
+}
+
+.gallery.gallery-layout-book {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+}
+
+.gallery.gallery-layout-book .book-spread {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.gallery.gallery-layout-book .book-stage {
+  position: relative;
+  /* Keynote/book canvas 20 × 11.25 */
+  width: min(100vw, calc(100dvh * 20 / 11.25));
+  height: min(100dvh, calc(100vw * 11.25 / 20));
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.gallery.gallery-layout-book .book-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.14);
+  transform: translateX(-0.5px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gallery.gallery-layout-book .book-spread.is-cover .book-spine,
+.gallery.gallery-layout-book .book-spread.is-back .book-spine {
+  display: none;
+}
+
+.gallery.gallery-layout-book .book-photo.gallery-item {
+  position: absolute;
+  left: var(--book-l, 0%);
+  top: var(--book-t, 0%);
+  width: var(--book-w, 0%) !important;
+  height: var(--book-h, 0%) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  background: transparent;
+  overflow: hidden;
+  cursor: zoom-in;
+  border-radius: 0;
+  flex: none !important;
+  display: block !important;
+  align-items: unset;
+  justify-content: unset;
+}
+
+.gallery.gallery-layout-book .book-photo img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  transform: none !important;
+  filter: none !important;
+  transition: none;
+}
+
+.gallery.gallery-layout-book .book-photo:hover img {
+  transform: none !important;
+  filter: none !important;
+}
+
+.gallery.gallery-layout-book .book-spread.is-cover .book-photo {
+  border: 1.5px solid #111;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.gallery.gallery-layout-book .book-cover-title {
+  position: absolute;
+  right: 4.2%;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: var(--font-bauhaus), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(0.72rem, 1.15vw, 0.95rem);
+  letter-spacing: 0.28em;
+  color: #222;
+  margin: 0;
+  pointer-events: none;
+  z-index: 3;
+  white-space: nowrap;
+}
+
+.gallery.gallery-layout-book .book-cover-credit {
+  position: absolute;
+  left: 8%;
+  bottom: 3.2%;
+  font-size: clamp(0.55rem, 0.85vw, 0.7rem);
+  letter-spacing: 0.04em;
+  color: #666;
+  margin: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.gallery.gallery-layout-book .book-intro-copy {
+  position: absolute;
+  left: 6.5%;
+  top: 58%;
+  width: 36%;
+  max-width: 420px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.gallery.gallery-layout-book .book-intro-copy .book-intro-kicker {
+  margin: 0 0 0.65rem;
+  font-size: clamp(0.72rem, 1.05vw, 0.9rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.gallery.gallery-layout-book .book-intro-copy p {
+  margin: 0 0 0.55rem;
+  font-family: "Crimson Text", Georgia, serif;
+  font-size: clamp(0.72rem, 1.05vw, 0.92rem);
+  line-height: 1.45;
+  color: #333;
+}
+
+.gallery.gallery-layout-book .book-intro-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.gallery.gallery-layout-book .book-spread.is-back {
+  background: #ffffff;
+}
+
+.gallery.gallery-layout-book .book-back-mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-bauhaus), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(0.75rem, 1.2vw, 1rem);
+  letter-spacing: 0.35em;
+  color: #bbb;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .gallery.gallery-layout-book {
+    display: block !important;
+    flex-direction: unset !important;
+    gap: 0 !important;
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+  }
+
+  .gallery.gallery-layout-book .book-spread {
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+  }
+
+  .gallery.gallery-layout-book .book-photo.gallery-item {
+    width: var(--book-w, 0%) !important;
+    height: var(--book-h, 0%) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .gallery.gallery-layout-book .book-intro-copy {
+    left: 4%;
+    top: 52%;
+    width: 42%;
+  }
+
+  .gallery.gallery-layout-book .book-intro-copy p {
+    font-size: clamp(0.62rem, 2.4vw, 0.78rem);
+    line-height: 1.35;
+  }
+}
+
 /* 컬렉션 작업소개: 제목 아래 전체 표시 (잘림 없음) */
 .collection-about {
   width: 100%;

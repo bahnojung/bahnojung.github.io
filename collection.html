@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261110leo1col" />
+    <link rel="stylesheet" href="style.css?v=20261112book1" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -221,6 +221,158 @@
         }
       }
 
+      async function loadBookSpreads(colId) {
+        try {
+          const path = `collections/${encodeURIComponent(colId)}/spreads.json`;
+          const res = await fetch(path, { cache: "no-store" });
+          if (!res.ok) return null;
+          const data = await res.json();
+          return Array.isArray(data) ? data : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      async function renderBookGallery(galleryEl, about, colId) {
+        const spreads = await loadBookSpreads(colId);
+        if (!spreads || !spreads.length) {
+          console.error("spreads.json을 불러오지 못했습니다.");
+          return;
+        }
+
+        document.documentElement.classList.add("book-scroll");
+        document.body.classList.add("collection-book-page");
+        galleryEl.classList.add("gallery-layout-book");
+        galleryEl.innerHTML = "";
+
+        const flat = [];
+        const srcIndex = new Map();
+
+        spreads.forEach((spread) => {
+          const section = document.createElement("section");
+          section.className = "book-spread";
+          section.dataset.spreadId = String(spread.id || "");
+          if (spread.kind === "cover") section.classList.add("is-cover");
+          if (spread.kind === "intro") section.classList.add("is-intro");
+          if (spread.kind === "back") section.classList.add("is-back");
+
+          const stage = document.createElement("div");
+          stage.className = "book-stage";
+
+          if (spread.kind !== "cover" && spread.kind !== "back") {
+            const spine = document.createElement("div");
+            spine.className = "book-spine";
+            spine.setAttribute("aria-hidden", "true");
+            stage.appendChild(spine);
+          }
+
+          if (spread.kind === "cover") {
+            const title = document.createElement("p");
+            title.className = "book-cover-title";
+            title.textContent = "LEO - DO";
+            stage.appendChild(title);
+            const credit = document.createElement("p");
+            credit.className = "book-cover-credit";
+            credit.textContent = "Bahno Jeong";
+            stage.appendChild(credit);
+          }
+
+          if (spread.kind === "intro" && about) {
+            const copy = document.createElement("div");
+            copy.className = "book-intro-copy";
+            const kicker = document.createElement("p");
+            kicker.className = "book-intro-kicker";
+            kicker.textContent = "IEODO";
+            copy.appendChild(kicker);
+            const paras = Array.isArray(about.paragraphs)
+              ? about.paragraphs.filter(Boolean)
+              : [];
+            // 책 인트로처럼 앞 문단만 — 너무 길면 넘침
+            paras.slice(0, 2).forEach((text) => {
+              const p = document.createElement("p");
+              p.textContent = text;
+              copy.appendChild(p);
+            });
+            stage.appendChild(copy);
+          }
+
+          if (spread.kind === "back") {
+            const mark = document.createElement("p");
+            mark.className = "book-back-mark";
+            mark.textContent = "LEO - DO";
+            stage.appendChild(mark);
+          }
+
+          (spread.images || []).forEach((slot) => {
+            if (!slot || !slot.src) return;
+            const figure = document.createElement("figure");
+            figure.className = "book-photo gallery-item";
+            figure.style.setProperty("--book-l", (Number(slot.l) || 0) * 100 + "%");
+            figure.style.setProperty("--book-t", (Number(slot.t) || 0) * 100 + "%");
+            figure.style.setProperty("--book-w", (Number(slot.w) || 0) * 100 + "%");
+            figure.style.setProperty("--book-h", (Number(slot.h) || 0) * 100 + "%");
+
+            const item = {
+              src: slot.src,
+              alt: String(slot.num != null ? slot.num : bookPathStem(slot.src)),
+            };
+            let idx = srcIndex.get(slot.src);
+            if (idx == null) {
+              idx = flat.length;
+              flat.push(item);
+              srcIndex.set(slot.src, idx);
+            }
+
+            const img = document.createElement("img");
+            img.src = imageUrlForItem(colId, item);
+            img.alt = item.alt || "";
+            img.decoding = "async";
+            img.loading = flat.length <= 4 ? "eager" : "lazy";
+            if (flat.length <= 2) img.fetchPriority = "high";
+            img.addEventListener("click", () => openLightbox(idx));
+            figure.appendChild(img);
+            stage.appendChild(figure);
+          });
+
+          section.appendChild(stage);
+          galleryEl.appendChild(section);
+        });
+
+        imageList = flat;
+
+        // 인접 스프레드 이미지 미리 로드 (스크롤 스냅 시 빈 화면 방지)
+        const spreadsEls = Array.from(galleryEl.querySelectorAll(".book-spread"));
+        const warmSpread = (el) => {
+          if (!el) return;
+          el.querySelectorAll("img").forEach((img) => {
+            if (img.loading === "lazy") img.loading = "eager";
+          });
+        };
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const idx = spreadsEls.indexOf(entry.target);
+              warmSpread(spreadsEls[idx - 1]);
+              warmSpread(entry.target);
+              warmSpread(spreadsEls[idx + 1]);
+              warmSpread(spreadsEls[idx + 2]);
+            });
+          },
+          { root: null, rootMargin: "120% 0px", threshold: 0.01 }
+        );
+        spreadsEls.forEach((el) => io.observe(el));
+        warmSpread(spreadsEls[0]);
+        warmSpread(spreadsEls[1]);
+
+        updateBackToMainVisibility();
+      }
+
+      function bookPathStem(src) {
+        const name = String(src || "").split("/").pop() || "";
+        return name.replace(/\.(jpe?g|png|gif|webp)$/i, "");
+      }
+
       // 컬렉션 폴더의 images.json을 불러와 갤러리를 채우는 스크립트
       async function loadGallery() {
         const galleryEl = document.getElementById("gallery");
@@ -304,6 +456,15 @@
             console.log("첫 번째 이미지 경로:", imageList[0].src);
           }
 
+          const bookLayout =
+            (about && String(about.layout).toLowerCase() === "book") ||
+            collectionId === "Leo-do";
+
+          if (bookLayout) {
+            await renderBookGallery(galleryEl, about, collectionId);
+            return;
+          }
+
           if (about && !introAfterFirst) appendCollectionIntro(about);
 
           const pairLayout = about && String(about.layout).toLowerCase() === "pair";
@@ -318,9 +479,7 @@
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
             collectionId === "Colors of the Grow-rings";
-          const gridLayout =
-            (about && String(about.layout).toLowerCase() === "grid") ||
-            collectionId === "Leo-do";
+          const gridLayout = about && String(about.layout).toLowerCase() === "grid";
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
           if (pathLayout) {
             galleryEl.classList.add("gallery-layout-path");
