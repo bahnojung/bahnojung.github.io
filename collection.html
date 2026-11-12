@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book6" />
+    <link rel="stylesheet" href="style.css?v=20261112book8" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -270,11 +270,16 @@
             const title = document.createElement("p");
             title.className = "book-cover-title";
             title.textContent = "LEO - DO";
-            // 캐시된 옛 CSS의 vertical-rl을 덮어쓰기
+            // 캐시된 옛 CSS의 vertical-rl을 덮어쓰기 — 하단 가로 배치
             title.style.writingMode = "horizontal-tb";
             title.style.textOrientation = "mixed";
-            title.style.transform = "translateY(-50%)";
+            title.style.left = "50%";
+            title.style.right = "auto";
+            title.style.top = "auto";
+            title.style.bottom = "4.5%";
+            title.style.transform = "translateX(-50%)";
             title.style.whiteSpace = "nowrap";
+            title.style.textAlign = "center";
             stage.appendChild(title);
             const credit = document.createElement("p");
             credit.className = "book-cover-credit";
@@ -383,16 +388,17 @@
           const critical = document.createElement("style");
           critical.id = "book-scrub-critical";
           critical.textContent =
-            ".book-scrub{position:fixed!important;top:11%!important;right:.7rem!important;bottom:11%!important;width:22px!important;z-index:9999!important;display:flex!important;align-items:stretch;justify-content:center;pointer-events:auto!important;opacity:1!important;visibility:visible!important;cursor:pointer;touch-action:none}" +
-            ".book-scrub-track{position:relative;width:6px!important;height:100%!important;border-radius:999px!important;background:linear-gradient(to bottom,#ff5a00 0%,#ff9a00 45%,#ffd84a 100%) 0 0/100% var(--scrub-progress,8%) no-repeat,#ddd9d2!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.65),0 2px 6px rgba(0,0,0,.12)!important}" +
-            ".book-scrub-thumb{position:absolute!important;left:50%!important;width:14px!important;height:14px!important;margin-left:-7px!important;border-radius:50%!important;background:radial-gradient(circle at 30% 28%,#fff 0%,#f7f7f5 52%,#ebeae6 100%)!important;border:1.5px solid rgba(255,120,0,.55)!important;box-shadow:0 2px 5px rgba(0,0,0,.22)!important;pointer-events:none}";
+            ".book-scrub{position:fixed!important;top:10%!important;right:1.1rem!important;bottom:10%!important;width:28px!important;z-index:9999!important;display:flex!important;align-items:stretch;justify-content:center;pointer-events:auto!important;opacity:1!important;visibility:visible!important;cursor:pointer;touch-action:none}" +
+            ".book-scrub-track{position:relative;width:8px!important;height:100%!important;border-radius:999px!important;background:linear-gradient(to bottom,transparent 0,transparent var(--scrub-progress,12%),#bdb7ae var(--scrub-progress,12%),#bdb7ae 100%),linear-gradient(to bottom,#ff4d00,#ff8a00 42%,#ffd23a)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7),0 2px 8px rgba(0,0,0,.14)!important}" +
+            ".book-scrub-thumb{position:absolute!important;left:50%!important;width:18px!important;height:18px!important;margin-left:-9px!important;border-radius:50%!important;background:radial-gradient(circle at 30% 28%,#fff 0%,#f7f7f5 52%,#ebeae6 100%)!important;border:2px solid #ff7a00!important;box-shadow:0 2px 7px rgba(0,0,0,.3),0 0 0 2px #fff!important;pointer-events:none}" +
+            ".book-cover-title{writing-mode:horizontal-tb!important;text-orientation:mixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:4.5%!important;transform:translateX(-50%)!important;white-space:nowrap!important;text-align:center!important}";
           document.head.appendChild(critical);
         }
 
         const scrub = document.createElement("aside");
         scrub.className = "book-scrub";
         scrub.setAttribute("aria-label", "페이지 빠른 스크롤");
-        scrub.style.setProperty("--scrub-progress", "8%");
+        scrub.style.setProperty("--scrub-progress", "12%");
         const track = document.createElement("div");
         track.className = "book-scrub-track";
         const thumb = document.createElement("div");
@@ -415,17 +421,17 @@
           const max = maxScroll();
           const ratio = Math.max(0, Math.min(1, max > 0 ? window.scrollY / max : 0));
           const trackH = track.clientHeight;
-          const thumbH = thumb.offsetHeight || 11;
+          const thumbH = thumb.offsetHeight || 16;
           const y = ratio * Math.max(0, trackH - thumbH);
           thumb.style.top = `${y}px`;
-          // 손잡이 중심까지 그라데이션 채움
-          const fill = ((y + thumbH / 2) / Math.max(1, trackH)) * 100;
+          // 손잡이 중심까지 채움 (맨 위에서도 최소 보이게)
+          const fill = Math.max(10, ((y + thumbH / 2) / Math.max(1, trackH)) * 100);
           scrub.style.setProperty("--scrub-progress", `${fill}%`);
         };
 
         const jumpFromClientY = (clientY) => {
           const rect = scrub.getBoundingClientRect();
-          const thumbH = thumb.offsetHeight || 11;
+          const thumbH = thumb.offsetHeight || 16;
           const usable = Math.max(1, rect.height - thumbH);
           const ratio = Math.max(0, Math.min(1, (clientY - rect.top - thumbH / 2) / usable));
           const index = Math.round(ratio * (total - 1));
