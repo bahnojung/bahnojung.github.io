@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book2" />
+    <link rel="stylesheet" href="style.css?v=20261112book3" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -398,19 +398,18 @@
           const max = maxScroll();
           const ratio = max > 0 ? window.scrollY / max : 0;
           const trackH = track.clientHeight;
-          const thumbH = thumb.offsetHeight || 28;
+          const thumbH = thumb.offsetHeight || 16;
           const y = Math.max(0, Math.min(1, ratio)) * Math.max(0, trackH - thumbH);
           thumb.style.top = `${y}px`;
         };
 
         const jumpFromClientY = (clientY) => {
-          const rect = track.getBoundingClientRect();
-          const thumbH = thumb.offsetHeight || 28;
+          const rect = scrub.getBoundingClientRect();
+          const thumbH = thumb.offsetHeight || 16;
           const usable = Math.max(1, rect.height - thumbH);
           const ratio = Math.max(0, Math.min(1, (clientY - rect.top - thumbH / 2) / usable));
           const index = Math.round(ratio * (total - 1));
-          const target = spreadsEls[Math.max(0, Math.min(total - 1, index))];
-          if (!target) return;
+          if (!spreadsEls[Math.max(0, Math.min(total - 1, index))]) return;
           document.documentElement.classList.add("is-book-scrubbing");
           const top = Math.round(index * pageHeight());
           window.scrollTo({ top, left: 0, behavior: "auto" });
@@ -446,7 +445,7 @@
           window.removeEventListener("pointercancel", endDrag);
         };
 
-        track.addEventListener("pointerdown", (event) => {
+        const startDrag = (event) => {
           event.preventDefault();
           dragging = true;
           scrub.classList.add("is-active");
@@ -455,7 +454,9 @@
           window.addEventListener("pointermove", onPointerMove);
           window.addEventListener("pointerup", endDrag);
           window.addEventListener("pointercancel", endDrag);
-        });
+        };
+
+        scrub.addEventListener("pointerdown", startDrag);
 
         window.addEventListener("scroll", syncThumb, { passive: true });
         window.addEventListener("resize", syncThumb);

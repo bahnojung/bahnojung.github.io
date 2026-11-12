@@ -1411,54 +1411,89 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
   pointer-events: none;
 }
 
-/* 빠른 페이지 이동용 오른쪽 미니 스크러버 */
+/* 빠른 페이지 이동용 오른쪽 오락실 블록 스크러버 */
 .book-scrub {
+  --arcade-y: #ffd000;
+  --arcade-r: #e53935;
+  --arcade-b: #1565c0;
+  --arcade-g: #00c853;
+  --arcade-p: #ff4081;
   position: fixed;
-  top: 12%;
-  right: 0.45rem;
-  bottom: 12%;
-  width: 10px;
+  top: 10%;
+  right: 0.35rem;
+  bottom: 10%;
+  width: 18px;
   z-index: 40;
   display: flex;
   align-items: stretch;
   justify-content: center;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: none;
 }
 
 .book-scrub-track {
   position: relative;
-  width: 3px;
+  width: 7px;
   height: 100%;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.08);
+  border-radius: 0;
+  border: 1.5px solid #111;
+  box-sizing: border-box;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--arcade-y) 0 14px,
+    var(--arcade-r) 14px 28px,
+    var(--arcade-b) 28px 42px,
+    var(--arcade-g) 42px 56px,
+    var(--arcade-p) 56px 70px
+  );
+  box-shadow: 1.5px 1.5px 0 #111;
   pointer-events: auto;
   cursor: pointer;
-  transition: width 0.15s ease, background 0.15s ease;
+  image-rendering: pixelated;
 }
 
 .book-scrub:hover .book-scrub-track,
 .book-scrub.is-active .book-scrub-track {
-  width: 5px;
-  background: rgba(0, 0, 0, 0.14);
+  width: 8px;
 }
 
 .book-scrub-thumb {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 9px;
-  height: 28px;
-  margin-left: -4.5px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.42);
+  width: 13px;
+  height: 16px;
+  margin-left: -6.5px;
+  border-radius: 0;
+  box-sizing: border-box;
+  background: #111;
+  border: 1.5px solid #111;
+  box-shadow:
+    inset 0 0 0 1.5px var(--arcade-y),
+    1.5px 1.5px 0 rgba(0, 0, 0, 0.25);
   pointer-events: none;
-  transform: translateY(0);
   will-change: top;
+}
+
+.book-scrub-thumb::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: var(--arcade-y);
 }
 
 .book-scrub:hover .book-scrub-thumb,
 .book-scrub.is-active .book-scrub-thumb {
-  background: rgba(0, 0, 0, 0.58);
+  background: #111;
+  box-shadow:
+    inset 0 0 0 1.5px #fff,
+    2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.book-scrub:hover .book-scrub-thumb::before,
+.book-scrub.is-active .book-scrub-thumb::before {
+  background: #fff;
 }
 
 @media (max-width: 900px) {
