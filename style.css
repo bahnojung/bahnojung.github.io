@@ -1410,18 +1410,14 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
   pointer-events: none;
 }
 
-/* 빠른 페이지 이동용 오른쪽 오락실 블록 스크러버 */
+/* 빠른 페이지 이동용 오른쪽 얇은 그라데이션 스크러버 */
 .book-scrub {
-  --arcade-y: #ffd000;
-  --arcade-r: #e53935;
-  --arcade-b: #1565c0;
-  --arcade-g: #00c853;
-  --arcade-p: #ff4081;
+  --scrub-progress: 0%;
   position: fixed;
-  top: 10%;
-  right: 0.35rem;
-  bottom: 10%;
-  width: 18px;
+  top: 12%;
+  right: 0.55rem;
+  bottom: 12%;
+  width: 16px;
   z-index: 40;
   display: flex;
   align-items: stretch;
@@ -1433,66 +1429,59 @@ body.collection-book-page .collection-about:not(.book-intro-about) {
 
 .book-scrub-track {
   position: relative;
-  width: 7px;
+  width: 4px;
   height: 100%;
-  border-radius: 0;
-  border: 1.5px solid #111;
+  border-radius: 999px;
   box-sizing: border-box;
-  background: repeating-linear-gradient(
-    to bottom,
-    var(--arcade-y) 0 14px,
-    var(--arcade-r) 14px 28px,
-    var(--arcade-b) 28px 42px,
-    var(--arcade-g) 42px 56px,
-    var(--arcade-p) 56px 70px
-  );
-  box-shadow: 1.5px 1.5px 0 #111;
+  background:
+    linear-gradient(
+      to bottom,
+      #ff6a00 0%,
+      #ffb000 55%,
+      #ffe566 100%
+    )
+      0 0 / 100% var(--scrub-progress) no-repeat,
+    #eceae6;
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.55),
+    inset 0 1px 2px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.06);
   pointer-events: auto;
   cursor: pointer;
-  image-rendering: pixelated;
 }
 
 .book-scrub:hover .book-scrub-track,
 .book-scrub.is-active .book-scrub-track {
-  width: 8px;
+  width: 5px;
 }
 
 .book-scrub-thumb {
   position: absolute;
   left: 50%;
   top: 0;
-  width: 13px;
-  height: 16px;
-  margin-left: -6.5px;
-  border-radius: 0;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 50%;
   box-sizing: border-box;
-  background: #111;
-  border: 1.5px solid #111;
+  background:
+    radial-gradient(circle at 32% 28%, #ffffff 0%, #f4f4f2 55%, #e4e4e0 100%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow:
-    inset 0 0 0 1.5px var(--arcade-y),
-    1.5px 1.5px 0 rgba(0, 0, 0, 0.25);
+    0 1px 2px rgba(0, 0, 0, 0.18),
+    0 0 0 0.5px rgba(255, 255, 255, 0.9);
   pointer-events: none;
   will-change: top;
 }
 
-.book-scrub-thumb::before {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  background: var(--arcade-y);
-}
-
 .book-scrub:hover .book-scrub-thumb,
 .book-scrub.is-active .book-scrub-thumb {
-  background: #111;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
   box-shadow:
-    inset 0 0 0 1.5px #fff,
-    2px 2px 0 rgba(0, 0, 0, 0.3);
-}
-
-.book-scrub:hover .book-scrub-thumb::before,
-.book-scrub.is-active .book-scrub-thumb::before {
-  background: #fff;
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    0 0 0 0.5px rgba(255, 255, 255, 0.95);
 }
 
 @media (max-width: 900px) {

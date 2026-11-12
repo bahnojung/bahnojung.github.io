@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book4" />
+    <link rel="stylesheet" href="style.css?v=20261112book5" />
     <script>
       window.__PATH_STROKE_FIX__ = "20260816pathvar";
     </script>
@@ -396,16 +396,19 @@
 
         const syncThumb = () => {
           const max = maxScroll();
-          const ratio = max > 0 ? window.scrollY / max : 0;
+          const ratio = Math.max(0, Math.min(1, max > 0 ? window.scrollY / max : 0));
           const trackH = track.clientHeight;
-          const thumbH = thumb.offsetHeight || 16;
-          const y = Math.max(0, Math.min(1, ratio)) * Math.max(0, trackH - thumbH);
+          const thumbH = thumb.offsetHeight || 11;
+          const y = ratio * Math.max(0, trackH - thumbH);
           thumb.style.top = `${y}px`;
+          // 손잡이 중심까지 그라데이션 채움
+          const fill = ((y + thumbH / 2) / Math.max(1, trackH)) * 100;
+          scrub.style.setProperty("--scrub-progress", `${fill}%`);
         };
 
         const jumpFromClientY = (clientY) => {
           const rect = scrub.getBoundingClientRect();
-          const thumbH = thumb.offsetHeight || 16;
+          const thumbH = thumb.offsetHeight || 11;
           const usable = Math.max(1, rect.height - thumbH);
           const ratio = Math.max(0, Math.min(1, (clientY - rect.top - thumbH / 2) / usable));
           const index = Math.round(ratio * (total - 1));
