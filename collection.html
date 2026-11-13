@@ -28,8 +28,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog9" />
-    <!-- Leo-do: desktop catalog / mobile list -->
+    <link rel="stylesheet" href="style.css?v=20261113catalog10" />
+    <!-- Leo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
         html.book-scroll { scroll-snap-type: none !important; }
@@ -61,7 +61,7 @@
         object-fit: contain !important;
         display: block !important;
       }
-      /* Sorika-style: 3-col book spreads on desk (desktop) */
+      /* Sorika-style: 3-col book spreads (desktop + phone) */
       .gallery.gallery-layout-catalog {
         display: grid !important;
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -72,6 +72,31 @@
         padding: 0 0 0.5rem !important;
         background: #ffffff !important;
         column-count: unset !important;
+      }
+      @media (max-width: 900px) {
+        .gallery.gallery-layout-catalog {
+          width: calc(100% - 1.1rem) !important;
+          max-width: none !important;
+          gap: 0.45rem 0.5rem !important;
+          margin: 0.2rem auto 2.2rem !important;
+        }
+        body.collection-catalog-page .collection-about {
+          width: calc(100% - 1.1rem) !important;
+          max-width: none !important;
+          margin: 0 auto 1rem !important;
+        }
+        body.collection-catalog-page .collection-title {
+          font-size: clamp(1.25rem, 8vw, 2rem);
+          margin: 0.25rem auto 0.85rem;
+        }
+        body.collection-catalog-page .collection-about-inner {
+          padding: 0.7rem 0.8rem;
+        }
+        .gallery.gallery-layout-catalog .catalog-spread img {
+          box-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.05),
+            0 4px 12px rgba(0, 0, 0, 0.07) !important;
+        }
       }
       .gallery.gallery-layout-catalog .catalog-spread {
         margin: 0 !important;
@@ -651,8 +676,8 @@
             console.log("첫 번째 이미지 경로:", imageList[0].src);
           }
 
-          // 카탈로그/책 스크롤은 맥·데스크톱만 — 폰·터치 태블릿은 예전 세로 나열
-          // Leo-do는 이번 샘플에서 catalog 고정 (about.json CDN 캐시 대비)
+          // Leo-do 카탈로그: 데스크톱·휴대폰 동일 3열 스프레드 그리드
+          // 책 스크롤(book)만 맥·데스크톱 전용
           const layoutName = about && String(about.layout).toLowerCase();
           const catalogPreferred =
             collectionId === "Leo-do" || layoutName === "catalog";
@@ -665,20 +690,11 @@
           );
           const touchLike = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
           const desktopOk = viewportW >= 901 && !(touchLike && viewportW < 1280);
-          const catalogLayout = catalogPreferred && desktopOk;
+          const catalogLayout = catalogPreferred;
           const bookLayout = bookPreferred && desktopOk;
 
           if (catalogLayout) {
             await renderCatalogGallery(galleryEl, about, collectionId);
-            const onResizeCatalog = () => {
-              const w = Math.min(
-                window.innerWidth || 9999,
-                document.documentElement.clientWidth || 9999,
-                (window.visualViewport && window.visualViewport.width) || 9999
-              );
-              if (w < 901) window.location.reload();
-            };
-            window.addEventListener("resize", onResizeCatalog, { passive: true });
             return;
           }
 
