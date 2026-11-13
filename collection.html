@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog11" />
+    <link rel="stylesheet" href="style.css?v=20261113catalog13" />
     <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -61,10 +61,10 @@
         object-fit: contain !important;
         display: block !important;
       }
-      /* Sorika-style: 3-col book spreads (desktop + phone) */
+      /* Sorika-style catalog: desktop 3 / phone 2 */
       .gallery.gallery-layout-catalog {
         display: grid !important;
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(var(--catalog-cols, 3), minmax(0, 1fr)) !important;
         gap: 0.85rem 0.95rem !important;
         width: min(1120px, calc(100% - 3.5rem)) !important;
         max-width: 1120px !important;
@@ -73,16 +73,56 @@
         background: #ffffff !important;
         column-count: unset !important;
       }
+      .gallery.gallery-layout-catalog .catalog-spread {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        cursor: zoom-in;
+        line-height: 0 !important;
+      }
+      .gallery.gallery-layout-catalog .catalog-spread img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        background: #fff !important;
+        box-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.06),
+          0 8px 22px rgba(0, 0, 0, 0.08) !important;
+        border-radius: 1px;
+      }
+      /* 폰: 2열 + 거의 붙여서 (클래스 + 미디어쿼리 이중) */
+      body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog {
+        --catalog-cols: 2;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        max-width: none !important;
+        gap: 0.14rem 0.16rem !important;
+        row-gap: 0.14rem !important;
+        column-gap: 0.16rem !important;
+        margin: 0 0 1.75rem !important;
+        padding: 0 0.2rem !important;
+        box-sizing: border-box !important;
+      }
+      body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread img {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
       @media (max-width: 900px) {
-        /* 폰: Sorika처럼 2열 + 촘촘한 간격 */
         .gallery.gallery-layout-catalog {
+          --catalog-cols: 2;
           grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
           width: 100% !important;
           max-width: none !important;
-          gap: 0.28rem 0.32rem !important;
-          margin: 0.15rem 0 2rem !important;
-          padding: 0 0.35rem 0.35rem !important;
+          gap: 0.14rem 0.16rem !important;
+          row-gap: 0.14rem !important;
+          column-gap: 0.16rem !important;
+          margin: 0 0 1.75rem !important;
+          padding: 0 0.2rem !important;
           box-sizing: border-box !important;
+        }
+        .gallery.gallery-layout-catalog .catalog-spread img {
+          box-shadow: none !important;
+          border-radius: 0 !important;
         }
         body.collection-catalog-page .collection-about {
           width: calc(100% - 0.7rem) !important;
@@ -96,27 +136,6 @@
         body.collection-catalog-page .collection-about-inner {
           padding: 0.65rem 0.75rem;
         }
-        .gallery.gallery-layout-catalog .catalog-spread img {
-          box-shadow:
-            0 1px 1px rgba(0, 0, 0, 0.04),
-            0 2px 8px rgba(0, 0, 0, 0.06) !important;
-        }
-      }
-      .gallery.gallery-layout-catalog .catalog-spread {
-        margin: 0 !important;
-        padding: 0 !important;
-        background: transparent !important;
-        cursor: zoom-in;
-      }
-      .gallery.gallery-layout-catalog .catalog-spread img {
-        width: 100% !important;
-        height: auto !important;
-        display: block !important;
-        background: #fff !important;
-        box-shadow:
-          0 1px 2px rgba(0, 0, 0, 0.06),
-          0 8px 22px rgba(0, 0, 0, 0.08) !important;
-        border-radius: 1px;
       }
       body.collection-catalog-page {
         background: #ffffff !important;
@@ -398,18 +417,42 @@
         galleryEl.innerHTML = "";
         document.querySelectorAll(".catalog-meta, .book-scrub").forEach((el) => el.remove());
 
-        const viewportW = Math.min(
-          window.innerWidth || 9999,
-          document.documentElement.clientWidth || 9999,
-          (window.visualViewport && window.visualViewport.width) || 9999
-        );
-        // 폰 2열 / 데스크톱 3열 (Sorika 느낌)
-        const cols =
-          viewportW < 901
+        const applyCatalogCols = () => {
+          const viewportW = Math.min(
+            window.innerWidth || 9999,
+            document.documentElement.clientWidth || 9999,
+            (window.visualViewport && window.visualViewport.width) || 9999
+          );
+          const touchLike = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+          const narrow = window.matchMedia("(max-width: 900px)").matches;
+          // 폰/터치 좁은 화면은 무조건 2열 (데스크톱 모드 요청이어도 폭 기준)
+          const mobile = narrow || (touchLike && viewportW < 1100);
+          const cols = mobile
             ? 2
             : Math.max(2, Math.min(4, Number(about && about.columns) || 3));
-        galleryEl.style.setProperty("--catalog-cols", String(cols));
-        galleryEl.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+          document.body.classList.toggle("is-catalog-mobile", mobile);
+          galleryEl.style.setProperty("--catalog-cols", String(cols));
+          galleryEl.style.setProperty(
+            "grid-template-columns",
+            `repeat(${cols}, minmax(0, 1fr))`,
+            "important"
+          );
+          if (mobile) {
+            galleryEl.style.setProperty("gap", "0.14rem 0.16rem", "important");
+            galleryEl.style.setProperty("row-gap", "0.14rem", "important");
+            galleryEl.style.setProperty("column-gap", "0.16rem", "important");
+          } else {
+            galleryEl.style.removeProperty("gap");
+            galleryEl.style.removeProperty("row-gap");
+            galleryEl.style.removeProperty("column-gap");
+          }
+          console.log("Ieo-do catalog cols", cols, "w", viewportW, "mobile", mobile);
+        };
+        applyCatalogCols();
+        window.addEventListener("resize", applyCatalogCols, { passive: true });
+        if (window.visualViewport) {
+          window.visualViewport.addEventListener("resize", applyCatalogCols, { passive: true });
+        }
 
         const flat = [];
         const maxPages = 90;
