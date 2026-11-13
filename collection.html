@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261114catalog23" />
+    <link rel="stylesheet" href="style.css?v=20261114catalog24" />
     <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -171,18 +171,28 @@
       }
       .gallery.gallery-layout-catalog .catalog-spread {
         position: relative !important;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .gallery.gallery-layout-catalog .catalog-spread > img {
+        pointer-events: none !important;
+        user-select: none;
+        -webkit-user-select: none;
       }
       .gallery.gallery-layout-catalog .catalog-photo-hit {
         position: absolute;
         border: 0;
         padding: 0;
         margin: 0;
-        background: transparent;
+        /* iOS: 완전 투명이면 터치가 무시됨 */
+        background: rgba(0, 0, 0, 0.01);
         cursor: zoom-in;
-        z-index: 2;
+        z-index: 3;
         appearance: none;
         -webkit-appearance: none;
         display: block;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
       }
       .gallery.gallery-layout-catalog .catalog-photo-hit:focus-visible {
         outline: 2px solid rgba(0, 0, 0, 0.35);
@@ -505,7 +515,7 @@
         const spreads = await loadBookSpreads(colId);
         const flat = [];
         const maxPages = 90;
-        const cacheVer = "20261114catalog23";
+        const cacheVer = "20261114catalog24";
 
         const clamp01 = (n, fallback) => {
           const v = Number(n);
@@ -554,74 +564,181 @@
           fig.appendChild(img);
 
           const regions = photos.map((im, pi) => {
-            const l = clamp01(im.l, im.half === "R" ? 0.5 : 0);
+            const half = String(im.half || "").toUpperCase();
+            const l = clamp01(im.l, half === "R" ? 0.5 : 0);
             const t = clamp01(im.t, 0);
-            const w = clamp01(im.w, im.half === "R" || im.half === "L" ? 0.5 : 1);
+            const w = clamp01(im.w, half === "R" || half === "L" ? 0.5 : 1);
             const h = clamp01(im.h, 1);
-            return { l, t, w, h, index: photoIndexes[pi] };
+            return { l, t, w, h, half, index: photoIndexes[pi], pi };
           });
 
           const openAt = (idx) => openLightbox(idx);
 
-          // 각 사진 영역 위에 정확한 클릭 히트박스
-          if (photos.length > 1 && regions.length) {
-            regions.forEach((region, pi) => {
-              const hit = document.createElement("button");
-              hit.type = "button";
-              hit.className = "catalog-photo-hit";
-              hit.setAttribute(
-                "aria-label",
-                `사진 크게 보기 ${photos[pi].num != null ? photos[pi].num : pi + 1}`
-              );
-              hit.style.left = `${region.l * 100}%`;
-              hit.style.top = `${region.t * 100}%`;
-              hit.style.width = `${Math.max(region.w, 0.04) * 100}%`;
-              hit.style.height = `${Math.max(region.h, 0.04) * 100}%`;
-              hit.addEventListener("click", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                openAt(region.index);
-              });
-              fig.appendChild(hit);
-            });
+          const pickIndexAt = (clientX, clientY) => {
+            const rect = img.getBoundingClientRect();
+            if (!rect.width || !rect.height) return photoIndexes[0];
+            const x = (clientX - rect.left) / rect.width;
+            const y = (clientY - rect.top) / rect.height;
 
-            // 여백 클릭: 가장 가까운 사진
-            fig.addEventListener("click", (e) => {
-              if (e.target.closest(".catalog-photo-hit")) return;
-              const rect = img.getBoundingClientRect();
-              if (!rect.width || !rect.height) {
-                openAt(photoIndexes[0]);
-                return;
+            // 1) 사진 박스 안을 직접 누른 경우 (가장 작은 영역 우선)
+            let inside = null;
+            let bestArea = Infinity;
+            for (const region of regions) {
+              if (
+                x >= region.l &&
+                x <= region.l + region.w &&
+                y >= region.t &&
+                y <= region.t + region.h
+              ) {
+                const area = region.w * region.h;
+                if (area < bestArea) {
+                  bestArea = area;
+                  inside = region;
+                }
               }
-              const x = (e.clientX - rect.left) / rect.width;
-              const y = (e.clientY - rect.top) / rect.height;
-              let best = regions[0];
+            }
+            if (inside) return inside.index;
+
+            // 2) 책 스프레드: 왼쪽/오른쪽 반쪽
+            const pageHalf = x < 0.5 ? "L" : "R";
+            const onHalf = regions.filter((r) => r.half === pageHalf);
+            if (onHalf.length === 1) return onHalf[0].index;
+            if (onHalf.length > 1) {
+              let best = onHalf[0];
               let bestDist = Infinity;
-              for (const region of regions) {
+              for (const region of onHalf) {
                 const cx = region.l + region.w / 2;
                 const cy = region.t + region.h / 2;
-                const dx = x - cx;
-                const dy = y - cy;
-                const dist = dx * dx + dy * dy;
+                const dist = (x - cx) * (x - cx) + (y - cy) * (y - cy);
                 if (dist < bestDist) {
                   bestDist = dist;
                   best = region;
                 }
               }
-              openAt(best.index);
+              return best.index;
+            }
+
+            // 3) half 정보 없을 때: 전체에서 가장 가까운 사진
+            let best = regions[0];
+            let bestDist = Infinity;
+            for (const region of regions) {
+              const cx = region.l + region.w / 2;
+              const cy = region.t + region.h / 2;
+              const dist = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+              if (dist < bestDist) {
+                bestDist = dist;
+                best = region;
+              }
+            }
+            return best.index;
+          };
+
+          const bindTapOpen = (el, getIndex) => {
+            let startX = 0;
+            let startY = 0;
+            let tracking = false;
+            let lastOpenAt = 0;
+            const openOnce = (point, event) => {
+              const now = Date.now();
+              if (now - lastOpenAt < 450) return;
+              lastOpenAt = now;
+              if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              openAt(getIndex(point));
+            };
+            el.addEventListener(
+              "pointerdown",
+              (e) => {
+                if (!e.isPrimary) return;
+                tracking = true;
+                startX = e.clientX;
+                startY = e.clientY;
+              },
+              { passive: true }
+            );
+            el.addEventListener(
+              "touchstart",
+              (e) => {
+                if (!e.touches || !e.touches[0]) return;
+                tracking = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+              },
+              { passive: true }
+            );
+            el.addEventListener("pointerup", (e) => {
+              if (!tracking || !e.isPrimary) return;
+              tracking = false;
+              if (Math.hypot(e.clientX - startX, e.clientY - startY) > 14) return;
+              openOnce(e, e);
             });
+            el.addEventListener(
+              "touchend",
+              (e) => {
+                if (!e.changedTouches || !e.changedTouches[0]) return;
+                const t = e.changedTouches[0];
+                tracking = false;
+                if (Math.hypot(t.clientX - startX, t.clientY - startY) > 14) return;
+                openOnce(t, e);
+              },
+              { passive: false }
+            );
+          };
+
+          if (photos.length > 1 && regions.length) {
+            const halfCount = {
+              L: regions.filter((r) => r.half === "L").length,
+              R: regions.filter((r) => r.half === "R").length,
+            };
+
+            regions.forEach((region) => {
+              const hit = document.createElement("button");
+              hit.type = "button";
+              hit.className = "catalog-photo-hit";
+              hit.setAttribute(
+                "aria-label",
+                `사진 크게 보기 ${photos[region.pi].num != null ? photos[region.pi].num : region.pi + 1}`
+              );
+
+              // 폰 손가락용: L/R가 각각 1장이면 페이지 반쪽 전체 히트
+              const usePageHalf =
+                (region.half === "L" && halfCount.L === 1) ||
+                (region.half === "R" && halfCount.R === 1);
+              if (usePageHalf && region.half === "L") {
+                hit.style.left = "0%";
+                hit.style.top = "0%";
+                hit.style.width = "50%";
+                hit.style.height = "100%";
+              } else if (usePageHalf && region.half === "R") {
+                hit.style.left = "50%";
+                hit.style.top = "0%";
+                hit.style.width = "50%";
+                hit.style.height = "100%";
+              } else {
+                hit.style.left = `${region.l * 100}%`;
+                hit.style.top = `${region.t * 100}%`;
+                hit.style.width = `${Math.max(region.w, 0.08) * 100}%`;
+                hit.style.height = `${Math.max(region.h, 0.08) * 100}%`;
+              }
+
+              bindTapOpen(hit, () => region.index);
+              fig.appendChild(hit);
+            });
+
+            // 여백/이미지 탭: 좌표로 좌우 판별 (휴대폰 핵심)
+            bindTapOpen(fig, (point) => pickIndexAt(point.clientX, point.clientY));
           } else {
             const onlyIdx = photoIndexes[0];
-            fig.style.cursor = "zoom-in";
             fig.setAttribute("role", "button");
             fig.tabIndex = 0;
             fig.setAttribute("aria-label", `사진 크게 보기 ${i}`);
-            const open = () => openAt(onlyIdx);
-            fig.addEventListener("click", open);
+            bindTapOpen(fig, () => onlyIdx);
             fig.addEventListener("keydown", (e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                open();
+                openAt(onlyIdx);
               }
             });
           }
@@ -1469,7 +1586,7 @@
           return;
         }
         try {
-          const res = await fetch("collections.json?v=20261114c6", { cache: "no-store" });
+          const res = await fetch("collections.json?v=20261114c7", { cache: "no-store" });
           if (!res.ok) return;
           const collections = await res.json();
           const c =
