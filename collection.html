@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog7" />
+    <link rel="stylesheet" href="style.css?v=20261113catalog8" />
     <!-- Leo-do: desktop catalog / mobile list -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -231,11 +231,25 @@
       // 현재 페이지 기준 베이스 경로 (로컬: /, GitHub Pages 커스텀 도메인/프로젝트 경로 모두 대응)
       const basePath = window.location.pathname.replace(/\/[^/]*$/, "/") || "/";
 
-      // 현재 컬렉션 id + 파일명으로 이미지 URL 생성 (폴더명 변경 후에도 항상 올바른 경로)
+      // 현재 컬렉션 id + 상대경로로 이미지 URL 생성 (catalog/ 하위 등 유지)
       function imageUrlForItem(colId, item) {
         if (!item || !item.src) return "";
-        const filename = item.src.split("/").pop() || item.src;
-        const path = "collections/" + encodeURIComponent(colId) + "/" + encodeURIComponent(filename);
+        const raw = String(item.src).replace(/^\/+/, "");
+        const prefix = "collections/" + colId + "/";
+        let rel = raw;
+        if (raw.startsWith(prefix)) {
+          rel = raw.slice(prefix.length);
+        } else if (raw.startsWith("collections/")) {
+          // 다른 컬렉션 경로가 오면 파일명만 사용
+          rel = raw.split("/").pop() || raw;
+        } else {
+          rel = raw;
+        }
+        const encodedRel = rel
+          .split("/")
+          .map((seg) => encodeURIComponent(seg))
+          .join("/");
+        const path = "collections/" + encodeURIComponent(colId) + "/" + encodedRel;
         return window.location.origin + basePath + path;
       }
 
