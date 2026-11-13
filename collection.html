@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog15" />
+    <link rel="stylesheet" href="style.css?v=20261114catalog16" />
     <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -103,19 +103,18 @@
         padding: 0 2px !important;
         box-sizing: border-box !important;
       }
+      /* 폰: 원본 비율 유지 (16:9 cover/scale 때문에 길쭉·잘림 생기던 것 제거) */
       body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread {
-        overflow: hidden !important;
-        aspect-ratio: 16 / 9 !important;
+        overflow: visible !important;
+        aspect-ratio: auto !important;
       }
       body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread img {
         box-shadow: none !important;
         border-radius: 0 !important;
         width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-        object-position: center !important;
-        transform: scale(1.12) !important;
-        transform-origin: center center !important;
+        height: auto !important;
+        object-fit: contain !important;
+        transform: none !important;
       }
       @media (max-width: 900px) {
         .gallery.gallery-layout-catalog {
@@ -131,18 +130,16 @@
           box-sizing: border-box !important;
         }
         .gallery.gallery-layout-catalog .catalog-spread {
-          overflow: hidden !important;
-          aspect-ratio: 16 / 9 !important;
+          overflow: visible !important;
+          aspect-ratio: auto !important;
         }
         .gallery.gallery-layout-catalog .catalog-spread img {
           box-shadow: none !important;
           border-radius: 0 !important;
           width: 100% !important;
-          height: 100% !important;
-          object-fit: cover !important;
-          object-position: center !important;
-          transform: scale(1.12) !important;
-          transform-origin: center center !important;
+          height: auto !important;
+          object-fit: contain !important;
+          transform: none !important;
         }
         body.collection-catalog-page .collection-about {
           width: calc(100% - 0.7rem) !important;
@@ -487,7 +484,7 @@
           const fig = document.createElement("figure");
           fig.className = "catalog-spread gallery-item";
           const img = document.createElement("img");
-          img.src = `${src}?v=20261113catalog15`;
+          img.src = `${src}?v=20261114catalog16`;
           img.alt = item.alt;
           img.decoding = "async";
           img.loading = i <= 9 ? "eager" : "lazy";
