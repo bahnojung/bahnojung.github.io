@@ -42,7 +42,7 @@
   </head>
   <body class="main-page">
     <nav class="collection-nav" id="collection-nav">
-      <!-- collections.json?v=20261114c2"site-header">
+      <!-- collections.json?v=20261114c3"site-header">
       <div class="header-inner">
         <div>
           <h1 class="site-title">
@@ -148,7 +148,7 @@
         }
 
         try {
-          const res = await fetch("collections.json?v=20261114c2", { cache: "no-store" });
+          const res = await fetch("collections.json?v=20261114c3", { cache: "no-store" });
           if (!res.ok) return;
           const collections = await res.json();
           if (!Array.isArray(collections)) return;

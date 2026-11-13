@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261114catalog19" />
+    <link rel="stylesheet" href="style.css?v=20261114catalog20" />
     <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -61,10 +61,10 @@
         object-fit: contain !important;
         display: block !important;
       }
-      /* Sorika-style catalog: desktop 3 / phone 2 */
+      /* Sorika-style catalog: desktop 2 / phone 1 */
       .gallery.gallery-layout-catalog {
         display: grid !important;
-        grid-template-columns: repeat(var(--catalog-cols, 3), minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(var(--catalog-cols, 2), minmax(0, 1fr)) !important;
         gap: 0.85rem 0.95rem !important;
         width: min(1120px, calc(100% - 3.5rem)) !important;
         max-width: 1120px !important;
@@ -90,36 +90,13 @@
           0 8px 22px rgba(0, 0, 0, 0.08) !important;
         border-radius: 1px;
       }
-      /* 폰: 1열 세로 스크롤 — 사진 크게 */
-      body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog {
-        --catalog-cols: 1;
-        grid-template-columns: minmax(0, 1fr) !important;
-        width: 100% !important;
-        max-width: none !important;
-        gap: 0.85rem 0 !important;
-        row-gap: 0.85rem !important;
-        column-gap: 0 !important;
-        margin: 0 0 2rem !important;
-        padding: 0 0.55rem !important;
-        box-sizing: border-box !important;
-      }
-      body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread {
-        overflow: visible !important;
-        aspect-ratio: auto !important;
-        width: 100% !important;
-      }
-      body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread img {
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        object-fit: contain !important;
-        transform: none !important;
-      }
-      @media (max-width: 900px) {
+      /* 폰/터치: 무조건 1열 (인라인 JS보다 미디어쿼리로 강제) */
+      @media (max-width: 1100px), (hover: none), (pointer: coarse) {
+        body.collection-catalog-page .gallery.gallery-layout-catalog,
+        body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog,
         .gallery.gallery-layout-catalog {
-          --catalog-cols: 1;
-          grid-template-columns: minmax(0, 1fr) !important;
+          --catalog-cols: 1 !important;
+          grid-template-columns: 100% !important;
           width: 100% !important;
           max-width: none !important;
           gap: 0.85rem 0 !important;
@@ -129,15 +106,19 @@
           padding: 0 0.55rem !important;
           box-sizing: border-box !important;
         }
+        body.collection-catalog-page .gallery.gallery-layout-catalog .catalog-spread,
         .gallery.gallery-layout-catalog .catalog-spread {
           overflow: visible !important;
           aspect-ratio: auto !important;
           width: 100% !important;
+          max-width: 100% !important;
         }
+        body.collection-catalog-page .gallery.gallery-layout-catalog .catalog-spread img,
         .gallery.gallery-layout-catalog .catalog-spread img {
           box-shadow: none !important;
           border-radius: 0 !important;
           width: 100% !important;
+          max-width: 100% !important;
           height: auto !important;
           object-fit: contain !important;
           transform: none !important;
@@ -436,35 +417,32 @@
         document.querySelectorAll(".catalog-meta, .book-scrub").forEach((el) => el.remove());
 
         const applyCatalogCols = () => {
-          const viewportW = Math.min(
-            window.innerWidth || 9999,
-            document.documentElement.clientWidth || 9999,
-            (window.visualViewport && window.visualViewport.width) || 9999
-          );
-          const touchLike = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-          const narrow = window.matchMedia("(max-width: 900px)").matches;
-          // 폰/터치 좁은 화면: 1열 세로 스크롤 (사진 크게)
-          const mobile = narrow || (touchLike && viewportW < 1100);
+          // 터치/좁은 화면은 CSS 미디어쿼리가 1열 강제.
+          // 인라인 !important 는 폰 CSS를 덮어쓰므로 폰에서는 인라인 grid를 지운다.
+          const mobile = window.matchMedia(
+            "(max-width: 1100px), (hover: none), (pointer: coarse)"
+          ).matches;
           const cols = mobile
             ? 1
-            : Math.max(2, Math.min(4, Number(about && about.columns) || 3));
+            : Math.max(2, Math.min(4, Number(about && about.columns) || 2));
           document.body.classList.toggle("is-catalog-mobile", mobile);
           galleryEl.style.setProperty("--catalog-cols", String(cols));
-          galleryEl.style.setProperty(
-            "grid-template-columns",
-            cols === 1 ? "minmax(0, 1fr)" : `repeat(${cols}, minmax(0, 1fr))`,
-            "important"
-          );
           if (mobile) {
-            galleryEl.style.setProperty("gap", "0.85rem 0", "important");
-            galleryEl.style.setProperty("row-gap", "0.85rem", "important");
-            galleryEl.style.setProperty("column-gap", "0", "important");
+            galleryEl.style.removeProperty("grid-template-columns");
+            galleryEl.style.removeProperty("gap");
+            galleryEl.style.removeProperty("row-gap");
+            galleryEl.style.removeProperty("column-gap");
           } else {
+            galleryEl.style.setProperty(
+              "grid-template-columns",
+              `repeat(${cols}, minmax(0, 1fr))`,
+              "important"
+            );
             galleryEl.style.removeProperty("gap");
             galleryEl.style.removeProperty("row-gap");
             galleryEl.style.removeProperty("column-gap");
           }
-          console.log("Ieo-do catalog cols", cols, "w", viewportW, "mobile", mobile);
+          console.log("Ieo-do catalog cols", cols, "mobile", mobile);
         };
         applyCatalogCols();
         window.addEventListener("resize", applyCatalogCols, { passive: true });
@@ -485,7 +463,7 @@
           const fig = document.createElement("figure");
           fig.className = "catalog-spread gallery-item";
           const img = document.createElement("img");
-          img.src = `${src}?v=20261114catalog19`;
+          img.src = `${src}?v=20261114catalog20`;
           img.alt = item.alt;
           img.decoding = "async";
           img.loading = i <= 9 ? "eager" : "lazy";
@@ -1328,7 +1306,7 @@
           return;
         }
         try {
-          const res = await fetch("collections.json?v=20261114c2", { cache: "no-store" });
+          const res = await fetch("collections.json?v=20261114c3", { cache: "no-store" });
           if (!res.ok) return;
           const collections = await res.json();
           const c =
