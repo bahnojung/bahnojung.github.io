@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog13" />
+    <link rel="stylesheet" href="style.css?v=20261113catalog15" />
     <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -96,16 +96,26 @@
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         width: 100% !important;
         max-width: none !important;
-        gap: 0.14rem 0.16rem !important;
-        row-gap: 0.14rem !important;
-        column-gap: 0.16rem !important;
+        gap: 2px 3px !important;
+        row-gap: 2px !important;
+        column-gap: 3px !important;
         margin: 0 0 1.75rem !important;
-        padding: 0 0.2rem !important;
+        padding: 0 2px !important;
         box-sizing: border-box !important;
+      }
+      body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread {
+        overflow: hidden !important;
+        aspect-ratio: 16 / 9 !important;
       }
       body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread img {
         box-shadow: none !important;
         border-radius: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        transform: scale(1.12) !important;
+        transform-origin: center center !important;
       }
       @media (max-width: 900px) {
         .gallery.gallery-layout-catalog {
@@ -113,16 +123,26 @@
           grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
           width: 100% !important;
           max-width: none !important;
-          gap: 0.14rem 0.16rem !important;
-          row-gap: 0.14rem !important;
-          column-gap: 0.16rem !important;
+          gap: 2px 3px !important;
+          row-gap: 2px !important;
+          column-gap: 3px !important;
           margin: 0 0 1.75rem !important;
-          padding: 0 0.2rem !important;
+          padding: 0 2px !important;
           box-sizing: border-box !important;
+        }
+        .gallery.gallery-layout-catalog .catalog-spread {
+          overflow: hidden !important;
+          aspect-ratio: 16 / 9 !important;
         }
         .gallery.gallery-layout-catalog .catalog-spread img {
           box-shadow: none !important;
           border-radius: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
+          object-position: center !important;
+          transform: scale(1.12) !important;
+          transform-origin: center center !important;
         }
         body.collection-catalog-page .collection-about {
           width: calc(100% - 0.7rem) !important;
@@ -438,9 +458,9 @@
             "important"
           );
           if (mobile) {
-            galleryEl.style.setProperty("gap", "0.14rem 0.16rem", "important");
-            galleryEl.style.setProperty("row-gap", "0.14rem", "important");
-            galleryEl.style.setProperty("column-gap", "0.16rem", "important");
+            galleryEl.style.setProperty("gap", "2px 3px", "important");
+            galleryEl.style.setProperty("row-gap", "2px", "important");
+            galleryEl.style.setProperty("column-gap", "3px", "important");
           } else {
             galleryEl.style.removeProperty("gap");
             galleryEl.style.removeProperty("row-gap");
@@ -467,7 +487,7 @@
           const fig = document.createElement("figure");
           fig.className = "catalog-spread gallery-item";
           const img = document.createElement("img");
-          img.src = `${src}?v=20261113catalog`;
+          img.src = `${src}?v=20261113catalog15`;
           img.alt = item.alt;
           img.decoding = "async";
           img.loading = i <= 9 ? "eager" : "lazy";
