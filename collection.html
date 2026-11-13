@@ -28,8 +28,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog10" />
-    <!-- Leo-do: catalog grid (desktop + phone) -->
+    <link rel="stylesheet" href="style.css?v=20261113catalog11" />
+    <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
         html.book-scroll { scroll-snap-type: none !important; }
@@ -440,7 +440,7 @@
         }
 
         updateBackToMainVisibility();
-        console.log("Leo-do catalog grid:", flat.length, "spreads ×", cols);
+        console.log("Ieo-do catalog grid:", flat.length, "spreads ×", cols);
       }
 
       async function renderBookGallery(galleryEl, about, colId) {
@@ -479,7 +479,7 @@
           if (spread.kind === "cover") {
             const title = document.createElement("p");
             title.className = "book-cover-title";
-            title.textContent = "LEO - DO";
+            title.textContent = "IEO - DO";
             // 가로 유지 + 오른쪽 여백
             title.style.writingMode = "horizontal-tb";
             title.style.textOrientation = "mixed";
@@ -519,7 +519,7 @@
           if (spread.kind === "back") {
             const mark = document.createElement("p");
             mark.className = "book-back-mark";
-            mark.textContent = "LEO - DO";
+            mark.textContent = "IEO - DO";
             stage.appendChild(mark);
           }
 
@@ -676,13 +676,13 @@
             console.log("첫 번째 이미지 경로:", imageList[0].src);
           }
 
-          // Leo-do 카탈로그: 데스크톱·휴대폰 동일 3열 스프레드 그리드
+          // Ieo-do 카탈로그: 데스크톱·휴대폰 동일 3열 스프레드 그리드
           // 책 스크롤(book)만 맥·데스크톱 전용
           const layoutName = about && String(about.layout).toLowerCase();
           const catalogPreferred =
-            collectionId === "Leo-do" || layoutName === "catalog";
+            collectionId === "Ieo-do" || layoutName === "catalog";
           const bookPreferred =
-            layoutName === "book" && collectionId !== "Leo-do";
+            layoutName === "book" && collectionId !== "Ieo-do";
           const viewportW = Math.min(
             window.innerWidth || 9999,
             document.documentElement.clientWidth || 9999,
@@ -733,7 +733,7 @@
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
             collectionId === "Colors of the Grow-rings";
-          // Leo-do 모바일: 카탈로그/책 대신 한 장씩 세로 나열
+          // Ieo-do 모바일: 카탈로그/책 대신 한 장씩 세로 나열
           const leoMobileList =
             (bookPreferred && !bookLayout) || (catalogPreferred && !catalogLayout);
           const gridLayout =
@@ -767,7 +767,7 @@
           if (slideLayout) galleryEl.classList.add("gallery-layout-slide");
           if (leoMobileList) {
             galleryEl.classList.add("gallery-layout-leo-mobile");
-            console.log("Leo-do mobile: vertical list (pre-book)");
+            console.log("Ieo-do mobile: vertical list (pre-book)");
           }
           if (gridLayout) {
             galleryEl.classList.add("gallery-layout-grid");
@@ -1242,8 +1242,8 @@
       async function setCollectionTitle() {
         const titleEl = document.getElementById("collection-title");
         if (!titleEl) return;
-        // Leo-do catalog: warm warm day처럼 소문자 컬러 타이틀
-        if (collectionId === "Leo-do") {
+        // Ieo-do catalog: warm warm day처럼 소문자 컬러 타이틀
+        if (collectionId === "Ieo-do") {
           titleEl.textContent = "ieodo";
           colorizeLetters(titleEl);
           return;

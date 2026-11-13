@@ -1199,7 +1199,7 @@ body.collection-path-page {
   box-sizing: border-box;
 }
 
-/* Leo-do book: one Keynote/InDesign spread per viewport, scroll-snap */
+/* Ieo-do book: one Keynote/InDesign spread per viewport, scroll-snap */
 html.book-scroll {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
