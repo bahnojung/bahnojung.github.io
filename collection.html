@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog5" />
+    <link rel="stylesheet" href="style.css?v=20261113catalog6" />
     <!-- Leo-do: desktop catalog / mobile list -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -89,42 +89,29 @@
           0 8px 22px rgba(0, 0, 0, 0.08) !important;
         border-radius: 1px;
       }
-      .catalog-meta {
-        width: min(1120px, calc(100% - 3.5rem));
-        max-width: 1120px;
-        margin: 1.1rem auto 1.35rem;
-        padding: 0 0.15rem;
-        color: #1a1a1a;
-      }
-      .catalog-meta.catalog-meta-top {
-        margin: 0.85rem auto 1.15rem;
-      }
-      .catalog-meta h3 {
-        margin: 0 0 0.55rem;
-        font-family: var(--font-bauhaus), "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: clamp(1.55rem, 2.4vw, 2.1rem);
-        font-weight: 500;
-        letter-spacing: 0.04em;
-      }
-      .catalog-meta ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        font-family: "Crimson Text", Georgia, serif;
-        font-size: 0.98rem;
-        line-height: 1.55;
-        color: #333;
-      }
-      .catalog-meta li + li { margin-top: 0.35rem; }
       body.collection-catalog-page {
         background: #f7f6f3 !important;
       }
       body.collection-catalog-page .main-full {
         background: #f7f6f3 !important;
       }
-      body.collection-catalog-page .collection-title,
+      body.collection-catalog-page .collection-title {
+        display: block !important;
+        width: min(1120px, calc(100% - 3.5rem));
+        max-width: 1120px;
+        margin: 0.85rem auto 0.65rem;
+        text-align: left;
+      }
       body.collection-catalog-page .collection-about {
-        display: none !important;
+        display: block !important;
+        width: min(1120px, calc(100% - 3.5rem));
+        max-width: 1120px;
+        margin: 0 auto 1.15rem;
+      }
+      body.collection-catalog-page .collection-about-inner {
+        background: transparent;
+        border: none;
+        padding: 0;
       }
       .gallery.gallery-layout-book .book-cover-title {
         writing-mode: horizontal-tb !important;
@@ -384,26 +371,20 @@
 
         imageList = flat;
 
+        // 예전 컬렉션 소개글 형식 그대로 — 그리드 위
         document.querySelectorAll(".catalog-meta").forEach((el) => el.remove());
-        const meta = document.createElement("aside");
-        meta.className = "catalog-meta catalog-meta-top";
-        const title = document.createElement("h3");
-        title.textContent = "LEO - DO";
-        meta.appendChild(title);
-        const ul = document.createElement("ul");
-        const lines = [];
-        if (about && about.date) lines.push(String(about.date));
-        if (about && about.location) lines.push(String(about.location));
-        (about && Array.isArray(about.paragraphs) ? about.paragraphs : []).forEach((t) => {
-          if (t) lines.push(String(t));
-        });
-        lines.forEach((t) => {
-          const li = document.createElement("li");
-          li.textContent = t;
-          ul.appendChild(li);
-        });
-        meta.appendChild(ul);
-        galleryEl.insertAdjacentElement("beforebegin", meta);
+        const titleEl = document.getElementById("collection-title");
+        if (titleEl) {
+          titleEl.textContent = "LEO - DO";
+          titleEl.hidden = false;
+          titleEl.style.display = "";
+        }
+        appendCollectionIntro(about || {});
+        const aboutEl = document.getElementById("collection-about");
+        if (aboutEl) {
+          aboutEl.hidden = false;
+          aboutEl.style.display = "";
+        }
 
         updateBackToMainVisibility();
         console.log("Leo-do catalog grid:", flat.length, "spreads ×", cols);
