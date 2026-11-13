@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog8" />
+    <link rel="stylesheet" href="style.css?v=20261113catalog9" />
     <!-- Leo-do: desktop catalog / mobile list -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -232,9 +232,11 @@
       const basePath = window.location.pathname.replace(/\/[^/]*$/, "/") || "/";
 
       // 현재 컬렉션 id + 상대경로로 이미지 URL 생성 (catalog/ 하위 등 유지)
-      function imageUrlForItem(colId, item) {
-        if (!item || !item.src) return "";
-        const raw = String(item.src).replace(/^\/+/, "");
+      function imageUrlForItem(colId, item, preferFull) {
+        if (!item) return "";
+        const pick = preferFull && item.full ? item.full : item.src;
+        if (!pick) return "";
+        const raw = String(pick).replace(/^\/+/, "");
         const prefix = "collections/" + colId + "/";
         let rel = raw;
         if (raw.startsWith(prefix)) {
@@ -376,7 +378,8 @@
         for (let i = 1; i <= maxPages; i++) {
           const stem = String(i).padStart(2, "0");
           const src = `collections/${colId}/catalog/${stem}.jpg`;
-          const item = { src, alt: `spread ${i}` };
+          const full = `collections/${colId}/catalog/hq/${stem}.jpg`;
+          const item = { src, full, alt: `spread ${i}` };
           const idx = flat.length;
           flat.push(item);
 
@@ -1154,7 +1157,7 @@
 
         currentImageIndex = index;
         const item = imageList[index];
-        img.src = imageUrlForItem(collectionId, item);
+        img.src = imageUrlForItem(collectionId, item, true);
         img.alt = item.alt || "";
 
         updateNavButtons();
@@ -1190,7 +1193,7 @@
         if (!img) return;
 
         const item = imageList[newIndex];
-        img.src = imageUrlForItem(collectionId, item);
+        img.src = imageUrlForItem(collectionId, item, true);
         img.alt = item.alt || "";
         currentImageIndex = newIndex;
 
