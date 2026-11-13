@@ -28,8 +28,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261112book14" />
-    <!-- Leo-do book: CDN 캐시 무시용 강제 스타일 -->
+    <link rel="stylesheet" href="style.css?v=20261113catalog3" />
+    <!-- Leo-do: desktop catalog / mobile list -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
         html.book-scroll { scroll-snap-type: none !important; }
@@ -60,6 +60,73 @@
         height: auto !important;
         object-fit: contain !important;
         display: block !important;
+      }
+      /* Sorika-style: 3-col book spreads on desk (desktop) */
+      .gallery.gallery-layout-catalog {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0.85rem 0.95rem !important;
+        width: min(1120px, calc(100% - 3.5rem)) !important;
+        max-width: 1120px !important;
+        margin: 1.25rem auto 0 !important;
+        padding: 0 0 0.5rem !important;
+        background: #f7f6f3 !important;
+        column-count: unset !important;
+      }
+      .gallery.gallery-layout-catalog .catalog-spread {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        cursor: zoom-in;
+      }
+      .gallery.gallery-layout-catalog .catalog-spread img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        background: #fff !important;
+        box-shadow:
+          0 1px 2px rgba(0, 0, 0, 0.06),
+          0 8px 22px rgba(0, 0, 0, 0.08) !important;
+        border-radius: 1px;
+      }
+      .catalog-meta {
+        width: min(1120px, calc(100% - 3.5rem));
+        max-width: 1120px;
+        margin: 2.4rem auto 3.5rem;
+        padding: 0 0.15rem;
+        color: #1a1a1a;
+      }
+      .catalog-meta h3 {
+        margin: 0 0 0.35rem;
+        font-family: var(--font-bauhaus), "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+        font-weight: 500;
+        letter-spacing: 0.04em;
+      }
+      .catalog-meta .catalog-credit {
+        margin: 0 0 1.1rem;
+        font-size: 0.95rem;
+        color: #333;
+      }
+      .catalog-meta ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-family: "Crimson Text", Georgia, serif;
+        font-size: 0.98rem;
+        line-height: 1.55;
+        color: #333;
+      }
+      .catalog-meta li + li { margin-top: 0.15rem; }
+      body.collection-catalog-page {
+        background: #f7f6f3 !important;
+      }
+      body.collection-catalog-page .main-full {
+        background: #f7f6f3 !important;
+      }
+      body.collection-catalog-page .collection-title,
+      body.collection-catalog-page .collection-about {
+        display: none !important;
       }
       .gallery.gallery-layout-book .book-cover-title {
         writing-mode: horizontal-tb !important;
@@ -280,6 +347,73 @@
         } catch (e) {
           return null;
         }
+      }
+
+      async function renderCatalogGallery(galleryEl, about, colId) {
+        // Sorika-style: 책 스프레드를 책상 위에 올려둔 3열 그리드 (데스크톱 샘플)
+        document.documentElement.classList.remove("book-scroll");
+        document.body.classList.remove("collection-book-page");
+        document.body.classList.add("collection-catalog-page");
+        galleryEl.className = "gallery gallery-layout-catalog";
+        galleryEl.innerHTML = "";
+        document.querySelectorAll(".catalog-meta, .book-scrub").forEach((el) => el.remove());
+
+        const cols = Math.max(2, Math.min(4, Number(about && about.columns) || 3));
+        galleryEl.style.setProperty("--catalog-cols", String(cols));
+        galleryEl.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+
+        const flat = [];
+        const maxPages = 90;
+        for (let i = 1; i <= maxPages; i++) {
+          const stem = String(i).padStart(2, "0");
+          const src = `collections/${colId}/catalog/${stem}.jpg`;
+          const item = { src, alt: `spread ${i}` };
+          const idx = flat.length;
+          flat.push(item);
+
+          const fig = document.createElement("figure");
+          fig.className = "catalog-spread gallery-item";
+          const img = document.createElement("img");
+          img.src = `${src}?v=20261113catalog`;
+          img.alt = item.alt;
+          img.decoding = "async";
+          img.loading = i <= 9 ? "eager" : "lazy";
+          if (i <= 3) img.fetchPriority = "high";
+          img.addEventListener("click", () => openLightbox(idx));
+          fig.appendChild(img);
+          galleryEl.appendChild(fig);
+        }
+
+        imageList = flat;
+
+        const meta = document.createElement("aside");
+        meta.className = "catalog-meta";
+        const title = document.createElement("h3");
+        title.textContent = "LEO - DO";
+        meta.appendChild(title);
+        const credit = document.createElement("p");
+        credit.className = "catalog-credit";
+        credit.textContent = "Bahno Jung";
+        meta.appendChild(credit);
+        const ul = document.createElement("ul");
+        const lines = [];
+        if (about && about.date) lines.push(String(about.date));
+        if (about && about.location) lines.push(String(about.location));
+        lines.push("Photographed & sequenced by Bahno Jung");
+        lines.push("Book spreads · desktop sample (3-up)");
+        (about && Array.isArray(about.paragraphs) ? about.paragraphs.slice(0, 1) : []).forEach(
+          (t) => lines.push(t)
+        );
+        lines.forEach((t) => {
+          const li = document.createElement("li");
+          li.textContent = t;
+          ul.appendChild(li);
+        });
+        meta.appendChild(ul);
+        galleryEl.insertAdjacentElement("afterend", meta);
+
+        updateBackToMainVisibility();
+        console.log("Leo-do catalog grid:", flat.length, "spreads ×", cols);
       }
 
       async function renderBookGallery(galleryEl, about, colId) {
@@ -515,17 +649,35 @@
             console.log("첫 번째 이미지 경로:", imageList[0].src);
           }
 
-          // 책 스크롤은 맥/데스크톱만 — 폰·터치 태블릿은 예전 세로 나열
-          const bookPreferred =
-            (about && String(about.layout).toLowerCase() === "book") ||
-            collectionId === "Leo-do";
+          // 카탈로그/책 스크롤은 맥·데스크톱만 — 폰·터치 태블릿은 예전 세로 나열
+          const layoutName = about && String(about.layout).toLowerCase();
+          const catalogPreferred =
+            layoutName === "catalog" ||
+            (collectionId === "Leo-do" && layoutName !== "book");
+          const bookPreferred = layoutName === "book";
           const viewportW = Math.min(
             window.innerWidth || 9999,
             document.documentElement.clientWidth || 9999,
             (window.visualViewport && window.visualViewport.width) || 9999
           );
           const touchLike = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-          const bookLayout = bookPreferred && viewportW >= 901 && !(touchLike && viewportW < 1280);
+          const desktopOk = viewportW >= 901 && !(touchLike && viewportW < 1280);
+          const catalogLayout = catalogPreferred && desktopOk;
+          const bookLayout = bookPreferred && desktopOk;
+
+          if (catalogLayout) {
+            await renderCatalogGallery(galleryEl, about, collectionId);
+            const onResizeCatalog = () => {
+              const w = Math.min(
+                window.innerWidth || 9999,
+                document.documentElement.clientWidth || 9999,
+                (window.visualViewport && window.visualViewport.width) || 9999
+              );
+              if (w < 901) window.location.reload();
+            };
+            window.addEventListener("resize", onResizeCatalog, { passive: true });
+            return;
+          }
 
           if (bookLayout) {
             await renderBookGallery(galleryEl, about, collectionId);
@@ -541,10 +693,10 @@
             return;
           }
 
-          // 책 모드 잔여 클래스/스크러버 제거
+          // 책/카탈로그 모드 잔여 클래스 제거
           document.documentElement.classList.remove("book-scroll");
-          document.body.classList.remove("collection-book-page");
-          document.querySelectorAll(".book-scrub").forEach((el) => el.remove());
+          document.body.classList.remove("collection-book-page", "collection-catalog-page");
+          document.querySelectorAll(".book-scrub, .catalog-meta").forEach((el) => el.remove());
 
           if (about && !introAfterFirst) appendCollectionIntro(about);
 
@@ -557,14 +709,18 @@
               collectionId === "Sunflowers of Seoul" ||
               collectionId === "Mars") &&
             !pathLayout &&
-            !bookPreferred;
+            !bookPreferred &&
+            !catalogPreferred;
           const slideLayout =
             (about && String(about.layout).toLowerCase() === "slide") ||
             collectionId === "Colors of the Grow-rings";
-          // Leo-do 모바일: 책 대신 한 장씩 세로 나열
-          const leoMobileList = bookPreferred && !bookLayout;
+          // Leo-do 모바일: 카탈로그/책 대신 한 장씩 세로 나열
+          const leoMobileList =
+            (bookPreferred && !bookLayout) || (catalogPreferred && !catalogLayout);
           const gridLayout =
-            ((about && String(about.layout).toLowerCase() === "grid") || bookPreferred) &&
+            ((about && String(about.layout).toLowerCase() === "grid") ||
+              bookPreferred ||
+              catalogPreferred) &&
             !leoMobileList;
           if (pairLayout) galleryEl.classList.add("gallery-layout-pair");
           if (pathLayout) {
