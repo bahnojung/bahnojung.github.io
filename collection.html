@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261114catalog22" />
+    <link rel="stylesheet" href="style.css?v=20261114catalog23" />
     <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -168,6 +168,25 @@
       }
       body.collection-catalog-page .lightbox-close {
         z-index: 310 !important;
+      }
+      .gallery.gallery-layout-catalog .catalog-spread {
+        position: relative !important;
+      }
+      .gallery.gallery-layout-catalog .catalog-photo-hit {
+        position: absolute;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        cursor: zoom-in;
+        z-index: 2;
+        appearance: none;
+        -webkit-appearance: none;
+        display: block;
+      }
+      .gallery.gallery-layout-catalog .catalog-photo-hit:focus-visible {
+        outline: 2px solid rgba(0, 0, 0, 0.35);
+        outline-offset: -2px;
       }
       body.collection-catalog-page {
         background: #ffffff !important;
@@ -485,9 +504,14 @@
 
         const spreads = await loadBookSpreads(colId);
         const flat = [];
-        const spreadStartIndex = [];
         const maxPages = 90;
-        const cacheVer = "20261114catalog22";
+        const cacheVer = "20261114catalog23";
+
+        const clamp01 = (n, fallback) => {
+          const v = Number(n);
+          if (!Number.isFinite(v)) return fallback;
+          return Math.min(1, Math.max(0, v));
+        };
 
         for (let i = 1; i <= maxPages; i++) {
           const stem = String(i).padStart(2, "0");
@@ -498,9 +522,10 @@
               ? spread.images.filter((im) => im && im.src)
               : [];
 
-          spreadStartIndex[i - 1] = flat.length;
+          const photoIndexes = [];
           if (photos.length) {
             for (const im of photos) {
+              photoIndexes.push(flat.length);
               flat.push({
                 src: im.src,
                 full: im.src,
@@ -508,6 +533,7 @@
               });
             }
           } else {
+            photoIndexes.push(flat.length);
             flat.push({
               src: thumb,
               full: `collections/${colId}/catalog/hq/${stem}.jpg`,
@@ -515,28 +541,91 @@
             });
           }
 
-          const openIdx = spreadStartIndex[i - 1];
           const fig = document.createElement("figure");
           fig.className = "catalog-spread gallery-item";
           fig.style.cursor = "zoom-in";
-          fig.setAttribute("role", "button");
-          fig.tabIndex = 0;
-          fig.setAttribute("aria-label", `사진 크게 보기 ${i}`);
           const img = document.createElement("img");
           img.src = `${thumb}?v=${cacheVer}`;
-          img.alt = photos.length ? `spread ${i}` : `spread ${i}`;
+          img.alt = `spread ${i}`;
           img.decoding = "async";
           img.loading = i <= 9 ? "eager" : "lazy";
           if (i <= 3) img.fetchPriority = "high";
-          const open = () => openLightbox(openIdx);
-          fig.addEventListener("click", open);
-          fig.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              open();
-            }
-          });
+          img.draggable = false;
           fig.appendChild(img);
+
+          const regions = photos.map((im, pi) => {
+            const l = clamp01(im.l, im.half === "R" ? 0.5 : 0);
+            const t = clamp01(im.t, 0);
+            const w = clamp01(im.w, im.half === "R" || im.half === "L" ? 0.5 : 1);
+            const h = clamp01(im.h, 1);
+            return { l, t, w, h, index: photoIndexes[pi] };
+          });
+
+          const openAt = (idx) => openLightbox(idx);
+
+          // 각 사진 영역 위에 정확한 클릭 히트박스
+          if (photos.length > 1 && regions.length) {
+            regions.forEach((region, pi) => {
+              const hit = document.createElement("button");
+              hit.type = "button";
+              hit.className = "catalog-photo-hit";
+              hit.setAttribute(
+                "aria-label",
+                `사진 크게 보기 ${photos[pi].num != null ? photos[pi].num : pi + 1}`
+              );
+              hit.style.left = `${region.l * 100}%`;
+              hit.style.top = `${region.t * 100}%`;
+              hit.style.width = `${Math.max(region.w, 0.04) * 100}%`;
+              hit.style.height = `${Math.max(region.h, 0.04) * 100}%`;
+              hit.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openAt(region.index);
+              });
+              fig.appendChild(hit);
+            });
+
+            // 여백 클릭: 가장 가까운 사진
+            fig.addEventListener("click", (e) => {
+              if (e.target.closest(".catalog-photo-hit")) return;
+              const rect = img.getBoundingClientRect();
+              if (!rect.width || !rect.height) {
+                openAt(photoIndexes[0]);
+                return;
+              }
+              const x = (e.clientX - rect.left) / rect.width;
+              const y = (e.clientY - rect.top) / rect.height;
+              let best = regions[0];
+              let bestDist = Infinity;
+              for (const region of regions) {
+                const cx = region.l + region.w / 2;
+                const cy = region.t + region.h / 2;
+                const dx = x - cx;
+                const dy = y - cy;
+                const dist = dx * dx + dy * dy;
+                if (dist < bestDist) {
+                  bestDist = dist;
+                  best = region;
+                }
+              }
+              openAt(best.index);
+            });
+          } else {
+            const onlyIdx = photoIndexes[0];
+            fig.style.cursor = "zoom-in";
+            fig.setAttribute("role", "button");
+            fig.tabIndex = 0;
+            fig.setAttribute("aria-label", `사진 크게 보기 ${i}`);
+            const open = () => openAt(onlyIdx);
+            fig.addEventListener("click", open);
+            fig.addEventListener("keydown", (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                open();
+              }
+            });
+          }
+
           galleryEl.appendChild(fig);
         }
 
@@ -1380,7 +1469,7 @@
           return;
         }
         try {
-          const res = await fetch("collections.json?v=20261114c5", { cache: "no-store" });
+          const res = await fetch("collections.json?v=20261114c6", { cache: "no-store" });
           if (!res.ok) return;
           const collections = await res.json();
           const c =
