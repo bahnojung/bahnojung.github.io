@@ -42,10 +42,7 @@
   </head>
   <body class="main-page">
     <nav class="collection-nav" id="collection-nav">
-      <!-- collections.json?v=20261114c1을 통해 자동으로 메뉴가 렌더링됩니다. -->
-    </nav>
-
-    <header class="site-header">
+      <!-- collections.json?v=20261114c2"site-header">
       <div class="header-inner">
         <div>
           <h1 class="site-title">
@@ -151,7 +148,7 @@
         }
 
         try {
-          const res = await fetch("collections.json?v=20261114c1", { cache: "no-store" });
+          const res = await fetch("collections.json?v=20261114c2", { cache: "no-store" });
           if (!res.ok) return;
           const collections = await res.json();
           if (!Array.isArray(collections)) return;
