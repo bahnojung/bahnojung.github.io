@@ -74,28 +74,32 @@
         column-count: unset !important;
       }
       @media (max-width: 900px) {
+        /* 폰: Sorika처럼 2열 + 촘촘한 간격 */
         .gallery.gallery-layout-catalog {
-          width: calc(100% - 1.1rem) !important;
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          width: 100% !important;
           max-width: none !important;
-          gap: 0.45rem 0.5rem !important;
-          margin: 0.2rem auto 2.2rem !important;
+          gap: 0.28rem 0.32rem !important;
+          margin: 0.15rem 0 2rem !important;
+          padding: 0 0.35rem 0.35rem !important;
+          box-sizing: border-box !important;
         }
         body.collection-catalog-page .collection-about {
-          width: calc(100% - 1.1rem) !important;
+          width: calc(100% - 0.7rem) !important;
           max-width: none !important;
-          margin: 0 auto 1rem !important;
+          margin: 0 auto 0.85rem !important;
         }
         body.collection-catalog-page .collection-title {
           font-size: clamp(1.25rem, 8vw, 2rem);
-          margin: 0.25rem auto 0.85rem;
+          margin: 0.25rem auto 0.75rem;
         }
         body.collection-catalog-page .collection-about-inner {
-          padding: 0.7rem 0.8rem;
+          padding: 0.65rem 0.75rem;
         }
         .gallery.gallery-layout-catalog .catalog-spread img {
           box-shadow:
-            0 1px 2px rgba(0, 0, 0, 0.05),
-            0 4px 12px rgba(0, 0, 0, 0.07) !important;
+            0 1px 1px rgba(0, 0, 0, 0.04),
+            0 2px 8px rgba(0, 0, 0, 0.06) !important;
         }
       }
       .gallery.gallery-layout-catalog .catalog-spread {
@@ -394,7 +398,16 @@
         galleryEl.innerHTML = "";
         document.querySelectorAll(".catalog-meta, .book-scrub").forEach((el) => el.remove());
 
-        const cols = Math.max(2, Math.min(4, Number(about && about.columns) || 3));
+        const viewportW = Math.min(
+          window.innerWidth || 9999,
+          document.documentElement.clientWidth || 9999,
+          (window.visualViewport && window.visualViewport.width) || 9999
+        );
+        // 폰 2열 / 데스크톱 3열 (Sorika 느낌)
+        const cols =
+          viewportW < 901
+            ? 2
+            : Math.max(2, Math.min(4, Number(about && about.columns) || 3));
         galleryEl.style.setProperty("--catalog-cols", String(cols));
         galleryEl.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
 
