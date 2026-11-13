@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261113catalog3" />
+    <link rel="stylesheet" href="style.css?v=20261113catalog4" />
     <!-- Leo-do: desktop catalog / mobile list -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -650,11 +650,12 @@
           }
 
           // 카탈로그/책 스크롤은 맥·데스크톱만 — 폰·터치 태블릿은 예전 세로 나열
+          // Leo-do는 이번 샘플에서 catalog 고정 (about.json CDN 캐시 대비)
           const layoutName = about && String(about.layout).toLowerCase();
           const catalogPreferred =
-            layoutName === "catalog" ||
-            (collectionId === "Leo-do" && layoutName !== "book");
-          const bookPreferred = layoutName === "book";
+            collectionId === "Leo-do" || layoutName === "catalog";
+          const bookPreferred =
+            layoutName === "book" && collectionId !== "Leo-do";
           const viewportW = Math.min(
             window.innerWidth || 9999,
             document.documentElement.clientWidth || 9999,
