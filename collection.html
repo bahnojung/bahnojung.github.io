@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261114catalog16" />
+    <link rel="stylesheet" href="style.css?v=20261114catalog17" />
     <!-- Ieo-do: catalog grid (desktop + phone) -->
     <style id="leo-book-force">
       @media (max-width: 900px) {
@@ -90,23 +90,23 @@
           0 8px 22px rgba(0, 0, 0, 0.08) !important;
         border-radius: 1px;
       }
-      /* 폰: 2열 + 거의 붙여서 (클래스 + 미디어쿼리 이중) */
+      /* 폰: 1열 세로 스크롤 — 사진 크게 */
       body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog {
-        --catalog-cols: 2;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        --catalog-cols: 1;
+        grid-template-columns: minmax(0, 1fr) !important;
         width: 100% !important;
         max-width: none !important;
-        gap: 2px 3px !important;
-        row-gap: 2px !important;
-        column-gap: 3px !important;
-        margin: 0 0 1.75rem !important;
-        padding: 0 2px !important;
+        gap: 0.85rem 0 !important;
+        row-gap: 0.85rem !important;
+        column-gap: 0 !important;
+        margin: 0 0 2rem !important;
+        padding: 0 0.55rem !important;
         box-sizing: border-box !important;
       }
-      /* 폰: 원본 비율 유지 (16:9 cover/scale 때문에 길쭉·잘림 생기던 것 제거) */
       body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread {
         overflow: visible !important;
         aspect-ratio: auto !important;
+        width: 100% !important;
       }
       body.collection-catalog-page.is-catalog-mobile .gallery.gallery-layout-catalog .catalog-spread img {
         box-shadow: none !important;
@@ -118,20 +118,21 @@
       }
       @media (max-width: 900px) {
         .gallery.gallery-layout-catalog {
-          --catalog-cols: 2;
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          --catalog-cols: 1;
+          grid-template-columns: minmax(0, 1fr) !important;
           width: 100% !important;
           max-width: none !important;
-          gap: 2px 3px !important;
-          row-gap: 2px !important;
-          column-gap: 3px !important;
-          margin: 0 0 1.75rem !important;
-          padding: 0 2px !important;
+          gap: 0.85rem 0 !important;
+          row-gap: 0.85rem !important;
+          column-gap: 0 !important;
+          margin: 0 0 2rem !important;
+          padding: 0 0.55rem !important;
           box-sizing: border-box !important;
         }
         .gallery.gallery-layout-catalog .catalog-spread {
           overflow: visible !important;
           aspect-ratio: auto !important;
+          width: 100% !important;
         }
         .gallery.gallery-layout-catalog .catalog-spread img {
           box-shadow: none !important;
@@ -442,22 +443,22 @@
           );
           const touchLike = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
           const narrow = window.matchMedia("(max-width: 900px)").matches;
-          // 폰/터치 좁은 화면은 무조건 2열 (데스크톱 모드 요청이어도 폭 기준)
+          // 폰/터치 좁은 화면: 1열 세로 스크롤 (사진 크게)
           const mobile = narrow || (touchLike && viewportW < 1100);
           const cols = mobile
-            ? 2
+            ? 1
             : Math.max(2, Math.min(4, Number(about && about.columns) || 3));
           document.body.classList.toggle("is-catalog-mobile", mobile);
           galleryEl.style.setProperty("--catalog-cols", String(cols));
           galleryEl.style.setProperty(
             "grid-template-columns",
-            `repeat(${cols}, minmax(0, 1fr))`,
+            cols === 1 ? "minmax(0, 1fr)" : `repeat(${cols}, minmax(0, 1fr))`,
             "important"
           );
           if (mobile) {
-            galleryEl.style.setProperty("gap", "2px 3px", "important");
-            galleryEl.style.setProperty("row-gap", "2px", "important");
-            galleryEl.style.setProperty("column-gap", "3px", "important");
+            galleryEl.style.setProperty("gap", "0.85rem 0", "important");
+            galleryEl.style.setProperty("row-gap", "0.85rem", "important");
+            galleryEl.style.setProperty("column-gap", "0", "important");
           } else {
             galleryEl.style.removeProperty("gap");
             galleryEl.style.removeProperty("row-gap");
@@ -484,7 +485,7 @@
           const fig = document.createElement("figure");
           fig.className = "catalog-spread gallery-item";
           const img = document.createElement("img");
-          img.src = `${src}?v=20261114catalog16`;
+          img.src = `${src}?v=20261114catalog17`;
           img.alt = item.alt;
           img.decoding = "async";
           img.loading = i <= 9 ? "eager" : "lazy";
