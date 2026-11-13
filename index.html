@@ -27,7 +27,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261011vscroll" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <link rel="stylesheet" href="style.css?v=20261113ieodo1" />
     <script>
       (function () {
         try {
@@ -154,8 +156,13 @@
           const collections = await res.json();
           if (!Array.isArray(collections)) return;
 
-          function displayName(id) {
-            return id && id.startsWith("_") ? id.slice(1) : (id || "");
+          function displayName(collectionOrId) {
+            if (collectionOrId && typeof collectionOrId === "object") {
+              const n = collectionOrId.name || collectionOrId.id || "";
+              return n.startsWith("_") ? n.slice(1) : n;
+            }
+            const id = collectionOrId || "";
+            return id.startsWith("_") ? id.slice(1) : id;
           }
           collections.forEach((collection, index) => {
             if (collection && collection.hidden) return;
@@ -163,7 +170,7 @@
             link.href =
               collection.path ||
               "collection.html?collection=" + encodeURIComponent(collection.id);
-            link.textContent = displayName(collection.id);
+            link.textContent = displayName(collection);
             link.className = "sidebar-link";
             if (collection.id === currentId) link.classList.add("active");
             // _ 로 시작하는 컬렉션은 맨 위에 표시하고 아래 간격 추가

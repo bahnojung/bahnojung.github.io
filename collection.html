@@ -427,7 +427,7 @@
         document.querySelectorAll(".catalog-meta").forEach((el) => el.remove());
         const titleEl = document.getElementById("collection-title");
         if (titleEl) {
-          titleEl.textContent = "ieodo";
+          titleEl.textContent = "ieo-do";
           titleEl.hidden = false;
           titleEl.style.display = "";
           colorizeLetters(titleEl);
@@ -1235,16 +1235,21 @@
         backToMainEl.classList.toggle("is-visible", atBottom);
       }
 
-      // 컬렉션 제목 표시: 폴더명(id)과 동일, _ 로 시작하면 _ 만 제거
-      function displayName(id) {
-        return id && id.startsWith("_") ? id.slice(1) : (id || "");
+      // 컬렉션 제목 표시: name 우선, 없으면 id (_ 접두 제거)
+      function displayName(collectionOrId) {
+        if (collectionOrId && typeof collectionOrId === "object") {
+          const n = collectionOrId.name || collectionOrId.id || "";
+          return n.startsWith("_") ? n.slice(1) : n;
+        }
+        const id = collectionOrId || "";
+        return id.startsWith("_") ? id.slice(1) : id;
       }
       async function setCollectionTitle() {
         const titleEl = document.getElementById("collection-title");
         if (!titleEl) return;
-        // Ieo-do catalog: warm warm day처럼 소문자 컬러 타이틀
+        // Ieo-do catalog: 소문자 ieo-do (대문자 I가 l처럼 보이는 문제 방지)
         if (collectionId === "Ieo-do") {
-          titleEl.textContent = "ieodo";
+          titleEl.textContent = "ieo-do";
           colorizeLetters(titleEl);
           return;
         }
@@ -1255,7 +1260,7 @@
           const c =
             Array.isArray(collections) &&
             collections.find((x) => x.id === collectionId);
-          titleEl.textContent = c ? displayName(c.id) : displayName(collectionId);
+          titleEl.textContent = c ? displayName(c) : displayName(collectionId);
           colorizeLetters(titleEl);
         } catch (e) {
           titleEl.textContent = displayName(collectionId);
