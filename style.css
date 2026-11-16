@@ -237,6 +237,19 @@ body.main-page .collection-nav .wall-link {
   font-weight: 500;
 }
 
+/* 홈: 한 번 누른 컬렉션 → 단색 (라이트=검정, 다크=흰색) */
+body.main-page .collection-nav a.is-opened,
+body.main-page .collection-nav a.is-opened span {
+  color: #111111 !important;
+}
+
+html.home-theme-dark body.main-page .collection-nav a.is-opened,
+html.home-theme-dark body.main-page .collection-nav a.is-opened span,
+body.main-page.theme-dark .collection-nav a.is-opened,
+body.main-page.theme-dark .collection-nav a.is-opened span {
+  color: #ffffff !important;
+}
+
 /* 레이아웃: 로고 = 화면 맨 아래 중앙 고정 */
 .site-header {
   background-color: #ffffff;
