@@ -5,11 +5,6 @@
     "path": "collection.html?collection=Where%20Colors%20Fall"
   },
   {
-    "id": "warm warm day",
-    "name": "warm warm day",
-    "path": "collection.html?collection=warm%20warm%20day"
-  },
-  {
     "id": "Ieo-do",
     "name": "ieo-do",
     "path": "collection.html?collection=Ieo-do&v=20261116final"
@@ -28,6 +23,11 @@
     "id": "Seong-woo's Blue Vacation",
     "name": "Seong-woo's Blue Vacation",
     "path": "collection.html?collection=Seong-woo's%20Blue%20Vacation"
+  },
+  {
+    "id": "warm warm day",
+    "name": "warm warm day",
+    "path": "collection.html?collection=warm%20warm%20day"
   },
   {
     "id": "Napping… Under the Tree, or Above",
