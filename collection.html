@@ -1499,15 +1499,9 @@
                 });
                 if (meta.some((row) => row.aspects.some((aspect) => !aspect))) return;
                 const page = rows.length > 1;
-                if (page) {
-                  screen.classList.add("is-page");
-                  screen.style.setProperty("height", fitCap + "px", "important");
-                  screen.style.setProperty("min-height", fitCap + "px", "important");
-                } else {
-                  screen.classList.remove("is-page");
-                  screen.style.removeProperty("height");
-                  screen.style.removeProperty("min-height");
-                }
+                screen.classList.toggle("is-page", page);
+                screen.style.removeProperty("height");
+                screen.style.removeProperty("min-height");
                 const natural = meta.map((row) => {
                   const sum = row.aspects.reduce((total, aspect) => total + aspect, 0);
                   const widthFit = (availW - colGap * (row.imgs.length - 1)) / sum;
