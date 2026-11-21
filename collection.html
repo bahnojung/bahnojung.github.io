@@ -360,14 +360,20 @@
           .split("/")
           .map((seg) => encodeURIComponent(seg))
           .join("/");
-        const path = "collections/" + encodeURIComponent(colId) + "/" + encodedRel;
+        // 휴대폰·세로 태블릿은 Where Colors Fall만 긴 변 3000px. 데스크톱은 원본.
+        const phoneSized =
+          colId === "Where Colors Fall" &&
+          window.matchMedia("(max-width: 1024px)").matches;
+        const fileRel = phoneSized ? "phone/" + encodedRel : encodedRel;
+        const path = "collections/" + encodeURIComponent(colId) + "/" + fileRel;
         const toneRefresh =
-          rel === "001 (2) (13).jpg" ||
+          !phoneSized &&
+          (rel === "001 (2) (13).jpg" ||
           rel === "001 (2) 3.jpg" ||
           rel === "001 (2) (9) 2.jpg" ||
           rel === "001 (2) (10) 2.jpg" ||
           rel === "001 (2) (11) 2.jpg" ||
-          rel === "001 (2) (2).jpg";
+          rel === "001 (2) (2).jpg");
         const version = toneRefresh ? "?v=20261121t3" : "";
         return window.location.origin + basePath + path + version;
       }
