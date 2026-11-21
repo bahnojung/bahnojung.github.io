@@ -177,7 +177,7 @@
         }
 
         try {
-          const res = await fetch("collections.json?v=20261121order", { cache: "no-store" });
+          const res = await fetch("collections.json?v=20261121order2", { cache: "no-store" });
           if (!res.ok) return;
           const collections = await res.json();
           if (!Array.isArray(collections)) return;
