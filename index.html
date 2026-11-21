@@ -29,7 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
-    <link rel="stylesheet" href="style.css?v=20261117opened1" />
+    <link rel="stylesheet" href="style.css?v=20261121clear1" />
     <script>
       (function () {
         try {
@@ -191,8 +191,11 @@
             return id.startsWith("_") ? id.slice(1) : id;
           }
           const opened = getHomeOpened();
+          const darkHome = document.documentElement.classList.contains("home-theme-dark");
           collections.forEach((collection, index) => {
             if (collection && collection.hidden) return;
+            const onDarkScreen = collection && collection.screen === "dark";
+            if (darkHome !== onDarkScreen) return;
             const link = document.createElement("a");
             const label = displayName(collection);
             link.href =
@@ -509,8 +512,33 @@
         document.body.classList.add("theme-dark");
       }
 
+      function syncNavClearance() {
+        const title = document.querySelector("body.main-page .site-title");
+        if (!title) return;
+        const gap = 18;
+        const fromBottom = Math.ceil(
+          window.innerHeight - title.getBoundingClientRect().top + gap
+        );
+        if (fromBottom > 0) {
+          document.documentElement.style.setProperty(
+            "--nav-clearance",
+            fromBottom + "px"
+          );
+        }
+      }
+
+      syncNavClearance();
+      window.addEventListener("resize", syncNavClearance);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(syncNavClearance);
+      }
+
       loadSidebar().then(function () {
-        requestAnimationFrame(placeCursedRefresh);
+        syncNavClearance();
+        requestAnimationFrame(function () {
+          syncNavClearance();
+          placeCursedRefresh();
+        });
       });
     </script>
     <script src="music.js" defer></script>

@@ -1,5 +1,10 @@
 [
   {
+    "id": "Where Colors Fall",
+    "name": "Where Colors Fall",
+    "path": "collection.html?collection=Where%20Colors%20Fall"
+  },
+  {
     "id": "warm warm day",
     "name": "warm warm day",
     "path": "collection.html?collection=warm%20warm%20day"
@@ -37,12 +42,14 @@
   {
     "id": "038 x sogumm - seoul trip",
     "name": "038 x sogumm - seoul trip",
-    "path": "collection.html?collection=038%20x%20sogumm%20-%20seoul%20trip"
+    "path": "collection.html?collection=038%20x%20sogumm%20-%20seoul%20trip",
+    "screen": "dark"
   },
   {
     "id": "AMIS DU QUARTIER - SEOUL",
     "name": "AMIS DU QUARTIER - SEOUL",
-    "path": "collection.html?collection=AMIS%20DU%20QUARTIER%20-%20SEOUL"
+    "path": "collection.html?collection=AMIS%20DU%20QUARTIER%20-%20SEOUL",
+    "screen": "dark"
   },
   {
     "id": "Postarchivefaction - New Classic",

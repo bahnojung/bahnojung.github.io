@@ -1092,7 +1092,10 @@
                 ".gallery.gallery-layout-stack .gallery-item{flex:0 0 auto!important;width:100%!important;height:auto!important;margin:0!important;padding:0!important;background:transparent}" +
                 ".gallery.gallery-layout-stack .gallery-item.portrait{width:50%!important;max-width:450px}" +
                 ".gallery.gallery-layout-stack .gallery-item.landscape{width:100%!important}" +
-                ".gallery.gallery-layout-stack .gallery-item img{width:100%!important;height:auto!important;display:block;object-fit:contain!important}";
+                ".gallery.gallery-layout-stack .gallery-item img{width:100%!important;height:auto!important;display:block;object-fit:contain!important}" +
+                ".gallery.gallery-layout-stack .gallery-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.35rem;width:100%;max-width:100%;box-sizing:border-box}" +
+                ".gallery.gallery-layout-stack .gallery-screen.is-page{scroll-margin-top:calc(var(--logo-block-height, 100px) + 1rem)}" +
+                ".gallery.gallery-layout-stack .gallery-row{display:flex;align-items:flex-start;justify-content:center;gap:0.4rem;width:100%}";
               document.head.appendChild(style);
             }
           }
@@ -1413,6 +1416,10 @@
                 return;
               }
               if (!img.naturalWidth || !img.naturalHeight) return;
+              figure.style.setProperty(
+                "--aspect",
+                String(img.naturalWidth / img.naturalHeight)
+              );
               let isLandscape = img.naturalWidth > img.naturalHeight;
               if (forceLandscapeIds.has(id)) isLandscape = true;
               if (forcePortraitIds.has(id)) isLandscape = false;
@@ -1466,6 +1473,96 @@
               scheduleForestPathRedraw();
             }
           });
+
+          if (stackLayout && about && Array.isArray(about.screens)) {
+            const byId = new Map();
+            galleryEl.querySelectorAll(":scope > .gallery-item").forEach((el) => {
+              byId.set(el.dataset.photoId, el);
+            });
+            const fitScreens = () => {
+              const availW = galleryEl.clientWidth;
+              if (!availW) return;
+              const fitCap = Math.max(280, window.innerHeight - 80);
+              galleryEl.style.setProperty("--stack-view-h", fitCap + "px");
+              galleryEl.querySelectorAll(".gallery-screen").forEach((screen) => {
+                const rows = Array.from(screen.querySelectorAll(".gallery-row"));
+                const colGap = 8;
+                const rowGap = 8;
+                const meta = rows.map((row) => {
+                  const imgs = Array.from(row.querySelectorAll("img"));
+                  const aspects = imgs.map((img) =>
+                    img.naturalWidth && img.naturalHeight
+                      ? img.naturalWidth / img.naturalHeight
+                      : 0
+                  );
+                  return { imgs, aspects };
+                });
+                if (meta.some((row) => row.aspects.some((aspect) => !aspect))) return;
+                const page = rows.length > 1;
+                if (page) {
+                  screen.classList.add("is-page");
+                  screen.style.setProperty("height", fitCap + "px", "important");
+                  screen.style.setProperty("min-height", fitCap + "px", "important");
+                } else {
+                  screen.classList.remove("is-page");
+                  screen.style.removeProperty("height");
+                  screen.style.removeProperty("min-height");
+                }
+                const natural = meta.map((row) => {
+                  const sum = row.aspects.reduce((total, aspect) => total + aspect, 0);
+                  const widthFit = (availW - colGap * (row.imgs.length - 1)) / sum;
+                  const heightFit = page
+                    ? (fitCap - rowGap * (meta.length - 1)) / meta.length
+                    : fitCap;
+                  return { ...row, h: Math.min(widthFit, heightFit) };
+                });
+                natural.forEach((row) => {
+                  const height = row.h;
+                  row.imgs.forEach((img, index) => {
+                    const figure = img.closest(".gallery-item");
+                    const width = height * row.aspects[index];
+                    figure.style.setProperty("width", width + "px", "important");
+                    figure.style.setProperty("height", height + "px", "important");
+                    figure.style.setProperty("max-width", "none", "important");
+                    figure.style.setProperty("max-height", "none", "important");
+                    figure.style.setProperty("flex", "0 0 auto", "important");
+                    img.style.setProperty("width", "100%", "important");
+                    img.style.setProperty("height", "100%", "important");
+                    img.style.setProperty("max-width", "none", "important");
+                    img.style.setProperty("max-height", "none", "important");
+                  });
+                });
+              });
+            };
+            about.screens.forEach((screen) => {
+              if (!Array.isArray(screen)) return;
+              const rows = screen.filter((row) => Array.isArray(row) && row.length);
+              const grouped = rows.some((row) => row.length > 1) || rows.length > 1;
+              if (!grouped) {
+                const fig = byId.get(String(rows[0][0]));
+                if (fig) galleryEl.appendChild(fig);
+                return;
+              }
+              const holder = document.createElement("div");
+              holder.className = "gallery-screen";
+              rows.forEach((row) => {
+                const wrap = document.createElement("div");
+                wrap.className = "gallery-row";
+                row.forEach((id) => {
+                  const fig = byId.get(String(id));
+                  if (fig) wrap.appendChild(fig);
+                });
+                holder.appendChild(wrap);
+              });
+              galleryEl.appendChild(holder);
+            });
+            galleryEl.querySelectorAll(".gallery-screen img").forEach((img) => {
+              if (img.complete) fitScreens();
+              else img.addEventListener("load", fitScreens);
+            });
+            window.addEventListener("resize", fitScreens);
+            fitScreens();
+          }
 
           updatePairSolos();
           if (pathLayout) {
@@ -1691,6 +1788,67 @@
       setCollectionTitle();
       window.addEventListener("load", updateBackToMainVisibility);
       setTimeout(updateBackToMainVisibility, 250);
+    </script>
+    <script>
+      (function () {
+        const main = document.querySelector("main.main-full");
+        if (!main) return;
+        let pageZoom = 1;
+        let gestureBase = 1;
+        const minZoom = 0.4;
+        const maxZoom = 2.5;
+
+        function applyPageZoom(next) {
+          pageZoom = Math.min(maxZoom, Math.max(minZoom, next));
+          if (Math.abs(pageZoom - 1) < 0.004) pageZoom = 1;
+          main.style.transformOrigin = "top center";
+          main.style.transform = pageZoom === 1 ? "" : "scale(" + pageZoom + ")";
+          const extra = main.offsetHeight * (pageZoom - 1);
+          main.style.marginBottom = extra ? extra + "px" : "";
+        }
+
+        function lightboxOpen() {
+          const box = document.getElementById("lightbox");
+          return !!(box && box.classList.contains("is-open"));
+        }
+
+        window.addEventListener(
+          "wheel",
+          function (event) {
+            if (!event.ctrlKey || lightboxOpen()) return;
+            event.preventDefault();
+            const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+            applyPageZoom(pageZoom * Math.exp(-delta * 0.0025));
+          },
+          { passive: false }
+        );
+
+        window.addEventListener(
+          "gesturestart",
+          function (event) {
+            if (lightboxOpen()) return;
+            event.preventDefault();
+            gestureBase = pageZoom;
+          },
+          { passive: false }
+        );
+        window.addEventListener(
+          "gesturechange",
+          function (event) {
+            if (lightboxOpen()) return;
+            event.preventDefault();
+            applyPageZoom(gestureBase * event.scale);
+          },
+          { passive: false }
+        );
+        window.addEventListener(
+          "gestureend",
+          function (event) {
+            event.preventDefault();
+          },
+          { passive: false }
+        );
+      })();
     </script>
     <script src="music.js" defer></script>
   </body>
