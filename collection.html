@@ -361,7 +361,9 @@
           .map((seg) => encodeURIComponent(seg))
           .join("/");
         const path = "collections/" + encodeURIComponent(colId) + "/" + encodedRel;
-        return window.location.origin + basePath + path;
+        const toneRefresh = rel === "001 (2) (13).jpg" || rel === "001 (2) 3.jpg";
+        const version = toneRefresh ? "?v=20261121t" : "";
+        return window.location.origin + basePath + path + version;
       }
 
       function appendTextWithLinks(el, text) {
