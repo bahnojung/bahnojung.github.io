@@ -361,8 +361,13 @@
           .map((seg) => encodeURIComponent(seg))
           .join("/");
         const path = "collections/" + encodeURIComponent(colId) + "/" + encodedRel;
-        const toneRefresh = rel === "001 (2) (13).jpg" || rel === "001 (2) 3.jpg";
-        const version = toneRefresh ? "?v=20261121t" : "";
+        const toneRefresh =
+          rel === "001 (2) (13).jpg" ||
+          rel === "001 (2) 3.jpg" ||
+          rel === "001 (2) (9) 2.jpg" ||
+          rel === "001 (2) (10) 2.jpg" ||
+          rel === "001 (2) (11) 2.jpg";
+        const version = toneRefresh ? "?v=20261121t2" : "";
         return window.location.origin + basePath + path + version;
       }
 
